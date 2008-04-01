@@ -13,7 +13,7 @@ import org.apache.cayenne.access.DataContext;
  * @author Robert Zeigler
  * @version 1.0
  */
-public class ObjectContextProviderImpl implements ObjectContextProvider {
+public class DataContextProviderImpl implements ObjectContextProvider {
 
     public ObjectContext currentContext() {
         return DataContext.getThreadDataContext();
@@ -22,7 +22,4 @@ public class ObjectContextProviderImpl implements ObjectContextProvider {
     public ObjectContext newContext() {
         return DataContext.createDataContext();
     }
-    
-    
-
 }
