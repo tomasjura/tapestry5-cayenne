@@ -9,7 +9,8 @@ import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.access.DataContext;
 
 /**
- * Default implementaiton of ObjectContextProvider
+ * Implementation of provider for DataContext.
+ *
  * @author Robert Zeigler
  * @version 1.0
  */
