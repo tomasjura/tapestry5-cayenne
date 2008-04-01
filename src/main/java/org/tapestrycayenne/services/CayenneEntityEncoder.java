@@ -9,17 +9,18 @@ import java.util.regex.Pattern;
 
 import org.apache.cayenne.CayenneDataObject;
 import org.apache.cayenne.DataObjectUtils;
+import org.apache.cayenne.Persistent;
 import org.apache.tapestry.ValueEncoder;
 
 /**
  * Basic CayenneDataObject ValueEncoder.
- * This works for objects which extends CayenneDataObject.  
+ * This works for objects which implements Persistent.  
  * If you're using the POJO facilities of cayenne, you will need to contribute your own value encoders.
  * This ValueEncoder also assumes that the primary key of your object is a single int column.
- * @author Robert Zeigler
  *
+ * @author Robert Zeigler
  */
-public class CayenneEntityEncoder implements ValueEncoder<CayenneDataObject> {
+public class CayenneEntityEncoder implements ValueEncoder<Persistent> {
     
     private final ObjectContextProvider _provider;
     
@@ -29,12 +30,12 @@ public class CayenneEntityEncoder implements ValueEncoder<CayenneDataObject> {
     
     private Pattern _pattern = Pattern.compile("::");
 
-    public String toClient(CayenneDataObject dao) {
+    public String toClient(Persistent dao) {
         return dao.getObjectId().getEntityName() + "::" + 
             Integer.toString(DataObjectUtils.intPKForObject(dao));
     }
 
-    public CayenneDataObject toValue(String val) {
+    public Persistent toValue(String val) {
         String[] vals = _pattern.split(val);
         if (vals.length != 2) {
             //TODO i18n this
@@ -46,6 +47,4 @@ public class CayenneEntityEncoder implements ValueEncoder<CayenneDataObject> {
                     vals[0],
                     Integer.parseInt(vals[1]));
     }
-
-
 }
