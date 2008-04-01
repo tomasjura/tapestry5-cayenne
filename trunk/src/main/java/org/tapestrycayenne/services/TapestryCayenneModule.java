@@ -10,6 +10,7 @@ import org.apache.tapestry.ioc.OrderedConfiguration;
 import org.apache.tapestry.ioc.ServiceBinder;
 import org.apache.tapestry.services.RequestFilter;
 import org.tapestrycayenne.annotations.Cayenne;
+import org.tapestrycayenne.annotations.CayenneClient;
 
 public class TapestryCayenneModule {
     
@@ -18,9 +19,14 @@ public class TapestryCayenneModule {
     {
         binder.bind(ValueEncoder.class,CayenneEntityEncoder.class)
             .withId("CayenneEntityEncoder").withMarker(Cayenne.class);
-        binder.bind(ObjectContextProvider.class, ObjectContextProviderImpl.class)
+
+        binder.bind(ObjectContextProvider.class, CayenneContextProviderImpl.class)
+            .withMarker(CayenneClient.class);
+
+        binder.bind(ObjectContextProvider.class, DataContextProviderImpl.class)
             .withMarker(Cayenne.class);
-        binder.bind(RequestFilter.class,CayenneRequestFilter.class)
+
+        binder.bind(RequestFilter.class, CayenneRequestFilter.class)
             .withId("CayenneFilter")
             .withMarker(Cayenne.class);
     }
@@ -29,7 +35,6 @@ public class TapestryCayenneModule {
             @Cayenne
             RequestFilter filter)
     {
-        configuration.add("cayenne",filter,"after:Localization");
+        configuration.add("cayenne", filter, "after:Localization");
     }
-
 }
