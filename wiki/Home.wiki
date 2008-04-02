@@ -15,3 +15,7 @@ Supports both Cayenne server and client classes.  Core features are:
 = Design Notes =
 
   * ServerVersusClient
+
+= Decisions =
+
+  * DealingWithObjectsWithoutIDs
