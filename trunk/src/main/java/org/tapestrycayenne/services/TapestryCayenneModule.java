@@ -5,10 +5,13 @@
  */
 package org.tapestrycayenne.services;
 
+import org.apache.cayenne.Persistent;
 import org.apache.tapestry.ValueEncoder;
+import org.apache.tapestry.ioc.MappedConfiguration;
 import org.apache.tapestry.ioc.OrderedConfiguration;
 import org.apache.tapestry.ioc.ServiceBinder;
 import org.apache.tapestry.services.RequestFilter;
+import org.apache.tapestry.services.ValueEncoderFactory;
 import org.tapestrycayenne.annotations.Cayenne;
 import org.tapestrycayenne.annotations.CayenneClient;
 
@@ -36,5 +39,17 @@ public class TapestryCayenneModule {
             RequestFilter filter)
     {
         configuration.add("cayenne", filter, "after:Localization");
+    }
+
+    public static void contributeValueEncoderSource(MappedConfiguration<Class, ValueEncoderFactory> configuration,
+                                                    @CayenneClient final ObjectContextProvider provider)
+    {
+        configuration.add(Persistent.class, new ValueEncoderFactory<Persistent>()
+        {
+            public ValueEncoder<Persistent> create(Class<Persistent> persistentClass)
+            {
+                return new CayenneEntityEncoder(provider);
+            }
+        });
     }
 }
