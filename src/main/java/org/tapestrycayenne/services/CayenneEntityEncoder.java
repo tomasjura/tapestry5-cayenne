@@ -5,12 +5,11 @@
  */
 package org.tapestrycayenne.services;
 
-import java.util.regex.Pattern;
-
-import org.apache.cayenne.CayenneDataObject;
 import org.apache.cayenne.DataObjectUtils;
 import org.apache.cayenne.Persistent;
 import org.apache.tapestry.ValueEncoder;
+
+import java.util.regex.Pattern;
 
 /**
  * Basic CayenneDataObject ValueEncoder.
@@ -23,28 +22,30 @@ import org.apache.tapestry.ValueEncoder;
 public class CayenneEntityEncoder implements ValueEncoder<Persistent> {
     
     private final ObjectContextProvider _provider;
+    private Pattern _pattern = Pattern.compile("::");
     
     public CayenneEntityEncoder(final ObjectContextProvider provider) {
         _provider = provider;
     }
-    
-    private Pattern _pattern = Pattern.compile("::");
 
-    public String toClient(Persistent dao) {
+    // TODO null handling
+    public String toClient(final Persistent dao)
+    {
         return dao.getObjectId().getEntityName() + "::" + 
             Integer.toString(DataObjectUtils.intPKForObject(dao));
     }
 
-    public Persistent toValue(String val) {
+    // TODO null handling
+    public Persistent toValue(final String val) {
         String[] vals = _pattern.split(val);
-        if (vals.length != 2) {
+
+        if (vals.length != 2)
+        {
             //TODO i18n this
             throw new RuntimeException("Unable to convert " + val + " into a CayenneDataObject");
         }
-        return (CayenneDataObject) 
-            DataObjectUtils.objectForPK(
-                    _provider.currentContext(),
-                    vals[0],
-                    Integer.parseInt(vals[1]));
+
+        return (Persistent) 
+            DataObjectUtils.objectForPK(_provider.currentContext(), vals[0], Integer.parseInt(vals[1]));
     }
 }
