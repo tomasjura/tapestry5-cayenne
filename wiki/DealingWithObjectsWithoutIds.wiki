@@ -1,0 +1,11 @@
+The ValueEncoder currently relies on DataObjectUtils to extract the ID from an object and to extract the object from an ID.  So, what should we do when the object is null or not yet persisted to the DB?
+
+In my own apps, I've used a special IDs of "-1" and "new" to indicate null objects.  At that point, I auto-create a new object to work with.  I don't register the object with the context, however, because the object is in an inconsistent state.  If the user navigates away, and comes back, a new object would be created and any subsequent commits will fail.  So, what I've done instead is persisted the object and left registration up to the page code.
+
+To address new objects: If the user leaves and comes back, the persisted object is shown rather than a new one being created, but the context never gets dirty.  We can probably take care of this behind the scenes in the ValueEncoder, providing we have access to the ApplicationStateManager.  The obvious follow-up question is whether this is the right thing to do all the time.  I don't know for certain, but not storing it in the session largely means it'll be lost on any sort of redirect, unless the user explicitly passes the object along through Java code.
+
+
+Thinking out loud a bit:
+
+  * The special IDs should be configurable so the user can get the URLs they'd like.
+  * We may be able to use child contexts so that the object is at least registered without dirtying the primary context.  I've avoided this myself because associating objects in different contexts is not possible.
