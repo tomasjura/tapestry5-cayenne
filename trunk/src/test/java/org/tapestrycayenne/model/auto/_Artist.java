@@ -1,4 +1,4 @@
-package org.tapestrycayenne.model;
+package org.tapestrycayenne.model.auto;
 
 import org.apache.cayenne.CayenneDataObject;
 
