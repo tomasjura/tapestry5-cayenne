@@ -24,10 +24,10 @@ public class TapestryCayenneModule {
             .withId("CayenneEntityEncoder").withMarker(Cayenne.class);
 
         binder.bind(ObjectContextProvider.class, CayenneContextProviderImpl.class)
-            .withMarker(CayenneClient.class);
+            .withMarker(CayenneClient.class).withId("CayenneContext");
 
         binder.bind(ObjectContextProvider.class, DataContextProviderImpl.class)
-            .withMarker(Cayenne.class);
+            .withMarker(Cayenne.class).withId("DataContext");
 
         binder.bind(RequestFilter.class, CayenneRequestFilter.class)
             .withId("CayenneFilter")
@@ -38,7 +38,7 @@ public class TapestryCayenneModule {
             @Cayenne
             RequestFilter filter)
     {
-        configuration.add("cayenne", filter, "after:Localization");
+        configuration.add("cayenne", filter, "after:*");
     }
 
     public static void contributeValueEncoderSource(MappedConfiguration<Class, ValueEncoderFactory> configuration,
