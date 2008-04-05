@@ -9,3 +9,12 @@ Thinking out loud a bit:
 
   * The special IDs should be configurable so the user can get the URLs they'd like.
   * We may be able to use child contexts so that the object is at least registered without dirtying the primary context.  I've avoided this myself because associating objects in different contexts is not possible.
+
+(Robert) I approached this problem in a slightly different fashion in tapestry 3, when I wrote the CayenneDataObjectSqueezeAdaptor.  What I did was to special-case each of the three cases: transient object, new object, and a committed object (one with an id).  For the transient object, I just serialized the object using the default tapestry/object serialization code.  For objects with id's, I did something like what we're doing now.  For new objects, I seralized the (temporary) objectid, and stored the object into a map.  Then on server-side "deserialization," I fetched the new object from the map.
+
+In reality, the data squeezer delegated the new object responsibilities to separate interface; but in practice, I almost always wound up storing the new objects in a session-based map, keyed off the temporary object id.
+
+In my current incarnation of T5/cayenne applications, I do something similar.
+I have a service "NewObjRegistry" that is responsible for keeping tabs on newly created objects, and providing a temporary, unique key for them. My current implementation of this service uses an LRU map to avoid keeping references to "abandoned" new objects around.  The key stored is just the hash code of the object. Incidentally, looking over my code again, the NewObjRegistry is probably better termed "ObjRegistry" since it ends up handling transient objects, as well, and not just new objects.
+
+This approach (keeping tabs on the new objects) has worked well for me, but it may not be the ideal solution.
