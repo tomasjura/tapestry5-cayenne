@@ -1,6 +1,6 @@
 = Overview =
 
-The Tapestry5-Cayenne module should be able to handle both Cayenne server (classic) mode and Cayenne ROP client.  The two are actually fairly similar, but do have some divergent behavior that must be addressed my this module.
+The Tapestry5-Cayenne module should be able to handle both Cayenne server (classic) mode and Cayenne ROP client.  The two are actually fairly similar, but do have some divergent behavior that must be addressed by this module.
 
 = ObjectContext =
 
