@@ -1,4 +1,4 @@
-#Implementing ValueEncoder without using primary keys.
+#Implementing ValueEncoder without using primary keys.#
 
 = Motivation =
 
