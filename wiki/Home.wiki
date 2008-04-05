@@ -19,3 +19,4 @@ Supports both Cayenne server and client classes.  Core features are:
 = Decisions =
 
   * DealingWithObjectsWithoutIds
+  * SecuringValueEncoders
