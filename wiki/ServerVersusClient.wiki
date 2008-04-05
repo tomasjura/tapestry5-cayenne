@@ -21,4 +21,4 @@ What's even trickier is the lifecycle of the context.  While technically it is v
 
 The class hierarchy for Cayenne client classes is different from that of server classes.  The client classes do not extend CayenneDataObject, but rather PersistentObject.  The common interface for these two class hierarchies is org.apache.cayenne.Persistent.  Most of the general API in Cayenne 3.0 has been updated to work with Persistent rather than DataObject.  Any cases that it isn't are likely bugs and should be addressed in Cayenne.
 
-So, in order to share as much code between the server and client classes, we should we Persistent wherever possible.  If there is divergent behavior, we will need to supply client and/or server specific classes.
+So, in order to share as much code between the server and client classes, we should use Persistent wherever possible.  If there is divergent behavior, we will need to supply client and/or server specific classes.
