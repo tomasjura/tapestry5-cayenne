@@ -17,6 +17,16 @@ import org.tapestrycayenne.annotations.CayenneClient;
 
 public class TapestryCayenneModule {
     
+    /**
+     * Key which provides the default location to insert the CayenneRequestFilter.
+     * By default, this is at the end of the requestfilter pipeline.
+     */
+    public static final String FILTER_LOCATION="tapestrycayenne.filterlocation";
+    
+    public static void contributeFactoryDefaults(MappedConfiguration<String,String> conf) {
+        //conf.add();
+    }
+    
     @SuppressWarnings("unchecked")
     public static void bind(ServiceBinder binder) 
     {
