@@ -53,8 +53,8 @@
 
     <modules>
         <module>tapestry5-cayenne-core</module>
-        <!--module>tapestry5-cayenne-server</module-->
-        <!--module>tapestry5-cayenne-client</module-->
+        <module>tapestry5-cayenne-server</module>
+        <module>tapestry5-cayenne-client</module>
     </modules>
 
 
