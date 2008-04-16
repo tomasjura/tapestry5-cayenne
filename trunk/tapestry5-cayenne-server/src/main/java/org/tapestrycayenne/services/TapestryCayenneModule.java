@@ -13,7 +13,6 @@ import org.apache.tapestry.ioc.ServiceBinder;
 import org.apache.tapestry.services.RequestFilter;
 import org.apache.tapestry.services.ValueEncoderFactory;
 import org.tapestrycayenne.annotations.Cayenne;
-import org.tapestrycayenne.annotations.CayenneClient;
 
 public class TapestryCayenneModule {
     
@@ -33,9 +32,6 @@ public class TapestryCayenneModule {
         binder.bind(ValueEncoder.class,CayenneEntityEncoder.class)
             .withId("CayenneEntityEncoder").withMarker(Cayenne.class);
 
-        binder.bind(ObjectContextProvider.class, CayenneContextProviderImpl.class)
-            .withMarker(CayenneClient.class).withId("CayenneContext");
-
         binder.bind(ObjectContextProvider.class, DataContextProviderImpl.class)
             .withMarker(Cayenne.class).withId("DataContext");
 
@@ -52,7 +48,7 @@ public class TapestryCayenneModule {
     }
 
     public static void contributeValueEncoderSource(MappedConfiguration<Class, ValueEncoderFactory> configuration,
-                                                    @CayenneClient final ObjectContextProvider provider)
+                                                    @Cayenne final ObjectContextProvider provider)
     {
         configuration.add(Persistent.class, new ValueEncoderFactory<Persistent>()
         {
