@@ -20,7 +20,6 @@ import org.apache.tapestry.ioc.RegistryBuilder;
 import org.apache.tapestry.services.RequestFilter;
 import org.apache.tapestry.services.TapestryModule;
 import org.tapestrycayenne.annotations.Cayenne;
-import org.tapestrycayenne.annotations.CayenneClient;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -72,18 +71,13 @@ public class TestTapestryCayenneModule extends Assert {
         assertNotNull(provider);
         assertTrue(provider.newContext() instanceof DataContext);
     }
-    
+
+    @Test(enabled=false)
+    // TODO (KJM 04/15/08) This test needs to move to the client module.
     public void hasCayenneContextProviderWithId() {
         ObjectContextProvider provider = _registry.getService("CayenneContext",ObjectContextProvider.class);
         assertNotNull(provider);
         //can't assert anything at the moment since we're not configuring the CayenneContextProviderImpl.
-    }
-    
-    public void hasCayenneContextProviderWithMarker() {
-        ObjectContextProvider provider = _registry.getObject(
-                ObjectContextProvider.class,
-                new SimpleAnnotationProvider<CayenneClient>(CayenneClient.class));
-        assertNotNull(provider);
     }
     
     public void hasRequestFilterWithId() {
