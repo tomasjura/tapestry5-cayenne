@@ -4,66 +4,45 @@
   <groupId>tapestry5-cayenne</groupId>
   <artifactId>tapestry5-cayenne</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifestEntries>
-              <Tapestry-Module-Classes>org.tapestrycayenne.services.TapestryCayenneModule</Tapestry-Module-Classes>
-            </manifestEntries>
-          </archive>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+  <packaging>jar</packaging>
+  <parent>
+      <groupId>com.googlecode.tapestry5-cayenne</groupId>
+      <artifactId>tapestry5-cayenne-project</artifactId>
+      <version>0.0.2-SNAPSHOT</version>
+  </parent>
+  <name>Tapestry5-Cayenne Core Library</name>
+  <description>
+      Central module for Tapestry5-Cayenne.
+  </description>
+  <inceptionYear>2008</inceptionYear>
   <dependencies>
     <dependency>
       <groupId>org.apache.tapestry</groupId>
       <artifactId>tapestry-core</artifactId>
-      <version>5.0.11</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.cayenne</groupId>
       <artifactId>cayenne-server</artifactId>
-      <version>3.0M3</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
       <version>5.7</version>
-      <classifier>jdk15</classifier>
+	  <classifier>jdk15</classifier>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
-      <version>1.8.0.7</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
-      <version>2.4</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
-  <distributionManagement>
-    <repository>
-      <id>saiwai-repository</id>
-      <name>Saiwai-solutions Maven Repository</name>
-      <url>scp://saiwai-solutions.com/var/www/vhosts/saiwai-solutions.com/maven</url>
-    </repository>
-  </distributionManagement>
 </project>
 
