@@ -20,7 +20,6 @@ import org.apache.tapestry.ioc.RegistryBuilder;
 import org.apache.tapestry.services.RequestFilter;
 import org.apache.tapestry.services.TapestryModule;
 import org.tapestrycayenne.annotations.Cayenne;
-import org.tapestrycayenne.annotations.CayenneClient;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
