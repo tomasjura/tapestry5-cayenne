@@ -22,7 +22,7 @@ public abstract class AbstractDBTest extends Assert {
     
     
     protected static void setupdb() throws Exception {
-        DefaultConfiguration c = new DefaultConfiguration("cayenne.xml");
+        DefaultConfiguration c = new DefaultConfiguration("/cayenne.xml");
         Configuration.initializeSharedConfiguration(c);
         DbAdapter adapt = HSQLDBAdapter.class.newInstance();
         DataContext dc = DataContext.createDataContext();

@@ -8,7 +8,6 @@ package org.tapestrycayenne.integration.app0.services;
 import org.apache.tapestry.TapestryConstants;
 import org.apache.tapestry.ioc.MappedConfiguration;
 import org.apache.tapestry.ioc.annotations.SubModule;
-import org.tapestrycayenne.services.TapestryCayenneModule;
 
 @SubModule(TapestryCayenneModule.class)
 public class AppModule {
