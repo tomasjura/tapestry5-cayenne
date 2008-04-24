@@ -12,7 +12,9 @@ public interface NonPersistedObjectStorer {
     
     /**
      * Retrieves the non-persisted persistent object from storage.
+     * @param key the key as returned from store
+     * @param objEntityName the name of the object entity.
      */
-    Persistent retrieve(String key);
+    Persistent retrieve(String key,String objEntityName);
 
 }
