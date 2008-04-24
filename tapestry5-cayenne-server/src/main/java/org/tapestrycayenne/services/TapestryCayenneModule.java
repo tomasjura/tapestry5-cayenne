@@ -54,7 +54,7 @@ public class TapestryCayenneModule {
     }
     
     public static void contributeAlias(Configuration<AliasContribution> conf,
-            @Cayenne DefaultNonPersistedObjectStorer storer) {
+            @Cayenne NonPersistedObjectStorer storer) {
         conf.add(AliasContribution.create(NonPersistedObjectStorer.class, storer));
     }
 
