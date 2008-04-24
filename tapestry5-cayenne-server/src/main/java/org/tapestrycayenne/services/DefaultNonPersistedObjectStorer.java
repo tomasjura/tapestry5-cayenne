@@ -30,7 +30,7 @@ public class DefaultNonPersistedObjectStorer implements NonPersistedObjectStorer
         return key;
     }
 
-    public Persistent retrieve(String key) {
+    public Persistent retrieve(String key,String objEntityName) {
         return _objs.remove(key);
     }
     
