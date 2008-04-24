@@ -7,8 +7,6 @@ package org.tapestrycayenne;
 
 import javax.sql.DataSource;
 
-import junit.framework.Assert;
-
 import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.access.DataNode;
 import org.apache.cayenne.access.DbGenerator;
@@ -17,6 +15,13 @@ import org.apache.cayenne.conf.DefaultConfiguration;
 import org.apache.cayenne.dba.DbAdapter;
 import org.apache.cayenne.dba.hsqldb.HSQLDBAdapter;
 import org.apache.cayenne.map.DataMap;
+import org.apache.tapestry.internal.InternalConstants;
+import org.apache.tapestry.internal.SingleKeySymbolProvider;
+import org.apache.tapestry.internal.TapestryAppInitializer;
+import org.apache.tapestry.internal.test.PageTesterModule;
+import org.apache.tapestry.ioc.Registry;
+import org.apache.tapestry.ioc.services.SymbolProvider;
+import org.testng.Assert;
 
 public abstract class AbstractDBTest extends Assert {
     
@@ -39,6 +44,22 @@ public abstract class AbstractDBTest extends Assert {
             dbgen.runGenerator(src);
         }
         DataContext.bindThreadDataContext(dc);
+    }
+    
+    /**
+     * Builds a basic test registry
+     * @param modules
+     * @return
+     */
+    protected static Registry setupRegistry(String appName, Class<?>...modules) {
+        SymbolProvider provider = new SingleKeySymbolProvider(InternalConstants.TAPESTRY_APP_PACKAGE_PARAM, "org.tapestrycayenne.integration");
+        TapestryAppInitializer initializer = new TapestryAppInitializer(provider, appName, PageTesterModule.TEST_MODE);
+        if (modules.length > 0) {
+            initializer.addModules(modules);
+        }
+        Registry ret = initializer.getRegistry();
+        return ret;
+
     }
 
 }
