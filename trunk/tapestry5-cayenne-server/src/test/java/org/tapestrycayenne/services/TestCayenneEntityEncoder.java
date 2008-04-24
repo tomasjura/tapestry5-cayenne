@@ -29,7 +29,10 @@ public class TestCayenneEntityEncoder extends AbstractDBTest {
         AbstractDBTest.setupdb();
         _registry = AbstractDBTest.setupRegistry("App0",TapestryCayenneModule.class);
         _provider = _registry.getService(ObjectContextProvider.class);
-        _encoder = new CayenneEntityEncoder(_provider,_registry.getService(TypeCoercer.class));
+        _encoder = new CayenneEntityEncoder(
+                _provider,
+                _registry.getService(TypeCoercer.class),
+                _registry.getService(NonPersistedObjectStorer.class));
     }
     
     @AfterTest
@@ -54,9 +57,9 @@ public class TestCayenneEntityEncoder extends AbstractDBTest {
                 //Null object handling.
                 {null,"nil"},
                 //transient object handling
-                {a2,"Artist::" + "h" + a2.hashCode()},
+                {a2,"Artist::" + "t::" + a2.hashCode()},
                 //"new" object handling.
-                {a3, "Artist::" + "h" + a3.hashCode()},
+                {a3, "Artist::" + "t::" + a3.hashCode()},
                 //committed object handling, int pk.
                 {a,"Artist::" + DataObjectUtils.intPKForObject(a)},
                 //committed object handling non-numeric pk

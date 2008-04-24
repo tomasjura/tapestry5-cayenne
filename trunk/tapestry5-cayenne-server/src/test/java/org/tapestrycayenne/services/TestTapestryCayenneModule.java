@@ -35,6 +35,7 @@ public class TestTapestryCayenneModule extends Assert {
     private Registry _registry;
     
     @BeforeTest
+    @SuppressWarnings("unused")
     private void init_registry() {
         RegistryBuilder blder = new RegistryBuilder();
         blder.add(TapestryCayenneModule.class,TapestryModule.class,TestModule.class);
@@ -42,6 +43,7 @@ public class TestTapestryCayenneModule extends Assert {
     }
     
     @AfterTest
+    @SuppressWarnings("unused")
     private void shutdown_registry() {
         _registry.shutdown();
     }
@@ -96,7 +98,6 @@ public class TestTapestryCayenneModule extends Assert {
 
 class SimpleAnnotationProvider<A extends Annotation> implements AnnotationProvider, InvocationHandler {
     private Class<A> _clazz;
-    private A _annotation;
     
     SimpleAnnotationProvider(Class<A> annotationClass) {
         _clazz=annotationClass;
