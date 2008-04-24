@@ -4,6 +4,7 @@ import org.tapestrycayenne.model.auto._Artist;
 
 
 
+@SuppressWarnings("serial")
 public class Artist extends _Artist {
 
 }

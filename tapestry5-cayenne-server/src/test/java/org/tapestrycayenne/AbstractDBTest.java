@@ -33,9 +33,7 @@ public abstract class AbstractDBTest extends Assert {
         DataContext dc = DataContext.createDataContext();
         for(Object obj : dc.getEntityResolver().getDataMaps()) {
             DataMap map = (DataMap) obj;
-            System.out.println(map.getName());
             DataNode node = dc.getParentDataDomain().lookupDataNode(map);
-            System.out.println(node.getName());
             DataSource src = node.getDataSource();
             DbGenerator dbgen = new DbGenerator(adapt,map);
             dbgen.setShouldCreatePKSupport(true);
