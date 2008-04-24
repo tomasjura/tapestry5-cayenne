@@ -6,16 +6,23 @@
 package org.tapestrycayenne.services;
 
 import org.apache.cayenne.DataObjectUtils;
+import org.apache.cayenne.ObjectContext;
+import org.apache.cayenne.ObjectId;
 import org.apache.cayenne.Persistent;
 import org.apache.tapestry.ioc.Registry;
 import org.apache.tapestry.ioc.services.TypeCoercer;
 import org.tapestrycayenne.AbstractDBTest;
 import org.tapestrycayenne.model.Artist;
+import org.tapestrycayenne.model.BigIntPKEntity;
+import org.tapestrycayenne.model.SmallIntPKEntity;
 import org.tapestrycayenne.model.StringPKEntity;
+import org.tapestrycayenne.model.TinyIntPKEntity;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import sun.security.util.BigInt;
 
 @Test
 public class TestCayenneEntityEncoder extends AbstractDBTest {
@@ -45,10 +52,20 @@ public class TestCayenneEntityEncoder extends AbstractDBTest {
     @SuppressWarnings("unused")
     @DataProvider(name="conversions")
     private Object[][] conversionValues() {
+        ObjectContext ctxt = _provider.currentContext();
         Artist a = _provider.currentContext().newObject(Artist.class);
         a.setName("test");
-        StringPKEntity spke = _provider.currentContext().newObject(StringPKEntity.class);
-        spke.setId("testingstrings");
+        StringPKEntity stringPk = ctxt.newObject(StringPKEntity.class);
+        TinyIntPKEntity tinyPk = ctxt.newObject(TinyIntPKEntity.class);
+        //have to explicitly set the id here because cayenne wants
+        //to start id numbering at 200, and 200 is already too big for tinyPk.
+        tinyPk.setObjectId(new ObjectId("TinyIntPKEntity","id",1));
+        SmallIntPKEntity smallPk = ctxt.newObject(SmallIntPKEntity.class);
+        BigIntPKEntity bigPk = ctxt.newObject(BigIntPKEntity.class);
+        //set this to be something bigger than Integer.class can handle
+        //(unsigned) int is just over 4 billion, so, 5 billion.
+        bigPk.setObjectId(new ObjectId("BigIntPKEntity","id",5000000000L));
+        stringPk.setId("testingstrings");
         _provider.currentContext().commitChanges();
         Artist a2 = new Artist();
         Artist a3 = _provider.currentContext().newObject(Artist.class);
@@ -63,7 +80,11 @@ public class TestCayenneEntityEncoder extends AbstractDBTest {
                 //committed object handling, int pk.
                 {a,"Artist::" + DataObjectUtils.intPKForObject(a)},
                 //committed object handling non-numeric pk
-                {spke,"StringPKEntity::testingstrings"}
+                {stringPk ,"StringPKEntity::testingstrings"},
+                //committed object, non INTEGER pks...
+                {tinyPk,"TinyIntPKEntity::" + DataObjectUtils.intPKForObject(tinyPk)},
+                {smallPk,"SmallIntPKEntity::" + DataObjectUtils.intPKForObject(smallPk)},
+                {bigPk,"BigIntPKEntity::" + DataObjectUtils.longPKForObject(bigPk)},
                 //TODO might be nice to have a way to store objs in the url in a "tamper-proof" fashion.
                 //at least as an option.
         };

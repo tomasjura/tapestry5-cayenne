@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data-map project-version="3.0">
+	<property name="defaultPackage" value="org.tapestrycayenne.model"/>
+	<db-entity name="BigIntPKEntity">
+		<db-attribute name="id" type="BIGINT" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="name" type="VARCHAR" length="64"/>
+	</db-entity>
+	<db-entity name="SmallIntPKEntity">
+		<db-attribute name="id" type="SMALLINT" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="name" type="VARCHAR" length="64"/>
+	</db-entity>
 	<db-entity name="StringPKEntity">
 		<db-attribute name="id" type="VARCHAR" isPrimaryKey="true" isMandatory="true" length="64"/>
 		<db-attribute name="intProp1" type="INTEGER"/>
+	</db-entity>
+	<db-entity name="TinyIntPKEntity">
+		<db-attribute name="id" type="TINYINT" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="name" type="VARCHAR" length="64"/>
 	</db-entity>
 	<db-entity name="artists">
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
@@ -11,8 +24,17 @@
 	<obj-entity name="Artist" className="org.tapestrycayenne.model.Artist" dbEntityName="artists">
 		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
 	</obj-entity>
+	<obj-entity name="BigIntPKEntity" className="org.tapestrycayenne.model.BigIntPKEntity" dbEntityName="BigIntPKEntity">
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+	</obj-entity>
+	<obj-entity name="SmallIntPKEntity" className="org.tapestrycayenne.model.SmallIntPKEntity" dbEntityName="SmallIntPKEntity">
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+	</obj-entity>
 	<obj-entity name="StringPKEntity" className="org.tapestrycayenne.model.StringPKEntity" dbEntityName="StringPKEntity">
 		<obj-attribute name="id" type="java.lang.String" db-attribute-path="id"/>
 		<obj-attribute name="intProp1" type="java.lang.Integer" db-attribute-path="intProp1"/>
+	</obj-entity>
+	<obj-entity name="TinyIntPKEntity" className="org.tapestrycayenne.model.TinyIntPKEntity" dbEntityName="TinyIntPKEntity">
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
 	</obj-entity>
 </data-map>
