@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import org.apache.cayenne.DataObjectUtils;
 import org.apache.cayenne.PersistenceState;
 import org.apache.cayenne.Persistent;
+import org.apache.cayenne.dba.TypesMapping;
 import org.apache.cayenne.map.DbAttribute;
 import org.apache.cayenne.map.DbEntity;
 import org.apache.cayenne.map.ObjAttribute;
@@ -34,6 +35,7 @@ public class CayenneEntityEncoder implements ValueEncoder<Persistent> {
     private final Pattern _pattern = Pattern.compile("::");
     private final TypeCoercer _coercer;
     private final NonPersistedObjectStorer _storer;
+    
     
     @SuppressWarnings("unchecked")
     public CayenneEntityEncoder(
@@ -99,10 +101,15 @@ public class CayenneEntityEncoder implements ValueEncoder<Persistent> {
         DbAttribute dbatt = atts.iterator().next();
         ObjAttribute attribute = oent.getAttributeForDbAttribute(dbatt);
         if (attribute == null) {
-            if (dbatt.getType() != java.sql.Types.INTEGER) {
-                throw new RuntimeException("Primary Key types other than INTEGER must have a corresponding object property");
+            String className = TypesMapping.getJavaBySqlType(dbatt.getType());
+            if (className == null) {
+                throw new RuntimeException("CayenneEntityEncoder can't handle primary keys with java.sql.Types number " + dbatt.getType());
             }
-            return Integer.class;
+            try {
+                return Class.forName(className);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException("Unable to locate class " + className);
+            }
         }
         return attribute.getJavaClass();
     }
