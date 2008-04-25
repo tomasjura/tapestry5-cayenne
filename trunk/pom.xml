@@ -65,13 +65,11 @@
                 <groupId>org.apache.tapestry</groupId>
                 <artifactId>tapestry-core</artifactId>
                 <version>5.0.11</version>
-                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.cayenne</groupId>
                 <artifactId>cayenne-server</artifactId>
                 <version>3.0M3</version>
-                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.testng</groupId>
