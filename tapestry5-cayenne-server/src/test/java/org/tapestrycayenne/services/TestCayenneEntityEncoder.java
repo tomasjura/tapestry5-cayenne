@@ -22,8 +22,6 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import sun.security.util.BigInt;
-
 @Test
 public class TestCayenneEntityEncoder extends AbstractDBTest {
     
@@ -96,5 +94,14 @@ public class TestCayenneEntityEncoder extends AbstractDBTest {
         assertEquals(client,clientVal,"Encoder incorrectly encoded artist value");
         Persistent server = _encoder.toValue(client);
         assertEquals(server,serverVal,"Encoder incorrectly converted client value to server value");
+    }
+    
+    @Test
+    void testDoubleConvertNewObject() {
+        Artist a = _provider.currentContext().newObject(Artist.class);
+        a.setName("TestArtist");
+        String clientString = _encoder.toClient(a);
+        assertEquals(a,_encoder.toValue(clientString));
+        assertEquals(a,_encoder.toValue(clientString));
     }
 }

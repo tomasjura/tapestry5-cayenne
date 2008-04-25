@@ -11,8 +11,11 @@ import org.apache.tapestry.ioc.Configuration;
 import org.apache.tapestry.ioc.MappedConfiguration;
 import org.apache.tapestry.ioc.OrderedConfiguration;
 import org.apache.tapestry.ioc.ServiceBinder;
+import org.apache.tapestry.ioc.annotations.InjectService;
+import org.apache.tapestry.ioc.annotations.Symbol;
 import org.apache.tapestry.ioc.services.TypeCoercer;
 import org.apache.tapestry.services.AliasContribution;
+import org.apache.tapestry.services.BeanModelSource;
 import org.apache.tapestry.services.RequestFilter;
 import org.apache.tapestry.services.ValueEncoderFactory;
 import org.tapestrycayenne.annotations.Cayenne;
@@ -25,8 +28,21 @@ public class TapestryCayenneModule {
      */
     public static final String FILTER_LOCATION="tapestrycayenne.filterlocation";
     
+    /**
+     * Configuration key providing the limit of the number of unpersisted objects to retain in memory.
+     * This is used by the default implementation of NonPersistedObjectStorer to set an upper bounds 
+     * to the amount of objects allowed to accrue in memory.  The default is 500.
+     */
+    public static final String UNPERSISTED_OBJECT_LIMIT="tapestrycayenne.unpersistedlimit";
+    
+    /**
+     * 
+     * @param conf
+     */
+    
     public static void contributeFactoryDefaults(MappedConfiguration<String,String> conf) {
-        //conf.add();
+        conf.add(FILTER_LOCATION,"after:*");
+        conf.add(UNPERSISTED_OBJECT_LIMIT,"500");
     }
     
     @SuppressWarnings("unchecked")
@@ -44,13 +60,18 @@ public class TapestryCayenneModule {
         binder.bind(RequestFilter.class, CayenneRequestFilter.class)
             .withId("CayenneFilter")
             .withMarker(Cayenne.class);
+        
+        binder.bind(BeanModelSource.class, CayenneBeanModelSource.class)
+            .withId("CayenneBeanModelSource");
     }
     
     public static void contributeRequestHandler(OrderedConfiguration<RequestFilter> configuration,
-            @Cayenne
-            RequestFilter filter)
+            @Cayenne 
+            RequestFilter filter,
+            @Symbol(FILTER_LOCATION)  
+            String location)
     {
-        configuration.add("cayenne", filter, "after:*");
+        configuration.add("cayenne", filter, location);
     }
     
     public static void contributeAlias(Configuration<AliasContribution> conf,
