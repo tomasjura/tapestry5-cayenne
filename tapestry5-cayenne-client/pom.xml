@@ -21,16 +21,6 @@
             <groupId>com.googlecode.tapestry5-cayenne</groupId>
             <artifactId>tapestry5-cayenne-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.apache.tapestry</groupId>
-            <artifactId>tapestry-core</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cayenne</groupId>
-            <artifactId>cayenne-server</artifactId>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
 </project>
 
