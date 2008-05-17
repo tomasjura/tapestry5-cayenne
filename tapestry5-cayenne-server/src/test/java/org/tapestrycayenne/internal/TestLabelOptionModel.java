@@ -15,7 +15,6 @@ public class TestLabelOptionModel extends Assert {
     private Object[][] options() throws Exception {
         Artist a = new Artist();
         a.setName("Picasso");
-        Persistent p;
         Method m = Artist.class.getMethod("getName");
         return new Object[][] {
                 {null,null,""},

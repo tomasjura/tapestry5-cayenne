@@ -17,7 +17,7 @@ public class LabelOptionModel implements OptionModel {
         } else if (label == null) {
             _label = _value.toString();
         } else {
-            String lbl=null;
+            String lbl;
             try {
                 lbl = (String) label.invoke(_value);
             } catch (Exception e) {
