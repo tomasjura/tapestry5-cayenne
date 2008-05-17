@@ -14,24 +14,26 @@ import org.apache.tapestry.beaneditor.BeanModel;
 import org.apache.tapestry.ioc.Messages;
 import org.apache.tapestry.ioc.Registry;
 import org.apache.tapestry.services.BeanModelSource;
-import org.tapestrycayenne.AbstractDBTest;
+import org.tapestrycayenne.TestUtils;
 import org.tapestrycayenne.model.Artist;
+import org.tapestrycayenne.model.Painting;
 import org.tapestrycayenne.model.StringPKEntity;
+import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 @Test
-public class TestCayenneBeanModelSource extends AbstractDBTest {
+public class TestCayenneBeanModelSource extends Assert {
     
     private Registry _reg;
     private BeanModelSource _source;
     
     @BeforeTest
     void setup() throws Exception {
-        AbstractDBTest.setupdb();
-        _reg = AbstractDBTest.setupRegistry("App0",TapestryCayenneModule.class);
+        TestUtils.setupdb();
+        _reg = TestUtils.setupRegistry("App0",TapestryCayenneModule.class);
         _source = _reg.getService("CayenneBeanModelSource", BeanModelSource.class);
     }
     
@@ -49,6 +51,13 @@ public class TestCayenneBeanModelSource extends AbstractDBTest {
         stringPKProps.put(StringPKEntity.INT_PROP1_PROPERTY,"number");
         Map<String,String> artistProps = new HashMap<String, String>();
         artistProps.put(Artist.NAME_PROPERTY, "text");
+        Map<String,String> artistPropsWithRelationship = new HashMap<String,String>(artistProps);
+        artistPropsWithRelationship.put("paintingList", "to_many_list");
+        artistPropsWithRelationship.put("paintingsByTitle","to_many_map");
+        Map<String,String> paintingProps = new HashMap<String,String>();
+        paintingProps.put(Painting.ARTIST_PROPERTY,"to_one");
+        paintingProps.put(Painting.PRICE_PROPERTY,"number");
+        paintingProps.put(Painting.TITLE_PROPERTY,"text");
         return new Object[][] {
                 {
                     StringPKEntity.class,
@@ -68,7 +77,19 @@ public class TestCayenneBeanModelSource extends AbstractDBTest {
                 {
                     Artist.class,
                     false,
-                    artistProps
+                    artistPropsWithRelationship,
+                },
+                {
+                    Painting.class,
+                    true,
+                    paintingProps,
+                    
+                },
+                {
+                    Painting.class,
+                    false,
+                    paintingProps,
+                    
                 }
         };
     }
@@ -85,8 +106,8 @@ public class TestCayenneBeanModelSource extends AbstractDBTest {
         BeanModel<?> model = _source.create(type, filterReadable, res);
         List<String> names = model.getPropertyNames();
         for(String key : props.keySet()) {
-            assertTrue(names.contains(key));
-            assertEquals(model.get(key).getDataType(),props.get(key));
+            assertTrue(names.contains(key),"Model missing property " + key);
+            assertEquals(model.get(key).getDataType(),props.get(key),"Property has wrong datatype");
         }
         for(String name : names) {
             assertTrue(props.containsKey(name),"Model contained extraneous property: " + name);
