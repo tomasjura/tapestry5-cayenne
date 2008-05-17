@@ -10,6 +10,7 @@ import org.apache.cayenne.query.Ordering;
 public enum QuerySortType {
     NOSORT,
     METHOD {
+        @Override
         public void sort(final List<?> results, final Ordering ordering, final Method label) {
             Collections.sort(results,new Comparator<Object>() {
 
@@ -33,11 +34,13 @@ public enum QuerySortType {
         }
     },
     ORDERING {
+        @Override
         public void sort(final List<?> results, final Ordering ordering, final Method label) {
             ordering.orderList(results);
         }
     },
     COMPARABLE {
+        @Override
         @SuppressWarnings("unchecked")
         public void sort(final List<?> results, final Ordering ordering, final Method label) {
             Collections.sort((List<Comparable>)results);
