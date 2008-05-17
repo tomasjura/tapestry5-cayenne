@@ -36,6 +36,8 @@ public class TestUtils {
             DataNode node = dc.getParentDataDomain().lookupDataNode(map);
             DataSource src = node.getDataSource();
             DbGenerator dbgen = new DbGenerator(adapt,map);
+            dbgen.setShouldDropTables(true);
+            dbgen.setShouldDropPKSupport(true);
             dbgen.setShouldCreatePKSupport(true);
             dbgen.setShouldCreateFKConstraints(true);
             dbgen.setShouldCreateTables(true);

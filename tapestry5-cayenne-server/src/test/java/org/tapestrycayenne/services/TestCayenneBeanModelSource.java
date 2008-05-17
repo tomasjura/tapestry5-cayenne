@@ -20,17 +20,17 @@ import org.tapestrycayenne.model.Painting;
 import org.tapestrycayenne.model.StringPKEntity;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-@Test
+@Test(groups="all")
 public class TestCayenneBeanModelSource extends Assert {
     
     private Registry _reg;
     private BeanModelSource _source;
     
-    @BeforeTest
+    @BeforeClass
     void setup() throws Exception {
         TestUtils.setupdb();
         _reg = TestUtils.setupRegistry("App0",TapestryCayenneModule.class);
@@ -54,6 +54,7 @@ public class TestCayenneBeanModelSource extends Assert {
         Map<String,String> artistPropsWithRelationship = new HashMap<String,String>(artistProps);
         artistPropsWithRelationship.put("paintingList", "to_many_list");
         artistPropsWithRelationship.put("paintingsByTitle","to_many_map");
+        artistPropsWithRelationship.put("numPaintings","number");
         Map<String,String> paintingProps = new HashMap<String,String>();
         paintingProps.put(Painting.ARTIST_PROPERTY,"to_one");
         paintingProps.put(Painting.PRICE_PROPERTY,"number");

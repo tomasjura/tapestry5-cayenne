@@ -11,7 +11,7 @@ import org.apache.cayenne.query.Ordering;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-@Test(sequential=true)
+@Test(sequential=true,groups="all")
 public class TestQuerySortType {
     
     List<SimpleTestBean> _values;

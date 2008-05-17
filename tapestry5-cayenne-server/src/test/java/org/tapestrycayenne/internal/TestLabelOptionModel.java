@@ -2,12 +2,12 @@ package org.tapestrycayenne.internal;
 
 import java.lang.reflect.Method;
 
-import org.apache.cayenne.Persistent;
 import org.tapestrycayenne.model.Artist;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+@Test(groups="all")
 public class TestLabelOptionModel extends Assert {
     
     @SuppressWarnings("unused")

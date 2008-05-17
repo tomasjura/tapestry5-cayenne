@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.access.DataContext;
-import org.apache.cayenne.access.QueryResult;
 import org.apache.cayenne.query.Ordering;
 import org.apache.cayenne.query.SelectQuery;
 import org.apache.tapestry.OptionModel;
@@ -15,17 +14,17 @@ import org.tapestrycayenne.model.Artist;
 import org.tapestrycayenne.model.BigIntPKEntity;
 import org.tapestrycayenne.model.Painting;
 import org.testng.Assert;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-@Test
+@Test(groups="all")
 public class TestRelationshipSelectModel extends Assert {
     
     private ObjectContext _context;
     private List<Artist> _data;
     
-    @BeforeTest
+    @BeforeClass
     void setup() throws Exception {
         TestUtils.setupdb();
         _context = DataContext.getThreadDataContext();
