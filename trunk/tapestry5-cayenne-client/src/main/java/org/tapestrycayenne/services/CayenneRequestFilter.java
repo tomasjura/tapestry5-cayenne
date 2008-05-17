@@ -31,13 +31,13 @@ public class CayenneRequestFilter implements RequestFilter
         this.provider = provider;
     }
 
-    public boolean service(Request request, Response response, RequestHandler handler)
-            throws IOException {
+    public boolean service(Request request, Response response, RequestHandler handler) throws IOException 
+    {
         ObjectContext context;
 
-        if (asm.exists(CayenneContext.class))
+        if (asm.exists(ObjectContext.class))
         {
-            context = asm.get(CayenneContext.class);
+            context = asm.get(ObjectContext.class);
         }
         else
         {
