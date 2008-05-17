@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.apache.cayenne.Persistent;
 import org.apache.commons.collections.map.LRUMap;
-import org.apache.tapestry.ioc.annotations.Symbol;
+import org.apache.tapestry.ioc.annotation.Symbol;
 
 /**
  * Simple implementation of NonPersistedObjectStorer.

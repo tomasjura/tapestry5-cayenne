@@ -1,6 +1,6 @@
 package org.tapestrycayenne.pages;
 
-import org.apache.tapestry.annotations.Component;
+import org.apache.tapestry.annotation.Component;
 import org.tapestrycayenne.components.ToOneEditor;
 
 public class CayenneEditBlockContributions {
