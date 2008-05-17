@@ -6,6 +6,7 @@
 package org.tapestrycayenne.services;
 
 import org.apache.cayenne.Persistent;
+import org.apache.tapestry.ioc.annotations.SubModule;
 import org.apache.tapestry.ValueEncoder;
 import org.apache.tapestry.ioc.MappedConfiguration;
 import org.apache.tapestry.ioc.OrderedConfiguration;
@@ -15,6 +16,7 @@ import org.apache.tapestry.ioc.services.TypeCoercer;
 import org.apache.tapestry.services.ValueEncoderFactory;
 import org.tapestrycayenne.annotations.Cayenne;
 
+@SubModule(TapestryCayenneCoreModule.class)
 public class TapestryCayenneModule {
     
     /**
@@ -30,9 +32,6 @@ public class TapestryCayenneModule {
     @SuppressWarnings("unchecked")
     public static void bind(ServiceBinder binder) 
     {
-        binder.bind(ValueEncoder.class,CayenneEntityEncoder.class)
-            .withId("CayenneEntityEncoder").withMarker(Cayenne.class);
-
         binder.bind(ObjectContextProvider.class, CayenneContextProviderImpl.class)
             .withMarker(Cayenne.class).withId("CayenneContext");
     }
@@ -42,19 +41,5 @@ public class TapestryCayenneModule {
             RequestFilter filter)
     {
         configuration.add("cayenne", filter, "after:*");
-    }
-
-    public static void contributeValueEncoderSource(MappedConfiguration<Class, ValueEncoderFactory> configuration,
-                                                    @Cayenne final ObjectContextProvider provider,
-                                                    final TypeCoercer coercer,
-                                                    final NonPersistedObjectStorer storer)
-    {
-        configuration.add(Persistent.class, new ValueEncoderFactory<Persistent>()
-        {
-            public ValueEncoder<Persistent> create(Class<Persistent> persistentClass)
-            {
-                return new CayenneEntityEncoder(provider,coercer,storer);
-            }
-        });
     }
 }
