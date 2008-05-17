@@ -21,11 +21,21 @@
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
 		<db-attribute name="name" type="LONGVARCHAR"/>
 	</db-entity>
+	<db-entity name="paintings">
+		<db-attribute name="artistid" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="price" type="DECIMAL"/>
+		<db-attribute name="title" type="LONGVARCHAR" isMandatory="true"/>
+	</db-entity>
 	<obj-entity name="Artist" className="org.tapestrycayenne.model.Artist" dbEntityName="artists">
 		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
 	</obj-entity>
 	<obj-entity name="BigIntPKEntity" className="org.tapestrycayenne.model.BigIntPKEntity" dbEntityName="BigIntPKEntity">
 		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+	</obj-entity>
+	<obj-entity name="Painting" className="org.tapestrycayenne.model.Painting" dbEntityName="paintings">
+		<obj-attribute name="price" type="java.lang.Double" db-attribute-path="price"/>
+		<obj-attribute name="title" type="java.lang.String" db-attribute-path="title"/>
 	</obj-entity>
 	<obj-entity name="SmallIntPKEntity" className="org.tapestrycayenne.model.SmallIntPKEntity" dbEntityName="SmallIntPKEntity">
 		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
@@ -37,4 +47,13 @@
 	<obj-entity name="TinyIntPKEntity" className="org.tapestrycayenne.model.TinyIntPKEntity" dbEntityName="TinyIntPKEntity">
 		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
 	</obj-entity>
+	<db-relationship name="paintingList" source="artists" target="paintings" toMany="true">
+		<db-attribute-pair source="id" target="artistid"/>
+	</db-relationship>
+	<db-relationship name="artist" source="paintings" target="artists" toMany="false">
+		<db-attribute-pair source="artistid" target="id"/>
+	</db-relationship>
+	<obj-relationship name="paintingList" source="Artist" target="Painting" db-relationship-path="paintingList"/>
+	<obj-relationship name="paintingsByTitle" source="Artist" target="Painting" collection-type="java.util.Map" map-key="title" db-relationship-path="paintingList"/>
+	<obj-relationship name="artist" source="Painting" target="Artist" db-relationship-path="artist"/>
 </data-map>

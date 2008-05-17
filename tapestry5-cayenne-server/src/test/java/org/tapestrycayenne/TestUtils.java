@@ -1,12 +1,11 @@
-/*
- * Created on Apr 3, 2008
- * 
- * 
- */
 package org.tapestrycayenne;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.access.DataNode;
 import org.apache.cayenne.access.DbGenerator;
@@ -21,12 +20,13 @@ import org.apache.tapestry.internal.TapestryAppInitializer;
 import org.apache.tapestry.internal.test.PageTesterModule;
 import org.apache.tapestry.ioc.Registry;
 import org.apache.tapestry.ioc.services.SymbolProvider;
-import org.testng.Assert;
+import org.tapestrycayenne.model.Artist;
+import org.tapestrycayenne.model.Painting;
 
-public abstract class AbstractDBTest extends Assert {
+public class TestUtils {
     
     
-    protected static void setupdb() throws Exception {
+    public static void setupdb() throws Exception {
         DefaultConfiguration c = new DefaultConfiguration("cayenne.xml");
         Configuration.initializeSharedConfiguration(c);
         DbAdapter adapt = HSQLDBAdapter.class.newInstance();
@@ -44,12 +44,44 @@ public abstract class AbstractDBTest extends Assert {
         DataContext.bindThreadDataContext(dc);
     }
     
-    /**
-     * Builds a basic test registry
-     * @param modules
-     * @return
-     */
-    protected static Registry setupRegistry(String appName, Class<?>...modules) {
+    public static List<Artist> basicData(ObjectContext context) {
+        List<Artist> ret = new ArrayList<Artist>();
+        Artist a = context.newObject(Artist.class);
+        a.setName("Picasso");
+        
+        Painting p = context.newObject(Painting.class);
+        p.setArtist(a);
+        p.setPrice(10000.0);
+        p.setTitle("Portrait of Igor Stravinsky");
+        
+        p = context.newObject(Painting.class);
+        p.setArtist(a);
+        p.setPrice(15000.0);
+        p.setTitle("Dora Maar au Chat");
+        
+        ret.add(a);
+        
+        a = context.newObject(Artist.class);
+        a.setName("Dali");
+        
+        p = context.newObject(Painting.class);
+        p.setArtist(a);
+        p.setTitle("Self-portrait");
+        p.setPrice(12000.0);
+        
+        p = context.newObject(Painting.class);
+        p.setArtist(a);
+        p.setTitle("The Persistence of Memory");
+        p.setPrice(19000.0);
+        
+        ret.add(a);
+        
+        context.commitChanges();
+        
+        return ret;
+    }
+    
+    public static Registry setupRegistry(String appName, Class<?>...modules) {
         SymbolProvider provider = new SingleKeySymbolProvider(InternalConstants.TAPESTRY_APP_PACKAGE_PARAM, "org.tapestrycayenne.integration");
         TapestryAppInitializer initializer = new TapestryAppInitializer(provider, appName, PageTesterModule.TEST_MODE);
         if (modules.length > 0) {

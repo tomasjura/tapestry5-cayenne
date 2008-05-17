@@ -11,19 +11,20 @@ import org.apache.cayenne.ObjectId;
 import org.apache.cayenne.Persistent;
 import org.apache.tapestry.ioc.Registry;
 import org.apache.tapestry.ioc.services.TypeCoercer;
-import org.tapestrycayenne.AbstractDBTest;
+import org.tapestrycayenne.TestUtils;
 import org.tapestrycayenne.model.Artist;
 import org.tapestrycayenne.model.BigIntPKEntity;
 import org.tapestrycayenne.model.SmallIntPKEntity;
 import org.tapestrycayenne.model.StringPKEntity;
 import org.tapestrycayenne.model.TinyIntPKEntity;
+import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 @Test
-public class TestCayenneEntityEncoder extends AbstractDBTest {
+public class TestCayenneEntityEncoder extends Assert {
     
     private CayenneEntityEncoder _encoder;
     private ObjectContextProvider _provider;
@@ -31,8 +32,8 @@ public class TestCayenneEntityEncoder extends AbstractDBTest {
 
     @BeforeTest
     void setupDB() throws Exception {
-        AbstractDBTest.setupdb();
-        _registry = AbstractDBTest.setupRegistry("App0",TapestryCayenneModule.class);
+        TestUtils.setupdb();
+        _registry = TestUtils.setupRegistry("App0",TapestryCayenneModule.class);
         _provider = _registry.getService(ObjectContextProvider.class);
         _encoder = new CayenneEntityEncoder(
                 _provider,
@@ -103,5 +104,19 @@ public class TestCayenneEntityEncoder extends AbstractDBTest {
         String clientString = _encoder.toClient(a);
         assertEquals(a,_encoder.toValue(clientString));
         assertEquals(a,_encoder.toValue(clientString));
+    }
+    
+    @DataProvider(name="strings")
+    private Object[][] strings() {
+        return new Object[][] {
+                {"" },
+                {" "},
+                {"\t"},
+        };
+    }
+    
+    @Test(dataProvider="strings")
+    void testEmptyStringHandling(String string) {
+        assertNull(_encoder.toValue(string));
     }
 }

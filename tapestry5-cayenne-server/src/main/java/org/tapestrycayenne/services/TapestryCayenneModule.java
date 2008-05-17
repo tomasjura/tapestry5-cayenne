@@ -5,21 +5,17 @@
  */
 package org.tapestrycayenne.services;
 
-import org.apache.cayenne.Persistent;
-import org.apache.tapestry.ValueEncoder;
 import org.apache.tapestry.ioc.Configuration;
 import org.apache.tapestry.ioc.MappedConfiguration;
 import org.apache.tapestry.ioc.OrderedConfiguration;
 import org.apache.tapestry.ioc.ServiceBinder;
-import org.apache.tapestry.ioc.annotations.InjectService;
+import org.apache.tapestry.ioc.annotations.SubModule;
 import org.apache.tapestry.ioc.annotations.Symbol;
-import org.apache.tapestry.ioc.services.TypeCoercer;
 import org.apache.tapestry.services.AliasContribution;
-import org.apache.tapestry.services.BeanModelSource;
 import org.apache.tapestry.services.RequestFilter;
-import org.apache.tapestry.services.ValueEncoderFactory;
 import org.tapestrycayenne.annotations.Cayenne;
 
+@SubModule(TapestryCayenneCoreModule.class)
 public class TapestryCayenneModule {
     
     /**
@@ -48,9 +44,6 @@ public class TapestryCayenneModule {
     @SuppressWarnings("unchecked")
     public static void bind(ServiceBinder binder) 
     {
-        binder.bind(ValueEncoder.class,CayenneEntityEncoder.class)
-            .withId("CayenneEntityEncoder").withMarker(Cayenne.class);
-
         binder.bind(ObjectContextProvider.class, DataContextProviderImpl.class)
             .withMarker(Cayenne.class).withId("DataContext");
         
@@ -61,8 +54,6 @@ public class TapestryCayenneModule {
             .withId("CayenneFilter")
             .withMarker(Cayenne.class);
         
-        binder.bind(BeanModelSource.class, CayenneBeanModelSource.class)
-            .withId("CayenneBeanModelSource");
     }
     
     public static void contributeRequestHandler(OrderedConfiguration<RequestFilter> configuration,
@@ -79,17 +70,4 @@ public class TapestryCayenneModule {
         conf.add(AliasContribution.create(NonPersistedObjectStorer.class, storer));
     }
 
-    public static void contributeValueEncoderSource(MappedConfiguration<Class, ValueEncoderFactory> configuration,
-                                                    @Cayenne final ObjectContextProvider provider,
-                                                    final TypeCoercer coercer,
-                                                    final NonPersistedObjectStorer storer)
-    {
-        configuration.add(Persistent.class, new ValueEncoderFactory<Persistent>()
-        {
-            public ValueEncoder<Persistent> create(Class<Persistent> persistentClass)
-            {
-                return new CayenneEntityEncoder(provider,coercer,storer);
-            }
-        });
-    }
 }
