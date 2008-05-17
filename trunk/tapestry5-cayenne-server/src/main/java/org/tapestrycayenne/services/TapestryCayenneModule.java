@@ -27,7 +27,6 @@ public class TapestryCayenneModule {
         binder.bind(RequestFilter.class, CayenneRequestFilter.class)
             .withId("CayenneFilter")
             .withMarker(Cayenne.class);
-        
     }
     
     public static void contributeRequestHandler(OrderedConfiguration<RequestFilter> configuration,

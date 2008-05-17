@@ -53,14 +53,8 @@ public class CayenneContextProviderImpl implements ObjectContextProvider
         this.sharedSessionName = sharedSessionName;
     }
 
-    // TODO (KJM 4/1/08) We shouldn't create a new instance if it doesn't exist . . . that's somebody else's job.
     public ObjectContext currentContext()
     {
-        if (false == asm.exists(ObjectContext.class))
-        {
-            asm.set(ObjectContext.class, newContext());
-        }
-
         return asm.get(ObjectContext.class);
     }
 
