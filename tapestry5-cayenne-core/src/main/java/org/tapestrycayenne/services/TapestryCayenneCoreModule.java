@@ -21,10 +21,15 @@ public class TapestryCayenneCoreModule {
     public static void bind(ServiceBinder binder) {
         binder.bind(ValueEncoder.class,CayenneEntityEncoder.class)
             .withId("CayenneEntityEncoder");
+
         binder.bind(BeanModelSource.class, CayenneBeanModelSource.class)
             .withId("CayenneBeanModelSource");
+
         binder.bind(DataTypeAnalyzer.class,CayenneDataTypeAnalyzer.class)
             .withId("CayenneDataTypeAnalyzer");
+
+        binder.bind(NonPersistedObjectStorer.class,DefaultNonPersistedObjectStorer.class)
+            .withId("DefaultNonPersistedObjectStorer").withMarker(Cayenne.class);
     }
     
     public static void contributeComponentClassResolver(Configuration<LibraryMapping> configuration) {

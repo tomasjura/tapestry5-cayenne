@@ -46,9 +46,6 @@ public class TapestryCayenneModule {
     {
         binder.bind(ObjectContextProvider.class, DataContextProviderImpl.class)
             .withMarker(Cayenne.class).withId("DataContext");
-        
-        binder.bind(NonPersistedObjectStorer.class,DefaultNonPersistedObjectStorer.class)
-            .withId("DefaultNonPersistedObjectStorer").withMarker(Cayenne.class);
 
         binder.bind(RequestFilter.class, CayenneRequestFilter.class)
             .withId("CayenneFilter")
