@@ -34,15 +34,18 @@ public class CayenneBeanModelSource implements BeanModelSource {
 
     @SuppressWarnings("unchecked")
     public <T> BeanModel<T> create(Class<T> type, boolean filterReadOnlyProperties, 
-            ComponentResources resources) {
+            ComponentResources resources)
+    {
         _environment.push(BeanModelTypeHolder.class, new BeanModelTypeHolder(type));
         BeanModel<T> model = _source.create(type, filterReadOnlyProperties, resources);
+
         _environment.pop(BeanModelTypeHolder.class);
         ObjEntity ent = _provider.currentContext().getEntityResolver().lookupObjEntity(type);
+
         if (ent == null) {
             return model;
         }
+
         return model.exclude(defaultExcludes);
     }
-
 }
