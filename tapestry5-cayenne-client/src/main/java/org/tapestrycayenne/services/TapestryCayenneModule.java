@@ -5,15 +5,11 @@
  */
 package org.tapestrycayenne.services;
 
-import org.apache.cayenne.Persistent;
-import org.apache.tapestry.ioc.annotations.SubModule;
-import org.apache.tapestry.ValueEncoder;
+import org.apache.tapestry.ioc.annotation.SubModule;
 import org.apache.tapestry.ioc.MappedConfiguration;
 import org.apache.tapestry.ioc.OrderedConfiguration;
 import org.apache.tapestry.ioc.ServiceBinder;
 import org.apache.tapestry.services.RequestFilter;
-import org.apache.tapestry.ioc.services.TypeCoercer;
-import org.apache.tapestry.services.ValueEncoderFactory;
 import org.tapestrycayenne.annotations.Cayenne;
 
 @SubModule(TapestryCayenneCoreModule.class)
