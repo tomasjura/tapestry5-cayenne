@@ -14,8 +14,8 @@ import org.apache.tapestry.services.RequestFilter;
 import org.tapestrycayenne.annotations.Cayenne;
 
 @SubModule(TapestryCayenneCoreModule.class)
-public class TapestryCayenneModule {
-
+public class TapestryCayenneModule
+{
     /**
      * Configuration key for setting the URL for the Cayenne Web Service that the client should connect to.
      */
@@ -36,7 +36,8 @@ public class TapestryCayenneModule {
      */
     public static final String SHARED_SESSION_NAME = "tapestrycayenne.client.shared_session_name";
 
-    public static void contributeFactoryDefaults(MappedConfiguration<String,String> conf) {
+    public static void contributeFactoryDefaults(final MappedConfiguration<String,String> conf)
+    {
         conf.add(WEB_SERVICE_URL, "http://localhost:8080/cws");
         conf.add(USERNAME, "");
         conf.add(PASSWORD, "");
@@ -44,20 +45,23 @@ public class TapestryCayenneModule {
     }
 
     @SuppressWarnings("unchecked")
-    public static void bind(ServiceBinder binder) 
+    public static void bind(final ServiceBinder binder)
     {
         binder.bind(ObjectContextProvider.class, CayenneContextProviderImpl.class)
             .withMarker(Cayenne.class).withId("CayenneContext");
+
+        binder.bind(RequestFilter.class, CayenneRequestFilter.class)
+            .withId("CayenneFilter")
+            .withMarker(Cayenne.class);
     }
 
-    /*
-    public static void contributeRequestHandler(OrderedConfiguration<RequestFilter> configuration,
+    public static void contributeRequestHandler(final OrderedConfiguration<RequestFilter> configuration,
             @Cayenne
             RequestFilter filter,
+
             @Symbol(TapestryCayenneCoreModule.FILTER_LOCATION)
             String location)
     {
         configuration.add("cayenne", filter, location);
     }
-    */
 }
