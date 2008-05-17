@@ -17,7 +17,9 @@ import org.apache.cayenne.map.DbEntity;
 import org.apache.cayenne.map.ObjAttribute;
 import org.apache.cayenne.map.ObjEntity;
 import org.apache.tapestry.ValueEncoder;
+import org.apache.tapestry.ioc.annotations.Marker;
 import org.apache.tapestry.ioc.services.TypeCoercer;
+import org.tapestrycayenne.annotations.Cayenne;
 
 /**
  * Basic Persistent ValueEncoder.
@@ -29,6 +31,7 @@ import org.apache.tapestry.ioc.services.TypeCoercer;
  * an object attribute corresponding to the primary key's db attribute.
  * @author Robert Zeigler
  */
+@Marker(Cayenne.class)
 public class CayenneEntityEncoder implements ValueEncoder<Persistent> {
     
     private final ObjectContextProvider _provider;
@@ -65,7 +68,7 @@ public class CayenneEntityEncoder implements ValueEncoder<Persistent> {
     }
 
     public Persistent toValue(final String val) {
-        if (val == null || val.trim() == "") { 
+        if (val == null || val.trim().equals("")) { 
             return null;
         }
         String[] vals = _pattern.split(val);
