@@ -17,9 +17,10 @@ import org.tapestrycayenne.model.Artist;
 import org.tapestrycayenne.services.ObjectContextProvider;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+@Test(groups="all")
 public class TestBlockContributions extends Assert {
     
     private Registry _registry;
@@ -29,7 +30,7 @@ public class TestBlockContributions extends Assert {
     private List<Artist> _data;
 
     @SuppressWarnings("unchecked")
-    @BeforeTest
+    @BeforeClass
     void setup() throws Exception {
         TestUtils.setupdb();
         _tester = new PageTester("org.tapestrycayenne.integration.app0","app","src/test/app0");

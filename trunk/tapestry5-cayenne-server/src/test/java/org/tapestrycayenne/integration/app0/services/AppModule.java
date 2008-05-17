@@ -31,7 +31,6 @@ public class AppModule {
     public static void contributeApplicationDefaults(
             MappedConfiguration<String, String> configuration)
     {
-        System.out.println("Contributing my defaults...");
         configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en");
         configuration.add(SymbolConstants.PRODUCTION_MODE,"false");
     }

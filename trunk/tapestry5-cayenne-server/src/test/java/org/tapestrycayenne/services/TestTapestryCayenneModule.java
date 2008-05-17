@@ -21,7 +21,7 @@ import org.apache.tapestry.services.RequestFilter;
 import org.apache.tapestry.services.TapestryModule;
 import org.tapestrycayenne.annotations.Cayenne;
 import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
@@ -29,12 +29,12 @@ import org.testng.annotations.Test;
  * @author robertz
  *
  */
-@Test
+@Test(groups="all")
 public class TestTapestryCayenneModule extends Assert {
     
     private Registry _registry;
     
-    @BeforeTest
+    @BeforeClass
     @SuppressWarnings("unused")
     private void init_registry() {
         RegistryBuilder blder = new RegistryBuilder();
