@@ -26,14 +26,17 @@ public class CayenneDataTypeAnalyzer implements DataTypeAnalyzer {
         _environment = environment;
     }
     
-    public String identifyDataType(PropertyAdapter adapter) {
+    public String identifyDataType(PropertyAdapter adapter)
+    {
         EntityResolver er = _provider.currentContext().getEntityResolver();
         Class<?> type = _environment.peek(BeanModelTypeHolder.class).getType();
         ObjEntity ent = er.lookupObjEntity(type);
         ObjRelationship rel = (ObjRelationship) ent.getRelationship(adapter.getName());
+
         if (rel == null) { 
             return null;
         }
+
         if (rel.isToMany()) {
             if (rel.getCollectionType().equals(List.class.getName())) {
                 return "to_many_list";
@@ -43,6 +46,7 @@ public class CayenneDataTypeAnalyzer implements DataTypeAnalyzer {
                 throw new UnsupportedOperationException(rel.getCollectionType());
             }
         }
+
         return "to_one";
     }
 }
