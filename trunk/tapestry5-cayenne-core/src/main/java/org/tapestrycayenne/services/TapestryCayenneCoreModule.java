@@ -16,7 +16,30 @@ import org.apache.tapestry.services.ValueEncoderFactory;
 import org.tapestrycayenne.annotations.Cayenne;
 
 public class TapestryCayenneCoreModule {
-    
+
+    /**
+     * Key which provides the default location to insert the CayenneRequestFilter.
+     * By default, this is at the end of the requestfilter pipeline.
+     */
+    public static final String FILTER_LOCATION="tapestrycayenne.filterlocation";
+
+    /**
+     * Configuration key providing the limit of the number of unpersisted objects to retain in memory.
+     * This is used by the default implementation of NonPersistedObjectStorer to set an upper bounds
+     * to the amount of objects allowed to accrue in memory.  The default is 500.
+     */
+    public static final String UNPERSISTED_OBJECT_LIMIT="tapestrycayenne.unpersistedlimit";
+
+    /**
+     *
+     * @param conf
+     */
+
+    public static void contributeFactoryDefaults(MappedConfiguration<String,String> conf) {
+        conf.add(FILTER_LOCATION,"after:*");
+        conf.add(UNPERSISTED_OBJECT_LIMIT,"500");
+    }
+
     @SuppressWarnings("unchecked")
     public static void bind(ServiceBinder binder) {
         binder.bind(ValueEncoder.class,CayenneEntityEncoder.class)

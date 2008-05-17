@@ -18,7 +18,7 @@ public class DefaultNonPersistedObjectStorer implements NonPersistedObjectStorer
     
     @SuppressWarnings("unchecked")
     public DefaultNonPersistedObjectStorer(
-            @Symbol(TapestryCayenneModule.UNPERSISTED_OBJECT_LIMIT)
+            @Symbol(TapestryCayenneCoreModule.UNPERSISTED_OBJECT_LIMIT)
             int limit) {
         _objs = new LRUMap(limit);
     }
