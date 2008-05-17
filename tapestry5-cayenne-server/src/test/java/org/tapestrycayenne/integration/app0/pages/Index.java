@@ -11,8 +11,8 @@ import java.util.List;
 
 import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.map.ObjEntity;
-import org.apache.tapestry.annotations.ApplicationState;
-import org.apache.tapestry.ioc.annotations.Inject;
+import org.apache.tapestry.ioc.annotation.Inject;
+import org.apache.tapestry.annotation.ApplicationState;
 import org.tapestrycayenne.annotations.Cayenne;
 import org.tapestrycayenne.services.ObjectContextProvider;
 

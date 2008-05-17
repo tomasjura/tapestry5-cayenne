@@ -8,19 +8,19 @@ package org.tapestrycayenne.integration.app0.services;
 import org.apache.cayenne.access.DataContext;
 import org.apache.tapestry.Field;
 import org.apache.tapestry.MarkupWriter;
-import org.apache.tapestry.TapestryConstants;
 import org.apache.tapestry.ValidationDecorator;
+import org.apache.tapestry.SymbolConstants;
 import org.apache.tapestry.dom.Element;
 import org.apache.tapestry.internal.services.PageRenderQueue;
 import org.apache.tapestry.ioc.MappedConfiguration;
 import org.apache.tapestry.ioc.OrderedConfiguration;
-import org.apache.tapestry.ioc.annotations.SubModule;
-import org.apache.tapestry.services.ApplicationInitializer;
-import org.apache.tapestry.services.ApplicationInitializerFilter;
+import org.apache.tapestry.ioc.annotation.SubModule;
 import org.apache.tapestry.services.Context;
 import org.apache.tapestry.services.Environment;
 import org.apache.tapestry.services.MarkupRenderer;
 import org.apache.tapestry.services.MarkupRendererFilter;
+import org.apache.tapestry5.services.ApplicationInitializerFilter;
+import org.apache.tapestry5.services.ApplicationInitializer;
 import org.tapestrycayenne.TestUtils;
 import org.tapestrycayenne.services.TapestryCayenneModule;
 
@@ -32,8 +32,8 @@ public class AppModule {
             MappedConfiguration<String, String> configuration)
     {
         System.out.println("Contributing my defaults...");
-        configuration.add(TapestryConstants.SUPPORTED_LOCALES_SYMBOL, "en");
-        configuration.add(TapestryConstants.PRODUCTION_MODE_SYMBOL,"false");
+        configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en");
+        configuration.add(SymbolConstants.PRODUCTION_MODE,"false");
     }
     
     public static void contributeApplicationInitializer(OrderedConfiguration<ApplicationInitializerFilter> conf) {
