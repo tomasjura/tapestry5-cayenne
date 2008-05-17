@@ -8,6 +8,7 @@ import org.tapestrycayenne.model.auto._Artist;
 @SuppressWarnings("serial")
 public class Artist extends _Artist implements Comparable<Artist>{
     
+    @Override
     @Label
     public String getName() {
         return super.getName();

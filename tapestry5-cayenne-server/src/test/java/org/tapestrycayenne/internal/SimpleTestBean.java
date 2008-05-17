@@ -19,6 +19,7 @@ public class SimpleTestBean implements Comparable<SimpleTestBean> {
         return getTheInt().compareTo(o.getTheInt());
     }
     
+    @Override
     public String toString() {
         return value.toString();
     }
@@ -27,6 +28,7 @@ public class SimpleTestBean implements Comparable<SimpleTestBean> {
 
 class BeanValue {
     Integer value;
+    @Override
     public String toString() {
         return value.toString();
     }
