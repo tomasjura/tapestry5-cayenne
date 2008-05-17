@@ -67,7 +67,7 @@ public class CayenneEntityEncoder implements ValueEncoder<Persistent> {
     }
 
     public Persistent toValue(final String val) {
-        if (val == null || val.trim().equals("")) { 
+        if (val == null || val.trim().length() == 0) { 
             return null;
         }
 

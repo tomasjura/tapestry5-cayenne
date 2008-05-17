@@ -30,7 +30,7 @@ public class CayenneRequestFilter implements RequestFilter {
 
     public boolean service(Request request, Response response, RequestHandler handler)
             throws IOException {
-        DataContext dc=null;
+        DataContext dc;
         if (_asm.exists(DataContext.class)) {
             dc = _asm.get(DataContext.class);
         } else {
