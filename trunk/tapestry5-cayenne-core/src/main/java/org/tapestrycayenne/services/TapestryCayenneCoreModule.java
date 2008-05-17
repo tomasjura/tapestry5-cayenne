@@ -30,11 +30,6 @@ public class TapestryCayenneCoreModule {
      */
     public static final String UNPERSISTED_OBJECT_LIMIT="tapestrycayenne.unpersistedlimit";
 
-    /**
-     *
-     * @param conf
-     */
-
     public static void contributeFactoryDefaults(MappedConfiguration<String,String> conf) {
         conf.add(FILTER_LOCATION,"after:*");
         conf.add(UNPERSISTED_OBJECT_LIMIT,"500");

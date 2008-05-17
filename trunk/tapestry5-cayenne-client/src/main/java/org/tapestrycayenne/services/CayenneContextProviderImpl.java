@@ -7,8 +7,9 @@ import org.apache.cayenne.remote.ClientChannel;
 import org.apache.cayenne.remote.ClientConnection;
 import org.apache.cayenne.remote.hessian.HessianConnection;
 import org.apache.tapestry.services.ApplicationStateManager;
-
-import java.util.Map;
+import org.apache.tapestry.ioc.annotation.Symbol;
+import org.apache.tapestry.ioc.annotation.Value;
+import org.apache.tapestry.ioc.annotation.Inject;
 
 /**
  * Implementation of provider for CayenneContext.
@@ -18,25 +19,38 @@ import java.util.Map;
  */
 public class CayenneContextProviderImpl implements ObjectContextProvider
 {
-    public static final String WEB_SERVICE_URL = "WEB_SERVICE_URL";
-    public static final String USERNAME = "USERNAME";
-    public static final String PASSWORD = "PASSWORD";
-    public static final String SHARED_SESSION = "SHARED_SESSION";
-
     private final ApplicationStateManager asm;
     private final String webServiceUrl;
     private final String username;
     private final String password;
-    private final String sharedSession;
+    private final String sharedSessionName;
 
-    public CayenneContextProviderImpl(final Map<String, String> configuration, final ApplicationStateManager asm)
+    @SuppressWarnings("unchecked")
+    public CayenneContextProviderImpl(
+            final ApplicationStateManager asm,
+
+            @Inject
+            @Symbol(TapestryCayenneModule.WEB_SERVICE_URL)
+            final String webServiceUrl,
+
+            @Inject
+            @Symbol(TapestryCayenneModule.USERNAME)
+            final String username,
+
+            @Inject
+            @Symbol(TapestryCayenneModule.PASSWORD)
+            final String password,
+
+            @Inject
+            @Symbol(TapestryCayenneModule.SHARED_SESSION_NAME)
+            final String sharedSessionName)
     {
         this.asm = asm;
 
-        webServiceUrl = configuration.get(WEB_SERVICE_URL);
-        username = configuration.get(USERNAME);
-        password = configuration.get(PASSWORD);
-        sharedSession = configuration.get(SHARED_SESSION);
+        this.webServiceUrl = webServiceUrl;
+        this.username = username;
+        this.password = password;
+        this.sharedSessionName = sharedSessionName;
     }
 
     // TODO (KJM 4/1/08) We shouldn't create a new instance if it doesn't exist . . . that's somebody else's job.
@@ -52,7 +66,7 @@ public class CayenneContextProviderImpl implements ObjectContextProvider
 
     public ObjectContext newContext()
     {
-        final ClientConnection conn = new HessianConnection(webServiceUrl, username, password, sharedSession);
+        final ClientConnection conn = new HessianConnection(webServiceUrl, username, password, sharedSessionName);
         final DataChannel channel = new ClientChannel(conn);
 
         return new CayenneContext(channel);
