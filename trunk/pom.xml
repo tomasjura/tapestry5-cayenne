@@ -190,9 +190,9 @@
 
     <distributionManagement>
         <repository>
-            <id>saiwai-repository</id>
-            <name>Saiwai-solutions Maven Repository</name>
-            <url>scp://saiwai-solutions.com/var/www/vhosts/saiwai-solutions.com/maven</url>
+            <id>objectstyle-repository</id>
+            <name>ObjectStyle Maven Repository</name>
+            <url>dav:https://objectstyle.org/maven2</url>
         </repository>
     </distributionManagement>
 </project>
