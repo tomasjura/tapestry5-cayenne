@@ -57,7 +57,7 @@ public class TapestryCayenneCoreModule {
     }
     
     public static void contributeComponentClassResolver(Configuration<LibraryMapping> configuration) {
-        configuration.add(new LibraryMapping("t5cayenne","org.tapestrycayenne"));
+        configuration.add(new LibraryMapping("t5cayenne", "org.tapestrycayenne"));
     }
 
     public static void contributeValueEncoderSource(MappedConfiguration<Class, ValueEncoderFactory> configuration,
@@ -85,10 +85,10 @@ public class TapestryCayenneCoreModule {
     {
         //add after Annotation; we want to make sure that explicitly-defined data types
         //are honored.
-        conf.add("Cayenne", analyzer,"after:Annotation");
+        conf.add("Cayenne", analyzer, "after:Annotation");
     }
     
     public static void contributeBeanBlockSource(Configuration<BeanBlockContribution> conf) {
-        conf.add(new BeanBlockContribution("to_one","t5cayenne/CayenneEditBlockContributions","to_one_editor",true));
+        conf.add(new BeanBlockContribution("to_one", "t5cayenne/CayenneEditBlockContributions", "to_one_editor", true));
     }
 }
