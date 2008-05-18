@@ -10,6 +10,15 @@ import org.apache.tapestry.services.Environment;
 import org.tapestrycayenne.annotations.Cayenne;
 import org.tapestrycayenne.internal.BeanModelTypeHolder;
 
+/**
+ * Provides a cayenne-specific implementation of BeanModelSource.
+ * This is used to override the default implementation.
+ * It is capable of handling Persistent and non-persistent objects.
+ * It ensures that extraneous properties inherited from, eg, 
+ * CayenneDataObject don't show up in the default model.
+ * @author robertz
+ *
+ */
 @Marker(Cayenne.class)
 public class CayenneBeanModelSource implements BeanModelSource {
     

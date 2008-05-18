@@ -14,6 +14,11 @@ import org.apache.tapestry.OptionModel;
 import org.apache.tapestry.util.AbstractSelectModel;
 import org.tapestrycayenne.annotations.Label;
 
+/**
+ * Defines a selection model for use with cayenne relationships.
+ * @author robertz
+ *
+ */
 public class RelationshipSelectModel extends AbstractSelectModel {
     
     private final List<OptionModel> _options;

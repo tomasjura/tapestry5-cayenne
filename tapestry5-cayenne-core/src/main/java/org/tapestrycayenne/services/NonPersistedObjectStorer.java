@@ -2,6 +2,11 @@ package org.tapestrycayenne.services;
 
 import org.apache.cayenne.Persistent;
 
+/**
+ * Contract for converting uncommitted Persistent objects to client-side representations and back.
+ * @author robertz
+ *
+ */
 public interface NonPersistedObjectStorer {
     
     /**

@@ -13,6 +13,12 @@ import org.apache.tapestry.services.Environment;
 import org.tapestrycayenne.annotations.Cayenne;
 import org.tapestrycayenne.internal.BeanModelTypeHolder;
 
+/**
+ * DataTypeAnalyzer to handle cayenne properties. In particular, 
+ * the CayenneDataTypeAnalyzer handles Cayenne toOne and toMany relationships.
+ * @author robertz
+ *
+ */
 @Marker(Cayenne.class)
 public class CayenneDataTypeAnalyzer implements DataTypeAnalyzer {
     
@@ -21,7 +27,8 @@ public class CayenneDataTypeAnalyzer implements DataTypeAnalyzer {
     
     public CayenneDataTypeAnalyzer(
             final ObjectContextProvider provider, 
-            final Environment environment) {
+            final Environment environment) 
+    {
         _provider = provider;
         _environment = environment;
     }

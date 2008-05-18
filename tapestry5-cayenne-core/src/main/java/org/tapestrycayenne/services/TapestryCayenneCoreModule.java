@@ -15,6 +15,12 @@ import org.apache.tapestry.services.LibraryMapping;
 import org.apache.tapestry.services.ValueEncoderFactory;
 import org.tapestrycayenne.annotations.Cayenne;
 
+/**
+ * Core module.  This module is a "SubModule" of the TapestryModule, defined in
+ * tapestry5-cayenne-client and tapestry5-cayenne-core.  Any shared services,
+ * contributions, etc. will be here.
+ * @author robertz
+ */
 public class TapestryCayenneCoreModule {
 
     /**
