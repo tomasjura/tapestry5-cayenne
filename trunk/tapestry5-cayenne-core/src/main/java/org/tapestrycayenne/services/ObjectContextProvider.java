@@ -9,8 +9,8 @@ import org.apache.cayenne.ObjectContext;
 
 /**
  * Defines an interface through which Cayenne a new or existing ObjectContext may be obtained.
- * @author Robert Zeigler
  *
+ * @author Robert Zeigler
  */
 public interface ObjectContextProvider {
     
