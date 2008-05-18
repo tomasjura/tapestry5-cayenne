@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * Used to mark a particular method as the "label" for the object type.
+ * The label is used when rendering selects for objects, as a short description for the object, etc.
  * @author robertz
  *
  */

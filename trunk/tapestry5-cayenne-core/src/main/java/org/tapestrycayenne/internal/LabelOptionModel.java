@@ -5,6 +5,9 @@ import java.util.Map;
 
 import org.apache.tapestry.OptionModel;
 
+/**
+ * An implementation of OptionModel that uses for a label, the results of a method marked with @Label 
+ */
 public class LabelOptionModel implements OptionModel {
     
     private final String _label;

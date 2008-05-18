@@ -13,6 +13,15 @@ import org.apache.tapestry.services.PropertyEditContext;
 import org.tapestrycayenne.internal.RelationshipSelectModel;
 import org.tapestrycayenne.services.ObjectContextProvider;
 
+/**
+ * Generic editor for to-one relationships.
+ * Builds a select list of each object of the type of field.
+ * For instance, a painting has an Artist field; this component
+ * will build an editor for the Artist field by building a select
+ * with each artist in the system listed in the select.
+ * @author robertz
+ *
+ */
 public class ToOneEditor implements Field {
     
     @Environmental
