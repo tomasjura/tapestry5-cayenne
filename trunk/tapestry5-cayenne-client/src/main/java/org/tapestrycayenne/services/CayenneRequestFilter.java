@@ -26,12 +26,13 @@ public class CayenneRequestFilter implements RequestFilter
     private final ApplicationStateManager asm;
     private final ObjectContextProvider provider;
 
-    public CayenneRequestFilter(final ApplicationStateManager asm, final ObjectContextProvider provider) {
+    public CayenneRequestFilter(final ApplicationStateManager asm, final ObjectContextProvider provider)
+    {
         this.asm = asm;
         this.provider = provider;
     }
 
-    public boolean service(Request request, Response response, RequestHandler handler) throws IOException 
+    public boolean service(final Request request, final Response response, final RequestHandler handler) throws IOException 
     {
         if (false == asm.exists(ObjectContext.class))
         {
