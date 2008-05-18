@@ -33,25 +33,11 @@ public class CayenneRequestFilter implements RequestFilter
 
     public boolean service(Request request, Response response, RequestHandler handler) throws IOException 
     {
-        ObjectContext context;
-
-        if (asm.exists(ObjectContext.class))
+        if (false == asm.exists(ObjectContext.class))
         {
-            context = asm.get(ObjectContext.class);
-        }
-        else
-        {
-            context = provider.newContext();
-            asm.set(ObjectContext.class, context);
+            asm.set(ObjectContext.class, provider.newContext());
         }
 
-        try
-        {
-            return handler.service(request, response);
-        }
-        finally
-        {
-            asm.set(ObjectContext.class, null);
-        }
+        return handler.service(request, response);
     }
 }

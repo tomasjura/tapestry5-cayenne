@@ -55,7 +55,12 @@ public class CayenneContextProviderImpl implements ObjectContextProvider
 
     public ObjectContext currentContext()
     {
-        return asm.get(ObjectContext.class);
+        if (asm.exists(ObjectContext.class))
+        {
+            return asm.get(ObjectContext.class);
+        }
+
+        return null;
     }
 
     public ObjectContext newContext()
