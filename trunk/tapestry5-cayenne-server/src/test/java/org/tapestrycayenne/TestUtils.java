@@ -1,10 +1,5 @@
 package org.tapestrycayenne;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.sql.DataSource;
-
 import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.access.DataNode;
@@ -14,14 +9,18 @@ import org.apache.cayenne.conf.DefaultConfiguration;
 import org.apache.cayenne.dba.DbAdapter;
 import org.apache.cayenne.dba.hsqldb.HSQLDBAdapter;
 import org.apache.cayenne.map.DataMap;
-import org.apache.tapestry.internal.InternalConstants;
-import org.apache.tapestry.internal.SingleKeySymbolProvider;
-import org.apache.tapestry.internal.TapestryAppInitializer;
-import org.apache.tapestry.internal.test.PageTesterModule;
-import org.apache.tapestry.ioc.Registry;
-import org.apache.tapestry.ioc.services.SymbolProvider;
+import org.apache.tapestry5.internal.InternalConstants;
+import org.apache.tapestry5.internal.SingleKeySymbolProvider;
+import org.apache.tapestry5.internal.TapestryAppInitializer;
+import org.apache.tapestry5.internal.test.PageTesterModule;
+import org.apache.tapestry5.ioc.Registry;
+import org.apache.tapestry5.ioc.services.SymbolProvider;
 import org.tapestrycayenne.model.Artist;
 import org.tapestrycayenne.model.Painting;
+
+import javax.sql.DataSource;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestUtils {
     

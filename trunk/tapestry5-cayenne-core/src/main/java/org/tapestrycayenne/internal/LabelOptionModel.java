@@ -1,9 +1,9 @@
 package org.tapestrycayenne.internal;
 
+import org.apache.tapestry5.OptionModel;
+
 import java.lang.reflect.Method;
 import java.util.Map;
-
-import org.apache.tapestry.OptionModel;
 
 /**
  * An implementation of OptionModel that uses for a label, the results of a method marked with @Label 

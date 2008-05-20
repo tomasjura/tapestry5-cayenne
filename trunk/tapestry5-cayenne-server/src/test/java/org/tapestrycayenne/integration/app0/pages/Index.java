@@ -5,16 +5,16 @@
  */
 package org.tapestrycayenne.integration.app0.pages;
 
+import org.apache.cayenne.access.DataContext;
+import org.apache.cayenne.map.ObjEntity;
+import org.apache.tapestry5.annotations.ApplicationState;
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.tapestrycayenne.annotations.Cayenne;
+import org.tapestrycayenne.services.ObjectContextProvider;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import org.apache.cayenne.access.DataContext;
-import org.apache.cayenne.map.ObjEntity;
-import org.apache.tapestry.ioc.annotation.Inject;
-import org.apache.tapestry.annotation.ApplicationState;
-import org.tapestrycayenne.annotations.Cayenne;
-import org.tapestrycayenne.services.ObjectContextProvider;
 
 public class Index {
 

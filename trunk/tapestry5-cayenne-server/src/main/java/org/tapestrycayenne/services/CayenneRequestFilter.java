@@ -5,14 +5,10 @@
  */
 package org.tapestrycayenne.services;
 
-import java.io.IOException;
-
 import org.apache.cayenne.access.DataContext;
-import org.apache.tapestry.services.ApplicationStateManager;
-import org.apache.tapestry.services.Request;
-import org.apache.tapestry.services.RequestFilter;
-import org.apache.tapestry.services.RequestHandler;
-import org.apache.tapestry.services.Response;
+import org.apache.tapestry5.services.*;
+
+import java.io.IOException;
 
 /**
  * Provides a RequestFilter which ensures that there is a DataContext associated with the current request.

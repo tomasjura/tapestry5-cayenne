@@ -8,10 +8,8 @@
 
 package org.tapestrycayenne.services;
 
-import org.apache.tapestry.services.*;
-import org.apache.cayenne.access.DataContext;
-import org.apache.cayenne.CayenneContext;
 import org.apache.cayenne.ObjectContext;
+import org.apache.tapestry5.services.*;
 
 import java.io.IOException;
 

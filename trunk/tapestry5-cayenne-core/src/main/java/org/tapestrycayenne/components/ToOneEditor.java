@@ -2,14 +2,14 @@ package org.tapestrycayenne.components;
 
 import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.Persistent;
-import org.apache.tapestry.Field;
-import org.apache.tapestry.FieldValidator;
-import org.apache.tapestry.SelectModel;
-import org.apache.tapestry.annotation.Environmental;
-import org.apache.tapestry.annotation.Component;
-import org.apache.tapestry.corelib.components.Select;
-import org.apache.tapestry.ioc.annotation.Inject;
-import org.apache.tapestry.services.PropertyEditContext;
+import org.apache.tapestry5.Field;
+import org.apache.tapestry5.FieldValidator;
+import org.apache.tapestry5.SelectModel;
+import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Environmental;
+import org.apache.tapestry5.corelib.components.Select;
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.PropertyEditContext;
 import org.tapestrycayenne.internal.RelationshipSelectModel;
 import org.tapestrycayenne.services.ObjectContextProvider;
 

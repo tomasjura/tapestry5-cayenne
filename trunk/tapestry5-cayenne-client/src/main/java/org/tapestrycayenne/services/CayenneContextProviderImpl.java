@@ -6,10 +6,9 @@ import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.remote.ClientChannel;
 import org.apache.cayenne.remote.ClientConnection;
 import org.apache.cayenne.remote.hessian.HessianConnection;
-import org.apache.tapestry.services.ApplicationStateManager;
-import org.apache.tapestry.ioc.annotation.Symbol;
-import org.apache.tapestry.ioc.annotation.Value;
-import org.apache.tapestry.ioc.annotation.Inject;
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.apache.tapestry5.services.ApplicationStateManager;
 
 /**
  * Implementation of provider for CayenneContext.

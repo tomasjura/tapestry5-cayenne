@@ -1,19 +1,11 @@
 package org.tapestrycayenne.services;
 
-import static org.easymock.EasyMock.anyObject;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.tapestry.ComponentResources;
-import org.apache.tapestry.beaneditor.BeanModel;
-import org.apache.tapestry.ioc.Messages;
-import org.apache.tapestry.ioc.Registry;
-import org.apache.tapestry.services.BeanModelSource;
+import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.beaneditor.BeanModel;
+import org.apache.tapestry5.ioc.Messages;
+import org.apache.tapestry5.ioc.Registry;
+import org.apache.tapestry5.services.BeanModelSource;
+import static org.easymock.EasyMock.*;
 import org.tapestrycayenne.TestUtils;
 import org.tapestrycayenne.model.Artist;
 import org.tapestrycayenne.model.Painting;
@@ -23,6 +15,10 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Test(groups="all")
 public class TestCayenneBeanModelSource extends Assert {

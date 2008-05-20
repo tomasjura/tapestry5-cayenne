@@ -6,21 +6,16 @@
 package org.tapestrycayenne.integration.app0.services;
 
 import org.apache.cayenne.access.DataContext;
-import org.apache.tapestry.Field;
-import org.apache.tapestry.MarkupWriter;
-import org.apache.tapestry.ValidationDecorator;
-import org.apache.tapestry.SymbolConstants;
-import org.apache.tapestry.dom.Element;
-import org.apache.tapestry.internal.services.PageRenderQueue;
-import org.apache.tapestry.ioc.MappedConfiguration;
-import org.apache.tapestry.ioc.OrderedConfiguration;
-import org.apache.tapestry.ioc.annotation.SubModule;
-import org.apache.tapestry.services.Context;
-import org.apache.tapestry.services.Environment;
-import org.apache.tapestry.services.MarkupRenderer;
-import org.apache.tapestry.services.MarkupRendererFilter;
-import org.apache.tapestry5.services.ApplicationInitializerFilter;
-import org.apache.tapestry5.services.ApplicationInitializer;
+import org.apache.tapestry5.Field;
+import org.apache.tapestry5.MarkupWriter;
+import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.ValidationDecorator;
+import org.apache.tapestry5.dom.Element;
+import org.apache.tapestry5.internal.services.PageRenderQueue;
+import org.apache.tapestry5.ioc.MappedConfiguration;
+import org.apache.tapestry5.ioc.OrderedConfiguration;
+import org.apache.tapestry5.ioc.annotations.SubModule;
+import org.apache.tapestry5.services.*;
 import org.tapestrycayenne.TestUtils;
 import org.tapestrycayenne.services.TapestryCayenneModule;
 

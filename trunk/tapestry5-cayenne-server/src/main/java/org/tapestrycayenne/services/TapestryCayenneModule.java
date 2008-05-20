@@ -5,14 +5,13 @@
  */
 package org.tapestrycayenne.services;
 
-import org.apache.tapestry.ioc.Configuration;
-import org.apache.tapestry.ioc.MappedConfiguration;
-import org.apache.tapestry.ioc.OrderedConfiguration;
-import org.apache.tapestry.ioc.ServiceBinder;
-import org.apache.tapestry.ioc.annotation.SubModule;
-import org.apache.tapestry.ioc.annotation.Symbol;
-import org.apache.tapestry.services.AliasContribution;
-import org.apache.tapestry.services.RequestFilter;
+import org.apache.tapestry5.ioc.Configuration;
+import org.apache.tapestry5.ioc.OrderedConfiguration;
+import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.annotations.SubModule;
+import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.apache.tapestry5.services.AliasContribution;
+import org.apache.tapestry5.services.RequestFilter;
 import org.tapestrycayenne.annotations.Cayenne;
 
 @SubModule(TapestryCayenneCoreModule.class)

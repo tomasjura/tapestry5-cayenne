@@ -1,12 +1,12 @@
 package org.tapestrycayenne.services;
 
 import org.apache.cayenne.map.ObjEntity;
-import org.apache.tapestry.ComponentResources;
-import org.apache.tapestry.beaneditor.BeanModel;
-import org.apache.tapestry.ioc.annotation.Marker;
-import org.apache.tapestry.ioc.annotation.InjectService;
-import org.apache.tapestry.services.BeanModelSource;
-import org.apache.tapestry.services.Environment;
+import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.beaneditor.BeanModel;
+import org.apache.tapestry5.ioc.annotations.InjectService;
+import org.apache.tapestry5.ioc.annotations.Marker;
+import org.apache.tapestry5.services.BeanModelSource;
+import org.apache.tapestry5.services.Environment;
 import org.tapestrycayenne.annotations.Cayenne;
 import org.tapestrycayenne.internal.BeanModelTypeHolder;
 

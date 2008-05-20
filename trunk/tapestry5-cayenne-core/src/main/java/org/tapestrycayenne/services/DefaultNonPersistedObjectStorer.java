@@ -1,10 +1,10 @@
 package org.tapestrycayenne.services;
 
-import java.util.Map;
-
 import org.apache.cayenne.Persistent;
 import org.apache.commons.collections.map.LRUMap;
-import org.apache.tapestry.ioc.annotation.Symbol;
+import org.apache.tapestry5.ioc.annotations.Symbol;
+
+import java.util.Map;
 
 /**
  * Simple implementation of NonPersistedObjectStorer.
