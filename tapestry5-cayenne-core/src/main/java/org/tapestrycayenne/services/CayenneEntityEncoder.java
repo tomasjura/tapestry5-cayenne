@@ -5,18 +5,18 @@
  */
 package org.tapestrycayenne.services;
 
-import java.util.Collection;
-import java.util.regex.Pattern;
-
 import org.apache.cayenne.DataObjectUtils;
 import org.apache.cayenne.PersistenceState;
 import org.apache.cayenne.Persistent;
 import org.apache.cayenne.map.ObjAttribute;
 import org.apache.cayenne.map.ObjEntity;
-import org.apache.tapestry.ValueEncoder;
-import org.apache.tapestry.ioc.services.TypeCoercer;
-import org.apache.tapestry.ioc.annotation.Marker;
+import org.apache.tapestry5.ValueEncoder;
+import org.apache.tapestry5.ioc.annotations.Marker;
+import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.tapestrycayenne.annotations.Cayenne;
+
+import java.util.Collection;
+import java.util.regex.Pattern;
 
 /**
  * Basic Persistent ValueEncoder.

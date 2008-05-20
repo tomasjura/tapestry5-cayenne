@@ -1,18 +1,13 @@
 package org.tapestrycayenne.services;
 
 import org.apache.cayenne.Persistent;
-import org.apache.tapestry.ValueEncoder;
-import org.apache.tapestry.ioc.Configuration;
-import org.apache.tapestry.ioc.MappedConfiguration;
-import org.apache.tapestry.ioc.OrderedConfiguration;
-import org.apache.tapestry.ioc.ServiceBinder;
-import org.apache.tapestry.ioc.services.TypeCoercer;
-import org.apache.tapestry.services.AliasContribution;
-import org.apache.tapestry.services.BeanBlockContribution;
-import org.apache.tapestry.services.BeanModelSource;
-import org.apache.tapestry.services.DataTypeAnalyzer;
-import org.apache.tapestry.services.LibraryMapping;
-import org.apache.tapestry.services.ValueEncoderFactory;
+import org.apache.tapestry5.ValueEncoder;
+import org.apache.tapestry5.ioc.Configuration;
+import org.apache.tapestry5.ioc.MappedConfiguration;
+import org.apache.tapestry5.ioc.OrderedConfiguration;
+import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.services.TypeCoercer;
+import org.apache.tapestry5.services.*;
 import org.tapestrycayenne.annotations.Cayenne;
 
 /**

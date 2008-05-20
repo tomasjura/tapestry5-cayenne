@@ -1,17 +1,17 @@
 package org.tapestrycayenne.services;
 
-import java.util.List;
-import java.util.Map;
-
 import org.apache.cayenne.map.EntityResolver;
 import org.apache.cayenne.map.ObjEntity;
 import org.apache.cayenne.map.ObjRelationship;
-import org.apache.tapestry.ioc.services.PropertyAdapter;
-import org.apache.tapestry.ioc.annotation.Marker;
-import org.apache.tapestry.services.DataTypeAnalyzer;
-import org.apache.tapestry.services.Environment;
+import org.apache.tapestry5.ioc.annotations.Marker;
+import org.apache.tapestry5.ioc.services.PropertyAdapter;
+import org.apache.tapestry5.services.DataTypeAnalyzer;
+import org.apache.tapestry5.services.Environment;
 import org.tapestrycayenne.annotations.Cayenne;
 import org.tapestrycayenne.internal.BeanModelTypeHolder;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * DataTypeAnalyzer to handle cayenne properties. In particular, 

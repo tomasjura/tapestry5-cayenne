@@ -1,7 +1,7 @@
 package org.tapestrycayenne.integration.app0.pages;
 
-import org.apache.tapestry.annotation.Component;
-import org.apache.tapestry.corelib.components.BeanEditForm;
+import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.corelib.components.BeanEditForm;
 import org.tapestrycayenne.model.Painting;
 
 public class TestToOneControl {

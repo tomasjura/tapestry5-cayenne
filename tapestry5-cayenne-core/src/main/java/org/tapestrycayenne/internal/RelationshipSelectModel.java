@@ -1,18 +1,18 @@
 package org.tapestrycayenne.internal;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.map.ObjAttribute;
 import org.apache.cayenne.map.ObjEntity;
 import org.apache.cayenne.query.Ordering;
 import org.apache.cayenne.query.SelectQuery;
-import org.apache.tapestry.OptionGroupModel;
-import org.apache.tapestry.OptionModel;
-import org.apache.tapestry.util.AbstractSelectModel;
+import org.apache.tapestry5.OptionGroupModel;
+import org.apache.tapestry5.OptionModel;
+import org.apache.tapestry5.util.AbstractSelectModel;
 import org.tapestrycayenne.annotations.Label;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Defines a selection model for use with cayenne relationships.

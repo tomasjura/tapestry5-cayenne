@@ -1,6 +1,6 @@
 package org.tapestrycayenne.pages;
 
-import org.apache.tapestry.annotation.Component;
+import org.apache.tapestry5.annotations.Component;
 import org.tapestrycayenne.components.ToOneEditor;
 
 /**

@@ -5,7 +5,7 @@
  */
 package org.tapestrycayenne.services;
 
-import org.apache.tapestry.ioc.MappedConfiguration;
+import org.apache.tapestry5.ioc.MappedConfiguration;
 
 public class TestModule {
     //allows us to contribute the alias mode for tests.

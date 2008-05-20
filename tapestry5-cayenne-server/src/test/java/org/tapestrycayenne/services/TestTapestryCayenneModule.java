@@ -5,24 +5,23 @@
  */
 package org.tapestrycayenne.services;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-
 import junit.framework.Assert;
-
 import org.apache.cayenne.access.DataContext;
-import org.apache.tapestry.ValueEncoder;
-import org.apache.tapestry.ioc.AnnotationProvider;
-import org.apache.tapestry.ioc.Registry;
-import org.apache.tapestry.ioc.RegistryBuilder;
-import org.apache.tapestry.services.RequestFilter;
-import org.apache.tapestry.services.TapestryModule;
+import org.apache.tapestry5.ValueEncoder;
+import org.apache.tapestry5.ioc.AnnotationProvider;
+import org.apache.tapestry5.ioc.Registry;
+import org.apache.tapestry5.ioc.RegistryBuilder;
+import org.apache.tapestry5.services.RequestFilter;
+import org.apache.tapestry5.services.TapestryModule;
 import org.tapestrycayenne.annotations.Cayenne;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 /**
  * Test to ensure that the TapestryCayenne module is properly contributing all services that it needs to.

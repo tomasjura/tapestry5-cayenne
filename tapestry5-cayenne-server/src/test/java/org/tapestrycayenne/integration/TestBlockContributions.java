@@ -1,17 +1,12 @@
 package org.tapestrycayenne.integration;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.cayenne.Persistent;
-import org.apache.tapestry.ValueEncoder;
-import org.apache.tapestry.dom.Document;
-import org.apache.tapestry.dom.Element;
-import org.apache.tapestry.dom.Node;
-import org.apache.tapestry.ioc.Registry;
-import org.apache.tapestry.test.PageTester;
+import org.apache.tapestry5.ValueEncoder;
+import org.apache.tapestry5.dom.Document;
+import org.apache.tapestry5.dom.Element;
+import org.apache.tapestry5.dom.Node;
+import org.apache.tapestry5.ioc.Registry;
+import org.apache.tapestry5.test.PageTester;
 import org.tapestrycayenne.TestUtils;
 import org.tapestrycayenne.model.Artist;
 import org.tapestrycayenne.services.ObjectContextProvider;
@@ -19,6 +14,11 @@ import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 
 @Test(groups="all")
 public class TestBlockContributions extends Assert {
