@@ -25,7 +25,7 @@ public class RelationshipSelectModel extends AbstractSelectModel {
     
     @SuppressWarnings("unchecked")
     public RelationshipSelectModel(Class<?> type, ObjectContext context) {
-        final Method label = findLabel(type);
+        final Method label = AnnotationFinder.methodForAnnotation(Label.class, type);
         SelectQuery sq = new SelectQuery(type);
         QuerySortResult rslt = querySort(sq,label,context,type);
         List<?> options = context.performQuery(sq);
@@ -74,15 +74,6 @@ public class RelationshipSelectModel extends AbstractSelectModel {
         return res;
     }
     
-    static Method findLabel(Class<?> type) {
-        for(Method m : type.getMethods()) {
-            if (m.getAnnotation(Label.class) != null) {
-                return m;
-            }
-        }
-        return null;
-    }
-
     public List<OptionGroupModel> getOptionGroups() {
         return null;
     }
