@@ -1,5 +1,9 @@
 package org.tapestrycayenne.internal;
 
+import java.lang.reflect.Method;
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.query.Ordering;
@@ -8,15 +12,10 @@ import org.apache.tapestry5.OptionModel;
 import org.tapestrycayenne.TestUtils;
 import org.tapestrycayenne.model.Artist;
 import org.tapestrycayenne.model.BigIntPKEntity;
-import org.tapestrycayenne.model.Painting;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import java.lang.reflect.Method;
-import java.util.Iterator;
-import java.util.List;
 
 @Test(groups="all")
 public class TestRelationshipSelectModel extends Assert {
@@ -41,20 +40,6 @@ public class TestRelationshipSelectModel extends Assert {
         for(Artist a : _data) {
             assertEquals(it.next().getValue(),a);
         }
-    }
-    
-    @DataProvider(name="labels")
-    Object[][] labels() throws Exception {
-        return new Object[][] {
-               {Artist.class,Artist.class.getMethod("getName")},
-               {Painting.class,null}
-        };
-    }
-    
-    @Test(dataProvider="labels")
-    public void find_label(Class<?> type, Method result) {
-        Method m = RelationshipSelectModel.findLabel(type);
-        assertEquals(m,result);
     }
     
     @DataProvider(name="sorts")
