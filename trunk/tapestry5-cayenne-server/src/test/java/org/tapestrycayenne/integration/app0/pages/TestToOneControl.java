@@ -8,6 +8,7 @@ public class TestToOneControl {
     
     private Painting _painting;
     
+    @SuppressWarnings("unused")
     @Component(parameters={
             "object=painting"
     })

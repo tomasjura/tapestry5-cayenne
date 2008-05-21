@@ -103,7 +103,7 @@ public class TestCayenneEntityEncoder extends Assert {
     }
     
     @DataProvider(name="strings")
-    private Object[][] strings() {
+    Object[][] strings() {
         return new Object[][] {
                 {"" },
                 {" "},
