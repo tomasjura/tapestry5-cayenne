@@ -14,6 +14,9 @@ public class CayenneViewBlockContributions {
     
     public String getToOneString() throws Exception {
         Object val = _context.getPropertyValue();
+        if (val == null) {
+            return "&nbsp;";
+        }
         Method m =AnnotationFinder.methodForAnnotation(Label.class,val.getClass());
         if (m == null) {
             return val.toString();

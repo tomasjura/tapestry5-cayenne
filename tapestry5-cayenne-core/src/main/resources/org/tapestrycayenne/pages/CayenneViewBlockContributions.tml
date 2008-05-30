@@ -1,5 +1,5 @@
 <div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
 <t:block t:id="to_one_viewer">
-  ${toOneString}
+  <t:outputraw value="toOneString"/>
 </t:block>
 </div>
