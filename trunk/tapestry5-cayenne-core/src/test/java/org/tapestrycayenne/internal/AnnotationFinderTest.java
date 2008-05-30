@@ -12,7 +12,7 @@ import org.tapestrycayenne.annotations.Label;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-@Test
+@Test(groups="all")
 public class AnnotationFinderTest {
     
     @DataProvider(name="methoddata")

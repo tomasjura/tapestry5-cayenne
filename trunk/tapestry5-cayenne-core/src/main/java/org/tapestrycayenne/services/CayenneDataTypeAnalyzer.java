@@ -1,17 +1,18 @@
 package org.tapestrycayenne.services;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.cayenne.map.EntityResolver;
 import org.apache.cayenne.map.ObjEntity;
 import org.apache.cayenne.map.ObjRelationship;
+import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.Marker;
 import org.apache.tapestry5.ioc.services.PropertyAdapter;
 import org.apache.tapestry5.services.DataTypeAnalyzer;
 import org.apache.tapestry5.services.Environment;
 import org.tapestrycayenne.annotations.Cayenne;
 import org.tapestrycayenne.internal.BeanModelTypeHolder;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * DataTypeAnalyzer to handle cayenne properties. In particular, 
@@ -24,17 +25,24 @@ public class CayenneDataTypeAnalyzer implements DataTypeAnalyzer {
     
     private final ObjectContextProvider _provider;
     private final Environment _environment;
+    private final DataTypeAnalyzer _defaultAnalyzer;
     
     public CayenneDataTypeAnalyzer(
             final ObjectContextProvider provider, 
-            final Environment environment) 
+            final Environment environment,
+            final @InjectService("DefaultDataTypeAnalyzer") DataTypeAnalyzer analyzer) 
     {
         _provider = provider;
         _environment = environment;
+        _defaultAnalyzer = analyzer;
     }
     
     public String identifyDataType(PropertyAdapter adapter)
     {
+        String dt = _defaultAnalyzer.identifyDataType(adapter);
+        if (dt != null && !dt.equals("")) {
+            return dt;
+        }
         EntityResolver er = _provider.currentContext().getEntityResolver();
         Class<?> type = _environment.peek(BeanModelTypeHolder.class).getType();
         ObjEntity ent = er.lookupObjEntity(type);

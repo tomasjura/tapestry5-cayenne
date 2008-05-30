@@ -85,5 +85,6 @@ public class TapestryCayenneCoreModule {
     
     public static void contributeBeanBlockSource(Configuration<BeanBlockContribution> conf) {
         conf.add(new BeanBlockContribution("to_one", "t5cayenne/CayenneEditBlockContributions", "to_one_editor", true));
+        conf.add(new BeanBlockContribution("to_one","t5cayenne/CayenneViewBlockContributions","to_one_viewer",false));
     }
 }
