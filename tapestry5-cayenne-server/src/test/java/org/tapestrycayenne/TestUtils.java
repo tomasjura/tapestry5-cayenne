@@ -1,5 +1,10 @@
 package org.tapestrycayenne;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.sql.DataSource;
+
 import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.access.DataNode;
@@ -9,6 +14,8 @@ import org.apache.cayenne.conf.DefaultConfiguration;
 import org.apache.cayenne.dba.DbAdapter;
 import org.apache.cayenne.dba.hsqldb.HSQLDBAdapter;
 import org.apache.cayenne.map.DataMap;
+import org.apache.tapestry5.dom.Element;
+import org.apache.tapestry5.dom.Node;
 import org.apache.tapestry5.internal.InternalConstants;
 import org.apache.tapestry5.internal.SingleKeySymbolProvider;
 import org.apache.tapestry5.internal.TapestryAppInitializer;
@@ -18,13 +25,14 @@ import org.apache.tapestry5.ioc.services.SymbolProvider;
 import org.tapestrycayenne.model.Artist;
 import org.tapestrycayenne.model.Painting;
 
-import javax.sql.DataSource;
-import java.util.ArrayList;
-import java.util.List;
-
 public class TestUtils {
     
     
+    /**
+     * Initializes an hsql database for tests.
+     * Note that this will drop tables, as well as create new ones.
+     * @throws Exception
+     */
     public static void setupdb() throws Exception {
         DefaultConfiguration c = new DefaultConfiguration("cayenne.xml");
         Configuration.initializeSharedConfiguration(c);
@@ -45,6 +53,12 @@ public class TestUtils {
         DataContext.bindThreadDataContext(dc);
     }
     
+    /**
+     * Sets up some basic data (artists and paintings) for use in t5cayenne tests.
+     * @param context
+     * @return The list of artists
+     * Sets up two artists ("Picasso" and "Dali"), each with two paintings.
+     */
     public static List<Artist> basicData(ObjectContext context) {
         List<Artist> ret = new ArrayList<Artist>();
         Artist a = context.newObject(Artist.class);
@@ -82,6 +96,12 @@ public class TestUtils {
         return ret;
     }
     
+    /**
+     * Initializes the application registry, including all tapestry services.
+     * @param appName The name of the application (allows tapestry to look for appName + Module)
+     * @param modules Any additional modules to load
+     * @return the initialized service/ioc registry.
+     */
     public static Registry setupRegistry(String appName, Class<?>...modules) {
         SymbolProvider provider = new SingleKeySymbolProvider(InternalConstants.TAPESTRY_APP_PACKAGE_PARAM, "org.tapestrycayenne.integration");
         TapestryAppInitializer initializer = new TapestryAppInitializer(provider, appName, PageTesterModule.TEST_MODE);
@@ -91,6 +111,37 @@ public class TestUtils {
         Registry ret = initializer.getRegistry();
         return ret;
 
+    }
+
+    /**
+     * Find all elements matching the path given, underneath the element given by root.
+     * @param root root element to search from. The search starts at the children of the root.
+     * @param path / delimitted search path. Path should start one level below the root element.
+     * @return A list of elements matching the path, or empty list if none match.
+     * Example:
+     *   Given the document: <html><body><form><div><input name="a"/></div><div><input name="b"/></div></form></body></html>
+     *   DOMFindAll(doc.getRootElement(),"body/form/div") would return the two div elements.
+     *   DomFindAll(doc.getRootElement(),"body/form/div/input") would return both input elements.
+     */
+    public static final List<Element> DOMFindAll(Element root, String path) {
+        String[] pathels = path.split("/");
+        List<Element> searchels = new ArrayList<Element>();
+        searchels.add(root);
+        for(String pathel : pathels) {
+            List<Element> nextsearch = new ArrayList<Element>();
+            for(Element el : searchels) {
+                for (Node n : el.getChildren()) {
+                    if (n instanceof Element && ((Element)n).getName().equals(pathel)) {
+                        nextsearch.add((Element)n);
+                    }
+                }
+            }
+            searchels = nextsearch;
+            if (searchels.isEmpty()) {//not found
+                break;
+            }
+        }
+        return searchels;
     }
 
 }

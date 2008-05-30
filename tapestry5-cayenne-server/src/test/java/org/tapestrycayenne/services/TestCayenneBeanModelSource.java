@@ -8,6 +8,7 @@ import org.apache.tapestry5.services.BeanModelSource;
 import static org.easymock.EasyMock.*;
 import org.tapestrycayenne.TestUtils;
 import org.tapestrycayenne.model.Artist;
+import org.tapestrycayenne.model.Bid;
 import org.tapestrycayenne.model.Painting;
 import org.tapestrycayenne.model.StringPKEntity;
 import org.testng.Assert;
@@ -29,7 +30,7 @@ public class TestCayenneBeanModelSource extends Assert {
     @BeforeClass
     void setup() throws Exception {
         TestUtils.setupdb();
-        _reg = TestUtils.setupRegistry("App0",TapestryCayenneModule.class);
+        _reg = TestUtils.setupRegistry("App0",TapestryCayenneModule.class,TestModule.class);
         _source = _reg.getService("CayenneBeanModelSource", BeanModelSource.class);
     }
     
@@ -55,6 +56,9 @@ public class TestCayenneBeanModelSource extends Assert {
         paintingProps.put(Painting.ARTIST_PROPERTY,"to_one");
         paintingProps.put(Painting.PRICE_PROPERTY,"number");
         paintingProps.put(Painting.TITLE_PROPERTY,"text");
+        Map<String,String> bidProps = new HashMap<String,String>();
+        bidProps.put(Bid.AMOUNT_PROPERTY, "number");
+        bidProps.put(Bid.PAINTING_PROPERTY, "painting");
         return new Object[][] {
                 {
                     StringPKEntity.class,
@@ -87,6 +91,16 @@ public class TestCayenneBeanModelSource extends Assert {
                     false,
                     paintingProps,
                     
+                },
+                {
+                    Bid.class,
+                    true,
+                    bidProps,
+                },
+                {
+                    Bid.class,
+                    false,
+                    bidProps,
                 }
         };
     }
