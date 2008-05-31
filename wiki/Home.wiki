@@ -11,6 +11,7 @@ Supports both Cayenne server and client classes.  Core features are:
   * Automatic ValueEncoder for use in page activation and passivation.
   * Simple ObjectContext creation for ad hoc contexts.
   * Custom BeanModelSource implementation
+  * Support for relationships via the CayenneDataTypeAnalyzer and supporting components.
 
 = Design Notes =
 
