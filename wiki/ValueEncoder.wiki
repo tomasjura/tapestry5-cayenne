@@ -1,3 +1,4 @@
+===A description of the tapestry5-cayenne ValueEncoder===
 = Introduction =
 
 Any web application must deal with client state.  A common way to deal with state is to store state information in string form on the client side as a request parameter or form field.  Tapestry 5 facilitates this process by providing "Value Encoders" which "magically" convert objects to a client-suitable representation, and then magically converting strings back to their server-side representations.  The tapestry5-cayenne library provides its own ValueEncoder for converting implementations of Cayenne's "Persistent" interface to strings and back.
