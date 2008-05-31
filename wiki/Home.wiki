@@ -10,7 +10,7 @@ Supports both Cayenne server and client classes.  Core features are:
   * Request filter for binding ObjectContext to session and ThreadLocal.
   * Automatic ValueEncoder for use in page activation and passivation.
   * Simple ObjectContext creation for ad hoc contexts.
-
+  * Custom BeanModelSource implementation
 
 = Design Notes =
 
