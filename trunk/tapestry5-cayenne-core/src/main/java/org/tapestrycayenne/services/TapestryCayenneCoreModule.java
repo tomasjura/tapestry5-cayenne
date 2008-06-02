@@ -2,10 +2,12 @@ package org.tapestrycayenne.services;
 
 import org.apache.cayenne.Persistent;
 import org.apache.tapestry5.ValueEncoder;
+import org.apache.tapestry5.VersionUtils;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.services.*;
 import org.tapestrycayenne.annotations.Cayenne;
@@ -30,10 +32,19 @@ public class TapestryCayenneCoreModule {
      * to the amount of objects allowed to accrue in memory.  The default is 500.
      */
     public static final String UNPERSISTED_OBJECT_LIMIT="tapestrycayenne.unpersistedlimit";
-
+    
+    /**
+     * Configuration/symbol key for ascertaining the version of the tapestry5-cayenne library.
+     */
+    public static final String T5CAYENNE_VERSION="tapestry5cayene.version";
+    
+    
     public static void contributeFactoryDefaults(MappedConfiguration<String,String> conf) {
         conf.add(FILTER_LOCATION,"after:*");
         conf.add(UNPERSISTED_OBJECT_LIMIT,"500");
+        conf.add(T5CAYENNE_VERSION,
+                 VersionUtils.readVersionNumber(
+                         "META-INF/maven/com.googlecode.tapestry5-cayenne/tapestry5-cayenne-core/pom.properties"));
     }
 
     @SuppressWarnings("unchecked")
@@ -86,5 +97,14 @@ public class TapestryCayenneCoreModule {
     public static void contributeBeanBlockSource(Configuration<BeanBlockContribution> conf) {
         conf.add(new BeanBlockContribution("to_one", "t5cayenne/CayenneEditBlockContributions", "to_one_editor", true));
         conf.add(new BeanBlockContribution("to_one","t5cayenne/CayenneViewBlockContributions","to_one_viewer",false));
+        conf.add(new BeanBlockContribution("to_many_map","t5cayenne/CayenneViewBlockContributions","to_many_map_viewer",false));
+        conf.add(new BeanBlockContribution("to_many_list","t5cayenne/CayenneViewBlockContributions","to_many_collection_viewer",false));
+    }
+    
+    public static void contributeClasspathAssetAliasManager(MappedConfiguration<String,String> configuration,
+                                                            @Symbol(T5CAYENNE_VERSION)
+                                                            String version)
+    {
+        configuration.add("t5cayenne/" + version,"org/tapestrycayenne");
     }
 }
