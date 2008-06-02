@@ -1,27 +1,52 @@
 package org.tapestrycayenne.pages;
 
-import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Map;
 
 import org.apache.tapestry5.annotations.Environmental;
+import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.ioc.Messages;
+import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.PropertyOutputContext;
-import org.tapestrycayenne.annotations.Label;
-import org.tapestrycayenne.internal.AnnotationFinder;
+import org.tapestrycayenne.internal.Labeler;
 
 public class CayenneViewBlockContributions {
     
     @Environmental
     private PropertyOutputContext _context;
     
-    public String getToOneString() throws Exception {
+    @Inject
+    private Messages _messages;
+    
+    @Property
+    @SuppressWarnings("unused")
+    private Object _tmp;
+    
+    public Collection getCollection() {
         Object val = _context.getPropertyValue();
-        if (val == null) {
-            return "&nbsp;";
+        if (!(val instanceof Collection)) {
+            bad_state("bad_state_collection", val);
         }
-        Method m =AnnotationFinder.methodForAnnotation(Label.class,val.getClass());
-        if (m == null) {
-            return val.toString();
-        }
-        return m.invoke(val).toString();
+        return (Collection) _context.getPropertyValue();
     }
-
+    
+    public String getToOneString() throws Exception {
+        return Labeler.htmlLabelForObject(_context.getPropertyValue());
+    }
+    
+    public Collection getMapKeys() {
+        Object val = _context.getPropertyValue();
+        if (!(val instanceof Map)) {
+            bad_state("bad_state_map",val);
+        }
+        return ((Map)val).keySet();
+    }
+    
+    private void bad_state(String key, Object val) {
+            throw new IllegalStateException(_messages.format(
+                    key,
+                    (val==null?null:val.getClass().getName()),
+                    _context.getPropertyName()));
+    }
+    
 }

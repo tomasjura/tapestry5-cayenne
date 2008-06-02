@@ -2,4 +2,12 @@
 <t:block t:id="to_one_viewer">
   <t:outputraw value="toOneString"/>
 </t:block>
+
+<t:block t:id="to_many_collection_viewer">
+  <ul t:type="t5cayenne/ToManyViewer" source="collection"/>
+</t:block>
+
+<t:block t:id="to_many_map_viewer">
+  <ul t:type="t5cayenne/ToManyViewer" source="mapKeys" />
+</t:block>
 </div>
