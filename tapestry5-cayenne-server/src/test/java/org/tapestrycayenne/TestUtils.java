@@ -144,4 +144,17 @@ public class TestUtils {
         return searchels;
     }
 
+    public static List<Painting> addPaintings(Artist artist, int numPaintings, ObjectContext context) {
+        List<Painting> newPaintings = new ArrayList<Painting>();
+        for(int i=1;i<=numPaintings;i++) {
+            Painting p = new Painting();
+            p.setPrice(i*1000.0);
+            p.setTitle("Painting " + i);
+            artist.addToPaintingsByTitle(p);
+            newPaintings.add(p);
+        }
+        context.commitChanges();
+        return newPaintings;
+    }
+
 }

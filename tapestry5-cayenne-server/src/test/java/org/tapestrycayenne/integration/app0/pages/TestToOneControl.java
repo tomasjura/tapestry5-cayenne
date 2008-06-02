@@ -2,6 +2,7 @@ package org.tapestrycayenne.integration.app0.pages;
 
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Persist;
+import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.BeanDisplay;
 import org.apache.tapestry5.corelib.components.BeanEditForm;
 import org.tapestrycayenne.model.Painting;
@@ -9,6 +10,8 @@ import org.tapestrycayenne.model.Painting;
 public class TestToOneControl {
     
     @Persist
+    @Property
+    @SuppressWarnings("unused")
     private Painting _painting;
     
     @SuppressWarnings("unused")
@@ -23,13 +26,4 @@ public class TestToOneControl {
     })
     private BeanDisplay _display;
     
-    
-    
-    public Painting getPainting() {
-        return _painting;
-    }
-    
-    public void setPainting(Painting p) {
-        _painting = p;
-    }
 }

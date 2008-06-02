@@ -67,8 +67,8 @@
 	<db-relationship name="bids" source="paintings" target="bid" toMany="true">
 		<db-attribute-pair source="id" target="paintingid"/>
 	</db-relationship>
-	<obj-relationship name="paintingList" source="Artist" target="Painting" db-relationship-path="paintingList"/>
-	<obj-relationship name="paintingsByTitle" source="Artist" target="Painting" collection-type="java.util.Map" map-key="title" db-relationship-path="paintingList"/>
+	<obj-relationship name="paintingList" source="Artist" target="Painting" deleteRule="Cascade" db-relationship-path="paintingList"/>
+	<obj-relationship name="paintingsByTitle" source="Artist" target="Painting" collection-type="java.util.Map" map-key="title" deleteRule="Cascade" db-relationship-path="paintingList"/>
 	<obj-relationship name="painting" source="Bid" target="Painting" db-relationship-path="painting"/>
-	<obj-relationship name="artist" source="Painting" target="Artist" db-relationship-path="artist"/>
+	<obj-relationship name="artist" source="Painting" target="Artist" deleteRule="Nullify" db-relationship-path="artist"/>
 </data-map>
