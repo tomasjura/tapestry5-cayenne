@@ -17,13 +17,14 @@ import org.apache.tapestry5.ioc.Registry;
 import org.apache.tapestry5.test.PageTester;
 import org.tapestrycayenne.TestUtils;
 import org.tapestrycayenne.model.Artist;
+import org.tapestrycayenne.model.Painting;
 import org.tapestrycayenne.services.ObjectContextProvider;
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-@Test(groups="all")
+@Test(groups="all",sequential=true)
 public class TestBlockContributions extends Assert {
     
     private Registry _registry;
@@ -44,14 +45,13 @@ public class TestBlockContributions extends Assert {
         _encoder = _registry.getService("CayenneEntityEncoder", ValueEncoder.class);
     }
     
-    @AfterTest
+    @AfterClass
     void shutdown() {
         if (_tester != null) {
             _tester.shutdown();
         }
     }
     
-    @Test
     public void testToOneEditor() {
         Document doc = _tester.renderPage("TestToOneControl");
         
@@ -80,11 +80,7 @@ public class TestBlockContributions extends Assert {
         }
     }
     
-    @Test
-    /** tests the "to_one" viewer; note that it also (re)tests the editor.
-     * Have to submit the form at the moment as there's no easy way to setup a
-     * page and then render that instance of that page. Or if there is, I don't
-     * know it.
+    /** tests the "to_one" viewer; also tests editor submission.
      */
     public void testToOneViewer() {
         //render the document, select the artist, 
@@ -111,6 +107,59 @@ public class TestBlockContributions extends Assert {
         els = TestUtils.DOMFindAll(doc.getRootElement(),"body/div/div/div");
         assertEquals(els.get(4).getChildMarkup(),"Artist:");
         assertEquals(els.get(5).getChildMarkup(),"Picasso");
+    }
+    
+    private Document assertToManyHead() {
+        Document doc = _tester.renderPage("TestToManyControl");
+        //make sure the stylesheet shows up.
+        List<Element> els = TestUtils.DOMFindAll(doc.getRootElement(), "head/link");
+        //should be 2: one for tapestry, one for t5cayenne
+        assertEquals(els.size(),2);
+        assertTrue(els.get(1).getAttribute("href").contains("ToManyViewer.css"));
+        //ok... make sure we have the right thing on the bean display...
+        return doc;
+    }
+    
+    
+    public void test_tomany_viewer_few_elements() {
+        assertEquals(_data.get(0).getName(),"Dali");
+        Document doc = assertToManyHead();
+        List<Element> els = TestUtils.DOMFindAll(doc.getRootElement(),"body/div/div/div/ul");
+        //one for the paintingList property, and one for the paintings as a map property.
+        assertEquals(els.size(),2);
+        assertEquals(els.get(0).getChildren().size(),_data.get(0).getPaintingList().size());
+        Iterator it = _data.get(0).getPaintingList().iterator();
+        for(Node n : els.get(0).getChildren()) {
+            //should be a li...
+            Element el = (Element) n;
+            assertEquals(el.getName(),"li");
+            StringBuilder blder = new StringBuilder();
+            doc.getMarkupModel().encode(it.next().toString(), blder);
+            assertEquals(el.getChildMarkup().trim(),blder.toString());
+        }
+        //now test the map...
+        it = _data.get(0).getPaintingsByTitle().keySet().iterator();
+        for(Node n : els.get(1).getChildren()) {
+            Element el = (Element) n;
+            assertEquals(el.getName(),"li");
+            assertEquals(el.getChildMarkup().trim(),it.next().toString());
+        }
+    }
+    
+    /**
+     * Test what happens with lots of paintings. Currently, it should "kick over" to generic descriptive text at 20 paintings.
+     */
+    public void test_tomany_viewer_many_elements() {
+        assertEquals(_data.get(0).getName(),"Dali");
+        List<Painting> paintings = TestUtils.addPaintings(_data.get(0), 18, _provider.currentContext());
+        for(Painting p : paintings) {
+            _data.get(0).addToPaintingList(p);
+        }
+        Document doc = assertToManyHead();
+        //no ul to grab anymore...
+        List<Element> els = TestUtils.DOMFindAll(doc.getRootElement(), "body/div/div/div");
+        assertEquals(els.get(1).getChildMarkup().trim(),"20 associated items");
+        assertEquals(els.get(3).getChildMarkup().trim(),"20 associated items");
     }
     
 }
