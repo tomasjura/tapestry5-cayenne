@@ -38,7 +38,7 @@ public class TestBlockContributions extends Assert {
     @BeforeClass
     void setup() throws Exception {
         TestUtils.setupdb();
-        _tester = new PageTester("org.tapestrycayenne.integration.app0","app","src/test/app0");
+        _tester = new PageTester("com.googlecode.tapestry5cayenne.integration.app0","app","src/test/app0");
         _registry = _tester.getRegistry();
         _provider = _registry.getService(ObjectContextProvider.class);
         _data = TestUtils.basicData(_provider.currentContext());

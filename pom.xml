@@ -135,7 +135,7 @@
                     <configuration>
                         <archive>
                             <manifestEntries>
-                                <Tapestry-Module-Classes>org.tapestrycayenne.services.TapestryCayenneModule
+                                <Tapestry-Module-Classes>com.googlecode.tapestry5cayenne.services.TapestryCayenneModule
                                 </Tapestry-Module-Classes>
                             </manifestEntries>
                         </archive>

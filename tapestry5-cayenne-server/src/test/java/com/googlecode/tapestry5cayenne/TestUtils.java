@@ -104,7 +104,7 @@ public class TestUtils {
      * @return the initialized service/ioc registry.
      */
     public static Registry setupRegistry(String appName, Class<?>...modules) {
-        SymbolProvider provider = new SingleKeySymbolProvider(InternalConstants.TAPESTRY_APP_PACKAGE_PARAM, "org.tapestrycayenne.integration");
+        SymbolProvider provider = new SingleKeySymbolProvider(InternalConstants.TAPESTRY_APP_PACKAGE_PARAM, "com.googlecode.tapestry5cayenne.integration");
         TapestryAppInitializer initializer = new TapestryAppInitializer(provider, appName, PageTesterModule.TEST_MODE);
         if (modules.length > 0) {
             initializer.addModules(modules);
