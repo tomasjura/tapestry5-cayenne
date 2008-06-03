@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data-map project-version="3.0">
-	<property name="defaultPackage" value="org.tapestrycayenne.model"/>
+	<property name="defaultPackage" value="com.googlecode.tapestry5cayenne.model"/>
 	<db-entity name="BigIntPKEntity">
 		<db-attribute name="id" type="BIGINT" isPrimaryKey="true" isMandatory="true"/>
 		<db-attribute name="name" type="VARCHAR" length="64"/>
@@ -32,27 +32,27 @@
 		<db-attribute name="price" type="DECIMAL"/>
 		<db-attribute name="title" type="LONGVARCHAR" isMandatory="true"/>
 	</db-entity>
-	<obj-entity name="Artist" className="org.tapestrycayenne.model.Artist" dbEntityName="artists">
+	<obj-entity name="Artist" className="com.googlecode.tapestry5cayenne.model.Artist" dbEntityName="artists">
 		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
 	</obj-entity>
-	<obj-entity name="Bid" className="org.tapestrycayenne.model.Bid" dbEntityName="bid">
+	<obj-entity name="Bid" className="com.googlecode.tapestry5cayenne.model.Bid" dbEntityName="bid">
 		<obj-attribute name="amount" type="java.math.BigDecimal" db-attribute-path="bidamount"/>
 	</obj-entity>
-	<obj-entity name="BigIntPKEntity" className="org.tapestrycayenne.model.BigIntPKEntity" dbEntityName="BigIntPKEntity">
+	<obj-entity name="BigIntPKEntity" className="com.googlecode.tapestry5cayenne.model.BigIntPKEntity" dbEntityName="BigIntPKEntity">
 		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
 	</obj-entity>
-	<obj-entity name="Painting" className="org.tapestrycayenne.model.Painting" dbEntityName="paintings">
+	<obj-entity name="Painting" className="com.googlecode.tapestry5cayenne.model.Painting" dbEntityName="paintings">
 		<obj-attribute name="price" type="java.lang.Double" db-attribute-path="price"/>
 		<obj-attribute name="title" type="java.lang.String" db-attribute-path="title"/>
 	</obj-entity>
-	<obj-entity name="SmallIntPKEntity" className="org.tapestrycayenne.model.SmallIntPKEntity" dbEntityName="SmallIntPKEntity">
+	<obj-entity name="SmallIntPKEntity" className="com.googlecode.tapestry5cayenne.model.SmallIntPKEntity" dbEntityName="SmallIntPKEntity">
 		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
 	</obj-entity>
-	<obj-entity name="StringPKEntity" className="org.tapestrycayenne.model.StringPKEntity" dbEntityName="StringPKEntity">
+	<obj-entity name="StringPKEntity" className="com.googlecode.tapestry5cayenne.model.StringPKEntity" dbEntityName="StringPKEntity">
 		<obj-attribute name="id" type="java.lang.String" db-attribute-path="id"/>
 		<obj-attribute name="intProp1" type="java.lang.Integer" db-attribute-path="intProp1"/>
 	</obj-entity>
-	<obj-entity name="TinyIntPKEntity" className="org.tapestrycayenne.model.TinyIntPKEntity" dbEntityName="TinyIntPKEntity">
+	<obj-entity name="TinyIntPKEntity" className="com.googlecode.tapestry5cayenne.model.TinyIntPKEntity" dbEntityName="TinyIntPKEntity">
 		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
 	</obj-entity>
 	<db-relationship name="paintingList" source="artists" target="paintings" toMany="true">
