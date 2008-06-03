@@ -64,7 +64,7 @@ public class TapestryCayenneCoreModule {
     }
     
     public static void contributeComponentClassResolver(Configuration<LibraryMapping> configuration) {
-        configuration.add(new LibraryMapping("t5cayenne", "org.tapestrycayenne"));
+        configuration.add(new LibraryMapping("t5cayenne", "com.googlecode.tapestry5cayenne"));
     }
 
     public static void contributeValueEncoderSource(MappedConfiguration<Class, ValueEncoderFactory> configuration,
@@ -106,6 +106,6 @@ public class TapestryCayenneCoreModule {
                                                             @Symbol(T5CAYENNE_VERSION)
                                                             String version)
     {
-        configuration.add("t5cayenne/" + version,"org/tapestrycayenne");
+        configuration.add("t5cayenne/" + version,"com/googlecode/tapestry5cayenne");
     }
 }
