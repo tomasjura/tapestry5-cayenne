@@ -6,7 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-package org.tapestrycayenne.services;
+package com.googlecode.tapestry5cayenne.services;
 
 import org.apache.cayenne.ObjectContext;
 import org.apache.tapestry5.services.*;
