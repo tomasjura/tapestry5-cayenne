@@ -1,4 +1,4 @@
-package org.tapestrycayenne.services;
+package com.googlecode.tapestry5cayenne.services;
 
 import org.apache.cayenne.CayenneContext;
 import org.apache.cayenne.DataChannel;
