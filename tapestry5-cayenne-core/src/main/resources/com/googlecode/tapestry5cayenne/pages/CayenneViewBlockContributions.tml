@@ -8,6 +8,6 @@
 </t:block>
 
 <t:block t:id="to_many_map_viewer">
-  <ul t:type="t5cayenne/ToManyViewer" source="mapKeys" />
+  <ul t:type="t5cayenne/ToManyViewer" source="mapValues" />
 </t:block>
 </div>

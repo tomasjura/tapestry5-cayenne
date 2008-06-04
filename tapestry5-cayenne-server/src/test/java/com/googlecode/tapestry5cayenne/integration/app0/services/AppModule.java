@@ -3,7 +3,7 @@
  * 
  * 
  */
-package com.googlecode.tapestry5cayenne.integration.services;
+package com.googlecode.tapestry5cayenne.integration.app0.services;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.googlecode.tapestry5cayenne.services;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 import org.apache.cayenne.map.EntityResolver;
@@ -54,9 +54,15 @@ public class CayenneDataTypeAnalyzer implements DataTypeAnalyzer {
         }
 
         if (rel.isToMany()) {
-            if (rel.getCollectionType().equals(List.class.getName())) {
-                return "to_many_list";
-            } else if (rel.getCollectionType().equals(Map.class.getName())){
+            Class clazz;
+            try {
+              clazz = Class.forName(rel.getCollectionType());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            if (Collection.class.isAssignableFrom(clazz)) {
+                return "to_many_collection";
+            } else if (Map.class.isAssignableFrom(clazz)) {
                 return "to_many_map";
             } else {
                 throw new UnsupportedOperationException(rel.getCollectionType());

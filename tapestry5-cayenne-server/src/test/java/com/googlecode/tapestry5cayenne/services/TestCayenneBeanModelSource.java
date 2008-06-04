@@ -52,7 +52,7 @@ public class TestCayenneBeanModelSource extends Assert {
         Map<String,String> artistProps = new HashMap<String, String>();
         artistProps.put(Artist.NAME_PROPERTY, "text");
         Map<String,String> artistPropsWithRelationship = new HashMap<String,String>(artistProps);
-        artistPropsWithRelationship.put("paintingList", "to_many_list");
+        artistPropsWithRelationship.put("paintingList", "to_many_collection");
         artistPropsWithRelationship.put("paintingsByTitle","to_many_map");
         artistPropsWithRelationship.put("numPaintings","number");
         Map<String,String> paintingProps = new HashMap<String,String>();
