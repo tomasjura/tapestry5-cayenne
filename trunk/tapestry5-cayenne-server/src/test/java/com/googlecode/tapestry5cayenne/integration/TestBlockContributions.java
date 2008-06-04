@@ -53,6 +53,9 @@ public class TestBlockContributions extends Assert {
         }
     }
     
+    /**
+     * Ensure that the toOneEditor is properly rendered
+     */
     public void testToOneEditor() {
         Document doc = _tester.renderPage("TestToOneControl");
         
@@ -81,9 +84,10 @@ public class TestBlockContributions extends Assert {
         }
     }
     
-    /** tests the "to_one" viewer; also tests editor submission.
+    /** 
+     * tests the "to_one" viewer; also tests editor submission.
      */
-    public void testToOneViewer() {
+    public void testToOneViewer_and_toOneEditorSubmission() {
         //render the document, select the artist, 
         //submit, then check the view.
         Document doc = _tester.renderPage("TestToOneControl");
@@ -110,6 +114,9 @@ public class TestBlockContributions extends Assert {
         assertEquals(els.get(5).getChildMarkup(),"Picasso");
     }
     
+    /**
+     * Ensures that the ToManyViewer.css link is properly rendered.
+     */
     private Document assertToManyHead() {
         Document doc = _tester.renderPage("TestToManyControl");
         //make sure the stylesheet shows up.
@@ -122,7 +129,11 @@ public class TestBlockContributions extends Assert {
     }
     
     
-    public void test_tomany_viewer_few_elements() {
+    /**
+     * Tests the behavior of the tomany view block & component with 
+     * few elements (should result in a listing of each element)
+     */
+    public void testToManyViewer_fewElements() {
         assertEquals(_data.get(0).getName(),"Dali");
         Document doc = assertToManyHead();
         List<Element> els = TestUtils.DOMFindAll(doc.getRootElement(),"body/div/div/div/ul");
@@ -139,19 +150,25 @@ public class TestBlockContributions extends Assert {
             assertEquals(el.getChildMarkup().trim(),blder.toString());
         }
         //now test the map...
-        it = _data.get(0).getPaintingsByTitle().keySet().iterator();
+        it = _data.get(0).getPaintingsByTitle().values().iterator();
         for(Node n : els.get(1).getChildren()) {
             Element el = (Element) n;
             assertEquals(el.getName(),"li");
-            assertEquals(el.getChildMarkup().trim(),it.next().toString());
+            StringBuilder blder = new StringBuilder();
+            doc.getMarkupModel().encode(it.next().toString(),blder);
+            assertEquals(el.getChildMarkup().trim(),blder.toString());
         }
     }
     
     /**
-     * Test what happens with lots of paintings. Currently, it should "kick over" to generic descriptive text at 20 paintings.
+     * Test what happens with lots of paintings. 
+     * Currently, it should "kick over" to generic descriptive text at 20 paintings.
      */
-    public void test_tomany_viewer_many_elements() {
+    @Test(dependsOnMethods="testToManyViewer_fewElements")
+    public void testToManyViewer_manyElements() {
         assertEquals(_data.get(0).getName(),"Dali");
+        //add 18 paintings, because "TestUtils.basicData" (called from setup) 
+        //creates two paintings for each artist.
         List<Painting> paintings = TestUtils.addPaintings(_data.get(0), 18, _provider.currentContext());
         for(Painting p : paintings) {
             _data.get(0).addToPaintingList(p);

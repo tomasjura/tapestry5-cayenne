@@ -35,12 +35,12 @@ public class CayenneViewBlockContributions {
         return Labeler.htmlLabelForObject(_context.getPropertyValue());
     }
     
-    public Collection getMapKeys() {
+    public Collection getMapValues() {
         Object val = _context.getPropertyValue();
         if (!(val instanceof Map)) {
             bad_state("bad_state_map",val);
         }
-        return ((Map)val).keySet();
+        return ((Map)val).values();
     }
     
     private void bad_state(String key, Object val) {

@@ -99,7 +99,7 @@ public class TapestryCayenneCoreModule {
         conf.add(new BeanBlockContribution("to_one", "t5cayenne/CayenneEditBlockContributions", "to_one_editor", true));
         conf.add(new BeanBlockContribution("to_one","t5cayenne/CayenneViewBlockContributions","to_one_viewer",false));
         conf.add(new BeanBlockContribution("to_many_map","t5cayenne/CayenneViewBlockContributions","to_many_map_viewer",false));
-        conf.add(new BeanBlockContribution("to_many_list","t5cayenne/CayenneViewBlockContributions","to_many_collection_viewer",false));
+        conf.add(new BeanBlockContribution("to_many_collection","t5cayenne/CayenneViewBlockContributions","to_many_collection_viewer",false));
     }
     
     public static void contributeClasspathAssetAliasManager(MappedConfiguration<String,String> configuration,
