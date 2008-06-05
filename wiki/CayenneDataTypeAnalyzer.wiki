@@ -10,9 +10,9 @@ The CayenneDataTypeAnalyzer looks at the property name and the class containing 
 
   * to-one properties are mapped to the property type "to_one"
   * to-many properties are mapped to:
-    * to_many_list for List-based collections
+    * to_many_collection for Collection-based collections
     * to_many_map for Map-based collections
-    * UnsupportedOperationException is thrown for other collection-types for now.
+    * UnsupportedOperationException is thrown for anything else
 
 == Supporting custom-mappings ==
 
@@ -47,4 +47,9 @@ If no @Label annotation is found, the objects will be displayed via their toStri
 
 === to_many ===
 
-Editing and viewing to_many relationships is not currently supported out of the box, but users can contribute their own editors and viewers for to_many_list or to_many_map.
+Viewing of to_many relationships is currently supported out of the box, but editing is not.  The current viewer works as follows:
+
+  # If there are only a few objects in the collection or map (currently less than 20), each object is displayed, according to the same rules that apply for rendering a to_one relationship (@Label, toString, etc.).  The items are rendered in a list, styled to allow for in-place scrolling by default.
+  # If there are many objects in the collection or map (currently 20 or more), the relationship is represented as: X associated items, where X is the size of the collection.
+
+There are plans to extend the viewer to either link to a grid-based view of the collection items, or to extend the list logic using an ajax-based approach to lazily fetch the data as needed.
