@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-map project-version="3.0">
+	<property name="defaultPackage" value="com.googlecode.tapestry5cayenne.model"/>
+	<db-entity name="BigIntPKEntity">
+		<db-attribute name="id" type="BIGINT" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="name" type="VARCHAR" length="64"/>
+	</db-entity>
+	<db-entity name="SmallIntPKEntity">
+		<db-attribute name="id" type="SMALLINT" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="name" type="VARCHAR" length="64"/>
+	</db-entity>
+	<db-entity name="StringPKEntity">
+		<db-attribute name="id" type="VARCHAR" isPrimaryKey="true" isMandatory="true" length="64"/>
+		<db-attribute name="intProp1" type="INTEGER"/>
+	</db-entity>
+	<db-entity name="TinyIntPKEntity">
+		<db-attribute name="id" type="TINYINT" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="name" type="VARCHAR" length="64"/>
+	</db-entity>
+	<db-entity name="artists">
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="name" type="LONGVARCHAR"/>
+	</db-entity>
+	<db-entity name="bid">
+		<db-attribute name="bidamount" type="DOUBLE" isMandatory="true"/>
+		<db-attribute name="bidid" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="paintingid" type="INTEGER" isMandatory="true"/>
+	</db-entity>
+	<db-entity name="paintings">
+		<db-attribute name="artistid" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="price" type="DECIMAL"/>
+		<db-attribute name="title" type="LONGVARCHAR" isMandatory="true"/>
+	</db-entity>
+	<obj-entity name="Artist" className="com.googlecode.tapestry5cayenne.model.Artist" dbEntityName="artists">
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+	</obj-entity>
+	<obj-entity name="Bid" className="com.googlecode.tapestry5cayenne.model.Bid" dbEntityName="bid">
+		<obj-attribute name="amount" type="java.math.BigDecimal" db-attribute-path="bidamount"/>
+	</obj-entity>
+	<obj-entity name="BigIntPKEntity" className="com.googlecode.tapestry5cayenne.model.BigIntPKEntity" dbEntityName="BigIntPKEntity">
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+	</obj-entity>
+	<obj-entity name="Painting" className="com.googlecode.tapestry5cayenne.model.Painting" dbEntityName="paintings">
+		<obj-attribute name="price" type="java.lang.Double" db-attribute-path="price"/>
+		<obj-attribute name="title" type="java.lang.String" db-attribute-path="title"/>
+	</obj-entity>
+	<obj-entity name="SmallIntPKEntity" className="com.googlecode.tapestry5cayenne.model.SmallIntPKEntity" dbEntityName="SmallIntPKEntity">
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+	</obj-entity>
+	<obj-entity name="StringPKEntity" className="com.googlecode.tapestry5cayenne.model.StringPKEntity" dbEntityName="StringPKEntity">
+		<obj-attribute name="id" type="java.lang.String" db-attribute-path="id"/>
+		<obj-attribute name="intProp1" type="java.lang.Integer" db-attribute-path="intProp1"/>
+	</obj-entity>
+	<obj-entity name="TinyIntPKEntity" className="com.googlecode.tapestry5cayenne.model.TinyIntPKEntity" dbEntityName="TinyIntPKEntity">
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+	</obj-entity>
+	<db-relationship name="paintingList" source="artists" target="paintings" toMany="true">
+		<db-attribute-pair source="id" target="artistid"/>
+	</db-relationship>
+	<db-relationship name="painting" source="bid" target="paintings" toMany="false">
+		<db-attribute-pair source="paintingid" target="id"/>
+	</db-relationship>
+	<db-relationship name="artist" source="paintings" target="artists" toMany="false">
+		<db-attribute-pair source="artistid" target="id"/>
+	</db-relationship>
+	<db-relationship name="bids" source="paintings" target="bid" toMany="true">
+		<db-attribute-pair source="id" target="paintingid"/>
+	</db-relationship>
+	<obj-relationship name="paintingList" source="Artist" target="Painting" deleteRule="Cascade" db-relationship-path="paintingList"/>
+	<obj-relationship name="paintingsByTitle" source="Artist" target="Painting" collection-type="java.util.Map" map-key="title" deleteRule="Cascade" db-relationship-path="paintingList"/>
+	<obj-relationship name="painting" source="Bid" target="Painting" db-relationship-path="painting"/>
+	<obj-relationship name="artist" source="Painting" target="Artist" deleteRule="Nullify" db-relationship-path="artist"/>
+</data-map>
