@@ -79,14 +79,14 @@ public class CayenneEntityEncoder implements ValueEncoder<Persistent> {
                 return null;
             }
             //TODO i18n this
-            throw new RuntimeException("Unable to convert " + val + " into a CayenneDataObject");
+            throw new RuntimeException("Unable to convert " + val + " into a Cayenne Persistent object");
         }
 
         if (vals.length == 3) {
             //check to see if it's in storage...
             final Persistent obj = _storer.retrieve(vals[2],vals[0]);
             if (obj == null) { 
-                throw new RuntimeException("Unable to convert " + val + " into a CayenneDataObject: missing object");
+                throw new RuntimeException("Unable to convert " + val + " into a Cayenne Persistent object: missing object");
             }
             return obj; 
         }
