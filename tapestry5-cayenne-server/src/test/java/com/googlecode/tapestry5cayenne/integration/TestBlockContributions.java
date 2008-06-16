@@ -1,12 +1,9 @@
 package com.googlecode.tapestry5cayenne.integration;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
+import com.googlecode.tapestry5cayenne.TestUtils;
+import com.googlecode.tapestry5cayenne.model.Artist;
+import com.googlecode.tapestry5cayenne.model.Painting;
+import com.googlecode.tapestry5cayenne.services.ObjectContextProvider;
 import org.apache.cayenne.Persistent;
 import org.apache.cayenne.query.Ordering;
 import org.apache.tapestry5.ValueEncoder;
@@ -20,10 +17,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.googlecode.tapestry5cayenne.TestUtils;
-import com.googlecode.tapestry5cayenne.model.Artist;
-import com.googlecode.tapestry5cayenne.model.Painting;
-import com.googlecode.tapestry5cayenne.services.ObjectContextProvider;
+import java.util.*;
 
 @Test(groups="all",sequential=true)
 public class TestBlockContributions extends Assert {
@@ -52,7 +46,7 @@ public class TestBlockContributions extends Assert {
             _tester.shutdown();
         }
     }
-    
+
     /**
      * Ensure that the toOneEditor is properly rendered
      */
@@ -179,5 +173,35 @@ public class TestBlockContributions extends Assert {
         assertEquals(els.get(1).getChildMarkup().trim(),"20 associated items");
         assertEquals(els.get(3).getChildMarkup().trim(),"20 associated items");
     }
-    
+
+    /**
+     * Test that CayenneSelect renders properly
+     */
+    public void testCayenneSelect() {
+        Document doc = _tester.renderPage("TestCayenneSelect");
+System.out.println(doc.toString());
+        //Verify the label
+        //Element el = doc.getElementById("toOneList:label");
+        //assertEquals(el.getChildMarkup(),"Artist");
+
+        //Verify the select list.
+        Element el = doc.getElementById("select");
+        assertEquals(el.getChildren().size()-1,_data.size());
+
+        //we expect the list of items to be sorted by the @Label.
+        Collections.sort(_data,new Comparator<Artist>() {
+            public int compare(Artist o1, Artist o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+        Iterator<Node> children = el.getChildren().iterator();
+        //skip the first node: it's blank.
+        children.next();
+        for(Artist a : _data) {
+            Element option = (Element) children.next();
+            String val = option.getAttribute("value");
+            Persistent obj = _encoder.toValue(val);
+            assertEquals(obj,a,"Incorrect order of persistent objects!");
+        }
+    }
 }
