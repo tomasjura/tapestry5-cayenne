@@ -1,6 +1,6 @@
 package com.googlecode.tapestry5cayenne.components;
 
-import com.googlecode.tapestry5cayenne.internal.RelationshipSelectModel;
+import com.googlecode.tapestry5cayenne.internal.PersistentEntitySelectModel;
 import com.googlecode.tapestry5cayenne.services.ObjectContextProvider;
 import org.apache.cayenne.Persistent;
 import org.apache.tapestry5.ComponentResources;
@@ -33,6 +33,6 @@ public class CayenneSelect
 
     public SelectModel getModel()
     {
-        return new RelationshipSelectModel(resources.getBoundType("value"), provider.currentContext());
+        return new PersistentEntitySelectModel(resources.getBoundType("value"), provider.currentContext());
     }
 }
