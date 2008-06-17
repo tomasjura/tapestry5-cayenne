@@ -17,15 +17,31 @@ import com.googlecode.tapestry5cayenne.annotations.Label;
 
 /**
  * Defines a selection model for use with cayenne relationships.
+ * The model will build a list of all objects of the type provided to the constructor.
+ * Objects will be ordered according to the following rules:
+ * 1) If the class type has a method annotated with the @Label annotation, then the objects will be 
+ *  ordered by the result of invoking the labeled method.  The model will check to see if the method
+ *  corresponds to a known database property.  If so, the sort will occur at the database level.
+ *  If not, the sort will occur in-memory.  
+ * 2) If no label is found, but the class is an instance of comparable, the objects will be sorted in-memory
+ *  according to their "comparable" ordering.
+ * 3) If no method can be found and the objects are not comparable, no sorting will occur.
+ * 
+ * Each option in the model displays a single Persistent object.  The user-presented value for the object
+ * is the result of invoking a @Label-annotated method, if present, or toString().
+ * 
  * @author robertz
  *
  */
-public class RelationshipSelectModel extends AbstractSelectModel {
+public class PersistentEntitySelectModel extends AbstractSelectModel {
     
     private final List<OptionModel> _options;
     
     @SuppressWarnings("unchecked")
-    public RelationshipSelectModel(Class<?> type, ObjectContext context) {
+    /**
+     * Constructs the model by looking up the entities corresponding to type, using the provided ObjectContext.
+     */
+    public PersistentEntitySelectModel(Class<?> type, ObjectContext context) {
         final Method label = AnnotationFinder.methodForAnnotation(Label.class, type);
         SelectQuery sq = new SelectQuery(type);
         QuerySortResult rslt = querySort(sq,label,context,type);

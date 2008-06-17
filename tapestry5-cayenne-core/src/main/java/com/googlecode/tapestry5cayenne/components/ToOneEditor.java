@@ -11,7 +11,7 @@ import org.apache.tapestry5.corelib.components.Select;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.PropertyEditContext;
 
-import com.googlecode.tapestry5cayenne.internal.RelationshipSelectModel;
+import com.googlecode.tapestry5cayenne.internal.PersistentEntitySelectModel;
 import com.googlecode.tapestry5cayenne.services.ObjectContextProvider;
 
 /**
@@ -51,7 +51,7 @@ public class ToOneEditor implements Field {
     public SelectModel getModel() {
         Class type = _context.getPropertyType();
         ObjectContext ctxt = _provider.currentContext();
-        return new RelationshipSelectModel(type,ctxt);
+        return new PersistentEntitySelectModel(type,ctxt);
     }
     
     public FieldValidator<?> getValidation() {
