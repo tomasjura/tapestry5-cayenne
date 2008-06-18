@@ -1,4 +1,4 @@
-#Implementing ValueEncoder without using primary keys.
+#summary Discussion on implementing ValueEncoder without using primary keys.
 
 = Motivation =
 
