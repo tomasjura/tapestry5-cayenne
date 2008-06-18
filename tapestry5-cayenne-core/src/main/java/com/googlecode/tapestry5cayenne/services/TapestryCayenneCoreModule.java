@@ -1,15 +1,23 @@
 package com.googlecode.tapestry5cayenne.services;
 
+import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.Persistent;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.VersionUtils;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
+import org.apache.tapestry5.ioc.ObjectLocator;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
-import org.apache.tapestry5.services.*;
+import org.apache.tapestry5.services.AliasContribution;
+import org.apache.tapestry5.services.BeanBlockContribution;
+import org.apache.tapestry5.services.BeanModelSource;
+import org.apache.tapestry5.services.DataTypeAnalyzer;
+import org.apache.tapestry5.services.LibraryMapping;
+import org.apache.tapestry5.services.PersistentFieldStrategy;
+import org.apache.tapestry5.services.ValueEncoderFactory;
 
 import com.googlecode.tapestry5cayenne.annotations.Cayenne;
 
@@ -38,6 +46,8 @@ public class TapestryCayenneCoreModule {
      * Configuration/symbol key for ascertaining the version of the tapestry5-cayenne library.
      */
     public static final String T5CAYENNE_VERSION="tapestry5cayene.version";
+    
+    public static final String T5CAYENNE_PERSISTENCE_STRATEGY="cayenneentity";
     
     
     public static void contributeFactoryDefaults(MappedConfiguration<String,String> conf) {
@@ -108,4 +118,16 @@ public class TapestryCayenneCoreModule {
     {
         configuration.add("t5cayenne/" + version,"com/googlecode/tapestry5cayenne");
     }
+    
+    /**
+     * Contributes the following: <dl> <dt>cayenneentity</dt> <dd>Stores the id of the entity and reloads from the {@link
+     * ObjectContext}</dd> </dl>
+     */
+    public static void contributePersistentFieldManager(
+            MappedConfiguration<String, PersistentFieldStrategy> configuration,
+            ObjectLocator locator)
+    {
+        configuration.add("cayenneentity", locator.autobuild(CayenneEntityPersistentFieldStrategy.class));
+    }       
+
 }
