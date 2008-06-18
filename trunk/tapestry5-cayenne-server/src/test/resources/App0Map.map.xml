@@ -12,10 +12,12 @@
 	<db-entity name="StringPKEntity">
 		<db-attribute name="id" type="VARCHAR" isPrimaryKey="true" isMandatory="true" length="64"/>
 		<db-attribute name="intProp1" type="INTEGER"/>
+		<db-attribute name="stringProp1" type="LONGVARCHAR"/>
 	</db-entity>
 	<db-entity name="TinyIntPKEntity">
 		<db-attribute name="id" type="TINYINT" isPrimaryKey="true" isMandatory="true"/>
 		<db-attribute name="name" type="VARCHAR" length="64"/>
+		<db-attribute name="value" type="VARCHAR" length="64"/>
 	</db-entity>
 	<db-entity name="artists">
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
@@ -51,9 +53,11 @@
 	<obj-entity name="StringPKEntity" className="com.googlecode.tapestry5cayenne.model.StringPKEntity" dbEntityName="StringPKEntity">
 		<obj-attribute name="id" type="java.lang.String" db-attribute-path="id"/>
 		<obj-attribute name="intProp1" type="java.lang.Integer" db-attribute-path="intProp1"/>
+		<obj-attribute name="stringProp1" type="java.lang.String" db-attribute-path="stringProp1"/>
 	</obj-entity>
 	<obj-entity name="TinyIntPKEntity" className="com.googlecode.tapestry5cayenne.model.TinyIntPKEntity" dbEntityName="TinyIntPKEntity">
 		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+		<obj-attribute name="value" type="java.lang.String" db-attribute-path="value"/>
 	</obj-entity>
 	<db-relationship name="paintingList" source="artists" target="paintings" toMany="true">
 		<db-attribute-pair source="id" target="artistid"/>

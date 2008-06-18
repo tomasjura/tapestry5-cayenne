@@ -11,6 +11,7 @@ import org.apache.cayenne.CayenneDataObject;
 public abstract class _TinyIntPKEntity extends CayenneDataObject {
 
     public static final String NAME_PROPERTY = "name";
+    public static final String VALUE_PROPERTY = "value";
 
     public static final String ID_PK_COLUMN = "id";
 
@@ -19,6 +20,13 @@ public abstract class _TinyIntPKEntity extends CayenneDataObject {
     }
     public String getName() {
         return (String)readProperty("name");
+    }
+
+    public void setValue(String value) {
+        writeProperty("value", value);
+    }
+    public String getValue() {
+        return (String)readProperty("value");
     }
 
 }
