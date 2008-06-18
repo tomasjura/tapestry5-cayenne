@@ -25,10 +25,12 @@ public class CayenneSelect
 
     @Property
     @Parameter(required = true)
+    @SuppressWarnings("unused")
     private Persistent value;
 
     @Property
     @Parameter
+    @SuppressWarnings("unused")
     private String label;
 
     public SelectModel getModel()

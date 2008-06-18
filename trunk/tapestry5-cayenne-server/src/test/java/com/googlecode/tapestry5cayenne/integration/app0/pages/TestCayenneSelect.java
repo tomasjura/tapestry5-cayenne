@@ -28,6 +28,7 @@ public class TestCayenneSelect
     @Component(parameters={
             "value=artist", "label=literal:Cayenne Select"
     })
+    @SuppressWarnings("unused")
     private CayenneSelect select;
 
 }
