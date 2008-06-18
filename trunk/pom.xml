@@ -169,7 +169,7 @@
     </reporting>
 
     <properties>
-        <tapestry-release-version>5.0.12-SNAPSHOT</tapestry-release-version>
+        <tapestry-release-version>5.0.13</tapestry-release-version>
     </properties>
 
     <repositories>
