@@ -57,10 +57,22 @@ public class PersistentEntitySelectModel extends AbstractSelectModel {
         }
     }
     
+    /**
+     * Converts the provided property names to orderings, assuming an ordering of ascending for all properties.
+     * @param vals
+     * @return an array of Ordering objects.
+     */
     public static Ordering[] stringToOrdering(String...vals) {
         return stringToOrdering(true,vals);
     }
     
+    /**
+     * Converts the provided property names to orderings.  
+     * All orderings will be ascending or descending, according to the ascending parameter.
+     * @param ascending
+     * @param vals
+     * @return
+     */
     public static Ordering[] stringToOrdering(boolean ascending,String...vals) {
         Ordering[] o = new Ordering[vals.length];
         for(int i=0;i<o.length;i++) {
@@ -69,6 +81,17 @@ public class PersistentEntitySelectModel extends AbstractSelectModel {
         return o;
     }
     
+    /**
+     * Determines what type of sorting to use for the given class.
+     * Only reason this is not private is so that TestPersistentEntitySelectModel 
+     * can more easily test it. 
+     * @param sq
+     * @param label
+     * @param context
+     * @param type
+     * @param orderings
+     * @return
+     */
     static QuerySortResult querySort(SelectQuery sq,Method label, ObjectContext context, Class<?> type,Ordering[] orderings) {
         QuerySortResult res = new QuerySortResult();
         //first check to see if there's anything in orderings...
@@ -137,6 +160,11 @@ public class PersistentEntitySelectModel extends AbstractSelectModel {
     }
 }
 
+/**
+ * Data Storage class for holding information about how the query sort should take place.
+ * @author robertz
+ *
+ */
 class QuerySortResult {
   
     QuerySortResult() {
