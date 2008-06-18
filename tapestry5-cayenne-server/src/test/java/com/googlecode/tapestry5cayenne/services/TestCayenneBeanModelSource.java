@@ -49,6 +49,7 @@ public class TestCayenneBeanModelSource extends Assert {
         Map<String,String> stringPKProps = new HashMap<String, String>();
         stringPKProps.put(StringPKEntity.ID_PROPERTY,"text");
         stringPKProps.put(StringPKEntity.INT_PROP1_PROPERTY,"number");
+        stringPKProps.put(StringPKEntity.STRING_PROP1_PROPERTY,"text");
         Map<String,String> artistProps = new HashMap<String, String>();
         artistProps.put(Artist.NAME_PROPERTY, "text");
         Map<String,String> artistPropsWithRelationship = new HashMap<String,String>(artistProps);

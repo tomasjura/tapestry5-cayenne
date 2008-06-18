@@ -1,6 +1,7 @@
 package com.googlecode.tapestry5cayenne.internal;
 
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
 
@@ -16,10 +17,13 @@ import org.testng.annotations.Test;
 
 import com.googlecode.tapestry5cayenne.TestUtils;
 import com.googlecode.tapestry5cayenne.model.Artist;
+import com.googlecode.tapestry5cayenne.model.Bid;
 import com.googlecode.tapestry5cayenne.model.BigIntPKEntity;
+import com.googlecode.tapestry5cayenne.model.StringPKEntity;
+import com.googlecode.tapestry5cayenne.model.TinyIntPKEntity;
 
 @Test(groups="all")
-public class TestRelationshipSelectModel extends Assert {
+public class TestPersistentEntitySelectModel extends Assert {
     
     private ObjectContext _context;
     private List<Artist> _data;
@@ -32,7 +36,7 @@ public class TestRelationshipSelectModel extends Assert {
     }
 
     public void construction() {
-        RelationshipSelectModel model = new RelationshipSelectModel(Artist.class,_context);
+        PersistentEntitySelectModel model = new PersistentEntitySelectModel(Artist.class,_context);
         assertNull(model.getOptionGroups());
         assertEquals(model.getOptions().size(),_data.size());
         Ordering o = new Ordering("name",true);
@@ -83,7 +87,7 @@ public class TestRelationshipSelectModel extends Assert {
     
     @Test(dataProvider="sorts")
     public void query_sort(SelectQuery sq, Method label, Class<?> type, QuerySortResult expected) {
-        QuerySortResult result = RelationshipSelectModel.querySort(sq, label, DataContext.getThreadDataContext(), type);
+        QuerySortResult result = PersistentEntitySelectModel.querySort(sq, label, DataContext.getThreadDataContext(), type,new Ordering[]{});
         assertEquals(result.type,expected.type);
         if (expected.ordering == null) {
             assertNull(result.ordering);
@@ -96,5 +100,55 @@ public class TestRelationshipSelectModel extends Assert {
         } else {
             assertEquals(sq.getOrderings().size(),0);
         }
+    }
+    
+    public void testExplicitOrdering() {
+        PersistentEntitySelectModel model = new PersistentEntitySelectModel(Artist.class,_context,
+                PersistentEntitySelectModel.stringToOrdering(Artist.NAME_PROPERTY));
+        assertEquals(model.getOptions().size(),_data.size());
+        Ordering o = new Ordering(Artist.NAME_PROPERTY,true);
+        o.orderList(_data);
+        Iterator<OptionModel> it = model.getOptions().iterator();
+        for(Artist a : _data) {
+            assertEquals(it.next().getValue(),a);
+        }
+    }
+    
+    public void testDefaultOrdering() {
+        Bid b = new Bid();
+        b.setPainting(_data.get(0).getPaintingList().get(0));
+        b.setAmount(new BigDecimal(27.00));
+        Bid b2 = new Bid();
+        b2.setPainting(_data.get(0).getPaintingList().get(0));
+        b2.setAmount(new BigDecimal(25.00));
+        _context.commitChanges();
+        PersistentEntitySelectModel model = new PersistentEntitySelectModel(Bid.class,_context);
+        assertEquals(model.getOptions().size(),2);
+        assertEquals(model.getOptions().get(0).getValue(),b2);
+        assertEquals(model.getOptions().get(1).getValue(),b);
+    }
+    
+    @Test(expectedExceptions=RuntimeException.class)
+    public void testDefaultOrderingUnbalancedAscending() {
+        new PersistentEntitySelectModel(TinyIntPKEntity.class,_context);
+    }
+    
+    public void testDefaultOrderingMultiOrder() {
+        StringPKEntity pke1 = _context.newObject(StringPKEntity.class);
+        pke1.setId("spke1");
+        pke1.setIntProp1(10);
+        pke1.setStringProp1("abc");
+        _context.registerNewObject(pke1);
+        
+        StringPKEntity pke2 = _context.newObject(StringPKEntity.class);
+        pke2.setId("spke2");
+        pke2.setIntProp1(20);
+        pke2.setStringProp1("abc");
+        
+        _context.commitChanges();
+        PersistentEntitySelectModel model = new PersistentEntitySelectModel(StringPKEntity.class,_context);
+        assertEquals(model.getOptions().size(),2);
+        assertEquals(model.getOptions().get(0).getValue(),pke2);
+        assertEquals(model.getOptions().get(1).getValue(),pke1);
     }
 }
