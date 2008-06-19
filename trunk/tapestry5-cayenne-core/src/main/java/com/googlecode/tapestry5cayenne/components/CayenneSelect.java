@@ -1,13 +1,14 @@
 package com.googlecode.tapestry5cayenne.components;
 
-import com.googlecode.tapestry5cayenne.internal.PersistentEntitySelectModel;
-import com.googlecode.tapestry5cayenne.services.ObjectContextProvider;
 import org.apache.cayenne.Persistent;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
+
+import com.googlecode.tapestry5cayenne.internal.PersistentEntitySelectModel;
+import com.googlecode.tapestry5cayenne.services.PersistentManager;
 
 /**
  * Displays a selection list for Cayenne persistent objects.  Designed to
@@ -21,7 +22,7 @@ public class CayenneSelect
     private ComponentResources resources;
 
     @Inject
-    private ObjectContextProvider provider;
+    private PersistentManager manager;
 
     @Property
     @Parameter(required = true)
@@ -35,6 +36,6 @@ public class CayenneSelect
 
     public SelectModel getModel()
     {
-        return new PersistentEntitySelectModel(resources.getBoundType("value"), provider.currentContext());
+        return new PersistentEntitySelectModel(resources.getBoundType("value"), manager);
     }
 }

@@ -1,6 +1,5 @@
 package com.googlecode.tapestry5cayenne.components;
 
-import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.Persistent;
 import org.apache.tapestry5.Field;
 import org.apache.tapestry5.FieldValidator;
@@ -12,7 +11,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.PropertyEditContext;
 
 import com.googlecode.tapestry5cayenne.internal.PersistentEntitySelectModel;
-import com.googlecode.tapestry5cayenne.services.ObjectContextProvider;
+import com.googlecode.tapestry5cayenne.services.PersistentManager;
 
 /**
  * Generic editor for to-one relationships.
@@ -29,7 +28,7 @@ public class ToOneEditor implements Field {
     private PropertyEditContext _context;
     
     @Inject
-    private ObjectContextProvider _provider;
+    private PersistentManager _manager;
     
     @SuppressWarnings("unused")
     @Component(parameters={
@@ -48,10 +47,10 @@ public class ToOneEditor implements Field {
         _context.setPropertyValue(value);
     }
     
+    @SuppressWarnings("unchecked")
     public SelectModel getModel() {
         Class type = _context.getPropertyType();
-        ObjectContext ctxt = _provider.currentContext();
-        return new PersistentEntitySelectModel(type,ctxt);
+        return new PersistentEntitySelectModel(type,_manager);
     }
     
     public FieldValidator<?> getValidation() {
