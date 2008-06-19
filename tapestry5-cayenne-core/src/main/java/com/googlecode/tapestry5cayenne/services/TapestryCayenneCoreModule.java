@@ -20,6 +20,7 @@ import org.apache.tapestry5.services.PersistentFieldStrategy;
 import org.apache.tapestry5.services.ValueEncoderFactory;
 
 import com.googlecode.tapestry5cayenne.annotations.Cayenne;
+import com.googlecode.tapestry5cayenne.internal.PersistentManagerImpl;
 
 /**
  * Core module.  This module is a "SubModule" of the TapestryModule, defined in
@@ -71,6 +72,7 @@ public class TapestryCayenneCoreModule {
 
         binder.bind(NonPersistedObjectStorer.class,DefaultNonPersistedObjectStorer.class)
             .withId("DefaultNonPersistedObjectStorer").withMarker(Cayenne.class);
+        binder.bind(PersistentManager.class,PersistentManagerImpl.class);
     }
     
     public static void contributeComponentClassResolver(Configuration<LibraryMapping> configuration) {
