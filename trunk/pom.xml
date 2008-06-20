@@ -159,8 +159,31 @@
                             <report>scm</report>
                             <report>project-team</report>
                             <report>mailing-list</report>
-                            <report>cim</report>
                             <report>issue-tracking</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <!--  Version 2.3 is broken: See http://jira.codehaus.org/browse/MJAVADOC-145 -->
+                <!--version>2.2</version-->
+                <configuration>
+                    <linksource>true</linksource>
+                    <links>
+                        <link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
+                        <link>http://java.sun.com/j2ee/1.4/docs/api/</link>
+                        <link>http://tapestry.apache.org/tapestry5/apidocs/</link>
+                        <link>http://cayenne.apache.org/doc/api/</link>
+                    </links>
+                    <aggregate>true</aggregate>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>javadoc</report>
                         </reports>
                     </reportSet>
                 </reportSets>
