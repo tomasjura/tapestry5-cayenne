@@ -43,11 +43,5 @@
 
         <menu ref="reports"/>
 
-        <menu name="Repository Reports">
-            <item name="changelog" href="changelog.html"/>
-            <item name="file activity" href="file-activity.html"/>
-            <item name="dev activity" href="dev-activity.html"/>
-        </menu>
-
     </body>
 </project>

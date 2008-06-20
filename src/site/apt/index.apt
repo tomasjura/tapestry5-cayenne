@@ -5,8 +5,7 @@
 Introduction
 
 	The Tapestry5-Cayenne Integration Module is a Tapestry-IoC module that makes using Cayenne data objects in your Tapestry projects
-	as simple as possible.  It is very similar in scope to the {{{http://tapestry.apache.org/tapestry5/tapestry-hibernate/}Tapestry-Hibernate}}
-	module.
+	as simple as possible.  It is very similar in scope to the {{{http://tapestry.apache.org/tapestry5/tapestry-hibernate/}Tapestry-Hibernate}} module.
 
 Current Status
 
