@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.cayenne.ObjectContext;
+import org.apache.cayenne.exp.Expression;
 import org.apache.cayenne.map.ObjAttribute;
 import org.apache.cayenne.map.ObjEntity;
 import org.apache.cayenne.query.Ordering;
@@ -26,15 +27,27 @@ public class PersistentManagerImpl implements PersistentManager {
     @SuppressWarnings("unchecked")
     public <T> List<T> listAll(Class<T> type,
             Ordering... orderings) {
-        Method label = AnnotationFinder.methodForAnnotation(Label.class, type);
-        ObjectContext context = _provider.currentContext();
         SelectQuery sq = new SelectQuery(type);
+        ObjectContext context = _provider.currentContext();
+        Method label = AnnotationFinder.methodForAnnotation(Label.class, type);
         QuerySortResult rslt = querySort(sq,label,context,type,orderings);
         List<T> values = context.performQuery(sq);
         rslt.type.sort(values,rslt.ordering,label);
         return values;
     }
     
+    @SuppressWarnings("unchecked")
+    public <T> List<T> listMatching(Class<T> type, Expression qualifier, Ordering... orderings) {
+        SelectQuery sq = new SelectQuery(type);
+        ObjectContext context = _provider.currentContext();
+        Method label = AnnotationFinder.methodForAnnotation(Label.class, type);
+        QuerySortResult rslt = querySort(sq,label,context,type,orderings);
+        sq.setQualifier(qualifier);
+        List<T> values = context.performQuery(sq);
+        rslt.type.sort(values,rslt.ordering,label);
+        return values;
+    }
+
     /**
      * Determines what type of sorting to use for the given class.
      * Only reason this is not private is so that TestPersistentEntitySelectModel 
@@ -58,10 +71,10 @@ public class PersistentManagerImpl implements PersistentManager {
         DefaultOrder order = type.getAnnotation(DefaultOrder.class);
         if (order != null) {
             if (order.ascending().length==1) {
-              sq.addOrderings(Arrays.asList(OrderingUtils.stringToOrdering(order.ascending()[0],order.orderings())));
-            } else if (order.ascending().length==order.orderings().length) {
-                for(int i=0;i<order.orderings().length;i++) {
-                    sq.addOrdering(new Ordering(order.orderings()[i],order.ascending()[i]));
+              sq.addOrderings(Arrays.asList(OrderingUtils.stringToOrdering(order.ascending()[0],order.value())));
+            } else if (order.ascending().length==order.value().length) {
+                for(int i=0;i<order.value().length;i++) {
+                    sq.addOrdering(new Ordering(order.value()[i],order.ascending()[i]));
                 }
             } else {
                 throw new RuntimeException("DefaultOrdering.ascending.length != 1 and DefaultOrdering.ascending.length != DefaultOrdering.orderings.length for type: " + type.getName());

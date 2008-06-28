@@ -5,11 +5,15 @@ import static org.testng.Assert.assertNull;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.access.DataContext;
+import org.apache.cayenne.exp.Expression;
+import org.apache.cayenne.exp.ExpressionFactory;
 import org.apache.cayenne.query.Ordering;
 import org.apache.cayenne.query.SelectQuery;
 import org.testng.annotations.BeforeClass;
@@ -20,6 +24,7 @@ import com.googlecode.tapestry5cayenne.TestUtils;
 import com.googlecode.tapestry5cayenne.model.Artist;
 import com.googlecode.tapestry5cayenne.model.Bid;
 import com.googlecode.tapestry5cayenne.model.BigIntPKEntity;
+import com.googlecode.tapestry5cayenne.model.Painting;
 import com.googlecode.tapestry5cayenne.model.StringPKEntity;
 import com.googlecode.tapestry5cayenne.model.TinyIntPKEntity;
 import com.googlecode.tapestry5cayenne.services.ObjectContextProvider;
@@ -150,5 +155,54 @@ public class TestPersistentManagerImpl {
         assertEquals(objs.size(),2);
         assertEquals(objs.get(0),pke2);
         assertEquals(objs.get(1),pke1);
+    }
+    
+    
+    @DataProvider(name="list_matching")
+    Object[][] listMatching() {
+        return new Object[][] {
+                {
+                    Artist.class,
+                    ExpressionFactory.matchExp(Artist.NAME_PROPERTY, "Flinstone"),
+                    Collections.emptyList(),
+                    new Ordering[]{}
+                },
+                {
+                    Artist.class,
+                    ExpressionFactory.matchExp(Artist.NAME_PROPERTY, "Picasso"),
+                    Arrays.asList(_data.get(0)),
+                    new Ordering[]{}
+                },
+                {
+                    Painting.class,
+                    ExpressionFactory.likeExp(Painting.TITLE_PROPERTY, "%P%"),
+                    Arrays.asList(
+                            _data.get(0).getPaintingsByTitle().get("Portrait of Igor Stravinsky"),
+                            _data.get(1).getPaintingsByTitle().get("The Persistence of Memory")
+                            ),
+                    new Ordering[]{}
+                },
+                {
+                    Painting.class,
+                    ExpressionFactory.likeExp(Painting.TITLE_PROPERTY, "%P%"),
+                    Arrays.asList(
+                            _data.get(1).getPaintingsByTitle().get("The Persistence of Memory"),
+                            _data.get(0).getPaintingsByTitle().get("Portrait of Igor Stravinsky")
+                            ),
+                    new Ordering[]{
+                       new Ordering("title",false)
+                    }
+                },
+        };
+    }
+    
+    @Test(dataProvider="list_matching")
+    public void testListMatching(Class<?> type, Expression qualifier, List<?> expected, Ordering... orderings) {
+        List<?> ret = _manager.listMatching(type, qualifier, orderings);
+        assertEquals(ret.size(), expected.size());
+        Iterator<?> it = ret.iterator();
+        for(Object obj : expected) {
+            assertEquals(it.next(),obj);
+        }
     }
 }

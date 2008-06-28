@@ -44,7 +44,7 @@ public class PersistentEntitySelectModel extends AbstractSelectModel {
         List<?> options = manager.listAll(type, orderings);
         _options = new ArrayList<OptionModel>();
         for(Object obj : options) {
-            _options.add(new LabelOptionModel(obj,label));
+            _options.add(new MethodLabelOptionModel(obj,label));
         }
     }
     

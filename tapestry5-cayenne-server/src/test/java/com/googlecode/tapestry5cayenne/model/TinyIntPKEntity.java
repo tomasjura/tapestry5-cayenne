@@ -4,7 +4,7 @@ import com.googlecode.tapestry5cayenne.annotations.DefaultOrder;
 import com.googlecode.tapestry5cayenne.model.auto._TinyIntPKEntity;
 
 @SuppressWarnings("serial")
-@DefaultOrder(orderings={"name","value"},ascending={true,false,false})
+@DefaultOrder(value={"name","value"},ascending={true,false,false})
 public class TinyIntPKEntity extends _TinyIntPKEntity {
 
 }

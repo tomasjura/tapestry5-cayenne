@@ -6,14 +6,19 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
- * An implementation of OptionModel that uses for a label, the results of a method marked with @Label 
+ * An implementation of OptionModel that uses the results of invoking a method as the label.
+ * 
  */
-public class LabelOptionModel implements OptionModel {
+public class MethodLabelOptionModel implements OptionModel {
     
     private final String _label;
     private final Object _value;
     
-    public LabelOptionModel(Object value, Method label) {
+    /**
+     * @param value The object represented by the option model.
+     * @param label The method to invoke on the object, representing its label.
+     */
+    public MethodLabelOptionModel(Object value, Method label) {
         _value = value;
         _label = Labeler.labelForObject(value,label);
     }

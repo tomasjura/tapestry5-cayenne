@@ -15,9 +15,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DefaultOrder {
     /**
-     * @return the names of the properties by which to order. The properties must correspond to cayenne-mapped properties.
+     * An array of mapped property paths, specifying the orderings to use by default for the annotated type. 
+     * @return An array of cayenne-mapped property paths
      */
-    String[] orderings();
+    String[] value();
     /**
      * Allows more control over the ordering by specifying the sort direction (true => ascending; false => descending).
      * This can either be a single value, representing the sort order for every specified property,

@@ -7,7 +7,7 @@ import com.googlecode.tapestry5cayenne.model.auto._StringPKEntity;
 
 @SuppressWarnings("serial")
 @DefaultOrder(
-        orderings={StringPKEntity.STRING_PROP1_PROPERTY,StringPKEntity.INT_PROP1_PROPERTY},
+        value={StringPKEntity.STRING_PROP1_PROPERTY,StringPKEntity.INT_PROP1_PROPERTY},
         ascending={true,false})
 public class StringPKEntity extends _StringPKEntity {
 

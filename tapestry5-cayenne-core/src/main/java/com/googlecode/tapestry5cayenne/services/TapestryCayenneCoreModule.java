@@ -2,6 +2,7 @@ package com.googlecode.tapestry5cayenne.services;
 
 import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.Persistent;
+import org.apache.tapestry5.PrimaryKeyEncoder;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.VersionUtils;
 import org.apache.tapestry5.ioc.Configuration;
@@ -73,6 +74,7 @@ public class TapestryCayenneCoreModule {
         binder.bind(NonPersistedObjectStorer.class,DefaultNonPersistedObjectStorer.class)
             .withId("DefaultNonPersistedObjectStorer").withMarker(Cayenne.class);
         binder.bind(PersistentManager.class,PersistentManagerImpl.class);
+        binder.bind(PrimaryKeyEncoder.class,CayennePrimaryKeyEncoder.class).withId("CayennePrimaryKeyEncoder");
     }
     
     public static void contributeComponentClassResolver(Configuration<LibraryMapping> configuration) {
