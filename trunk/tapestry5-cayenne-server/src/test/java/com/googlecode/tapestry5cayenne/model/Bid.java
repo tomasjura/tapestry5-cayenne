@@ -8,7 +8,7 @@ import com.googlecode.tapestry5cayenne.model.auto._Bid;
 
 @SuppressWarnings("serial")
 //use something different than what ordering by getLabel would give you...
-@DefaultOrder(orderings={"amount"})
+@DefaultOrder("amount")
 public class Bid extends _Bid {
 
     

@@ -8,9 +8,21 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import com.googlecode.tapestry5cayenne.annotations.Label;
 import com.googlecode.tapestry5cayenne.internal.Labeler;
 
 
+/**
+ * A component for viewing a "toMany" relationship.
+ * The output depends on the number of items in the relationship.
+ * With many items, a simple message is displayed, such as: 25 associated items
+ * With few associated items, each item is displayed as an entry in an unordered list.
+ * The list is styled to scroll if it overflows its bounds.
+ * The associated ul has a css class of t-cayenne-tomany-display, for easy css selection.
+ * The text displayed for each item is the result of invoking the method labeled with the {@link Label} 
+ * annotation. If no method is annotated, the text displayed will be the result of invoking "toString" on the object.
+ * @author robertz
+ */
 @IncludeStylesheet("ToManyViewer.css")
 public class ToManyViewer {
     
@@ -25,6 +37,9 @@ public class ToManyViewer {
     
     @Parameter
     @Property
+    /**
+     * The collection representing the toMany relationship.
+     */
     private Collection _source;
     
     @Inject

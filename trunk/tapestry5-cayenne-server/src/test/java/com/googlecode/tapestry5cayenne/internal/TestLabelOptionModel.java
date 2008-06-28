@@ -6,7 +6,7 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.googlecode.tapestry5cayenne.internal.LabelOptionModel;
+import com.googlecode.tapestry5cayenne.internal.MethodLabelOptionModel;
 import com.googlecode.tapestry5cayenne.model.Artist;
 
 @Test(groups="all")
@@ -28,7 +28,7 @@ public class TestLabelOptionModel extends Assert {
     
     @Test(dataProvider="options")
     public void test(Object obj, Method m, String label) {
-        LabelOptionModel model = new LabelOptionModel(obj,m);
+        MethodLabelOptionModel model = new MethodLabelOptionModel(obj,m);
         assertEquals(model.getLabel(),label);
         assertEquals(model.getValue(),obj);
         assertEquals(model.isDisabled(),false);

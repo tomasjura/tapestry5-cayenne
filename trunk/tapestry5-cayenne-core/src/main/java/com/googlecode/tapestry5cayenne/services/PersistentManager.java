@@ -2,6 +2,7 @@ package com.googlecode.tapestry5cayenne.services;
 
 import java.util.List;
 
+import org.apache.cayenne.exp.Expression;
 import org.apache.cayenne.query.Ordering;
 
 import com.googlecode.tapestry5cayenne.annotations.DefaultOrder;
@@ -30,5 +31,13 @@ public interface PersistentManager {
      * @return
      */
     <T> List<T> listAll(Class<T> type, Ordering...orderings);
-
+    
+    /**
+     * Returns a list of objects of type <T> that match the provided expression.
+     * The list is ordered as for listAll.
+     * @param type The type of object to return
+     * @param qualifier  the expression used to match the arguments
+     * @param orderings (optional) the order in which the objects should be returned.
+     */
+    <T> List<T> listMatching(Class<T> type, Expression qualifier, Ordering... orderings);
 }

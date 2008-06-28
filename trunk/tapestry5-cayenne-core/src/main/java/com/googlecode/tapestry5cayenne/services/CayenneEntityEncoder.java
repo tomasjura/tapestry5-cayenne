@@ -5,6 +5,9 @@
  */
 package com.googlecode.tapestry5cayenne.services;
 
+import java.util.Collection;
+import java.util.regex.Pattern;
+
 import org.apache.cayenne.DataObjectUtils;
 import org.apache.cayenne.PersistenceState;
 import org.apache.cayenne.Persistent;
@@ -15,9 +18,6 @@ import org.apache.tapestry5.ioc.annotations.Marker;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 
 import com.googlecode.tapestry5cayenne.annotations.Cayenne;
-
-import java.util.Collection;
-import java.util.regex.Pattern;
 
 /**
  * Basic Persistent ValueEncoder.
