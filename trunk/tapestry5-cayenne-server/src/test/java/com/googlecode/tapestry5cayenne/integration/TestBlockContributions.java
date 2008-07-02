@@ -178,7 +178,7 @@ public class TestBlockContributions extends Assert {
      * Test that CayenneSelect renders properly
      */
     public void testCayenneSelect() {
-        Document doc = _tester.renderPage("TestCayenneSelect");
+        Document doc = _tester.renderPage("TestSelect");
 System.out.println(doc.toString());
         //Verify the label
         //Element el = doc.getElementById("toOneList:label");
