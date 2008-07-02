@@ -1,6 +1,6 @@
 package com.googlecode.tapestry5cayenne.integration.app0.pages;
 
-import com.googlecode.tapestry5cayenne.components.CayenneSelect;
+import com.googlecode.tapestry5cayenne.components.Select;
 import com.googlecode.tapestry5cayenne.model.Artist;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Persist;
@@ -29,6 +29,6 @@ public class TestCayenneSelect
             "value=artist", "label=literal:Cayenne Select"
     })
     @SuppressWarnings("unused")
-    private CayenneSelect select;
+    private Select select;
 
 }
