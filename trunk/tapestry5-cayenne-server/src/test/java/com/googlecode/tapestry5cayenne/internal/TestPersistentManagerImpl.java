@@ -10,12 +10,14 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.cayenne.DataObjectUtils;
 import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.exp.Expression;
 import org.apache.cayenne.exp.ExpressionFactory;
 import org.apache.cayenne.query.Ordering;
 import org.apache.cayenne.query.SelectQuery;
+import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -42,6 +44,15 @@ public class TestPersistentManagerImpl {
         TestUtils.setupdb();
         _context = DataContext.getThreadDataContext();
         _data = TestUtils.basicData(_context);
+        TypeCoercer coercer = new TypeCoercer() {
+            public void clearCache() {}
+            @SuppressWarnings("unchecked")
+            public <S, T> T coerce(S arg0, Class<T> arg1) {
+                return (T) arg0;
+            }
+            public <S, T> String explain(Class<S> arg0, Class<T> arg1) { return null; }
+        };
+        
         _manager = new PersistentManagerImpl(new ObjectContextProvider() {
             public ObjectContext currentContext() {
                 return _context;
@@ -49,7 +60,8 @@ public class TestPersistentManagerImpl {
             public ObjectContext newContext() {
                 return _context;
             }
-        });
+        },
+        coercer);
     }
     
     @DataProvider(name="sorts")
@@ -204,5 +216,16 @@ public class TestPersistentManagerImpl {
         for(Object obj : expected) {
             assertEquals(it.next(),obj);
         }
+    }
+    
+    
+    public void testFind_Class() {
+        assertEquals(_data.get(0),_manager.find(Artist.class, DataObjectUtils.intPKForObject(_data.get(0))));
+    }
+    
+    
+    public void testFind_String() {
+        Artist a = _manager.find("Artist", DataObjectUtils.intPKForObject(_data.get(0)));
+        assertEquals(_data.get(0),a);
     }
 }

@@ -2,14 +2,18 @@ package com.googlecode.tapestry5cayenne.internal;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
+import org.apache.cayenne.DataObjectUtils;
 import org.apache.cayenne.ObjectContext;
+import org.apache.cayenne.Persistent;
 import org.apache.cayenne.exp.Expression;
 import org.apache.cayenne.map.ObjAttribute;
 import org.apache.cayenne.map.ObjEntity;
 import org.apache.cayenne.query.Ordering;
 import org.apache.cayenne.query.SelectQuery;
+import org.apache.tapestry5.ioc.services.TypeCoercer;
 
 import com.googlecode.tapestry5cayenne.annotations.DefaultOrder;
 import com.googlecode.tapestry5cayenne.annotations.Label;
@@ -19,9 +23,11 @@ import com.googlecode.tapestry5cayenne.services.PersistentManager;
 public class PersistentManagerImpl implements PersistentManager {
     
     private final ObjectContextProvider _provider;
+    private final TypeCoercer _coercer;
     
-    public PersistentManagerImpl(ObjectContextProvider provider) {
+    public PersistentManagerImpl(ObjectContextProvider provider, TypeCoercer coercer) {
         _provider = provider;
+        _coercer = coercer;
     }
 
     @SuppressWarnings("unchecked")
@@ -116,6 +122,34 @@ public class PersistentManagerImpl implements PersistentManager {
             res.type=QuerySortType.ORDERING;
         }
         return res;
+    }
+
+    public <T extends Persistent> T find(Class<T> type, Object id) {
+        Object pk = _coercer.coerce(id, pkTypeForEntity(type));
+        return DataObjectUtils.objectForPK(_provider.currentContext(),type,pk);
+    }
+    
+    private Class<?> pkTypeForEntity(String name) {
+        return pkTypeForEntity(_provider.currentContext().getEntityResolver().getObjEntity(name));
+    }
+    
+    private Class<?> pkTypeForEntity(Class<?> type) {
+        return pkTypeForEntity(_provider.currentContext().getEntityResolver().lookupObjEntity(type));
+    }
+    
+    private Class<?> pkTypeForEntity(ObjEntity entity) {
+        Collection<ObjAttribute> atts = entity.getPrimaryKeys();
+        if (atts.size() != 1) {
+            throw new RuntimeException("T5Cayenne integration currently only handles entities with single-column primary keys");
+        }
+        ObjAttribute attribute = atts.iterator().next(); 
+        return attribute.getJavaClass();
+    }
+    
+    @SuppressWarnings("unchecked")
+    public <T> T find(String entity, Object id) {
+        Object pk = _coercer.coerce(id,pkTypeForEntity(entity));
+        return (T) DataObjectUtils.objectForPK(_provider.currentContext(), entity, pk);
     }
 
 }
