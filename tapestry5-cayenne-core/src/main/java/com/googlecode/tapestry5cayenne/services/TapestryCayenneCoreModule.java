@@ -84,13 +84,14 @@ public class TapestryCayenneCoreModule {
     public static void contributeValueEncoderSource(MappedConfiguration<Class, ValueEncoderFactory> configuration,
                                                     @Cayenne final ObjectContextProvider provider,
                                                     final TypeCoercer coercer,
+                                                    final PersistentManager manager,
                                                     final NonPersistedObjectStorer storer)
     {
         configuration.add(Persistent.class, new ValueEncoderFactory<Persistent>()
         {
             public ValueEncoder<Persistent> create(Class<Persistent> persistentClass)
             {
-                return new CayenneEntityEncoder(provider,coercer,storer);
+                return new CayenneEntityEncoder(provider,coercer,manager, storer);
             }
         });
     }

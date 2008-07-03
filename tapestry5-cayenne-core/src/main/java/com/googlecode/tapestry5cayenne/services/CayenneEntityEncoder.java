@@ -5,13 +5,11 @@
  */
 package com.googlecode.tapestry5cayenne.services;
 
-import java.util.Collection;
 import java.util.regex.Pattern;
 
 import org.apache.cayenne.DataObjectUtils;
 import org.apache.cayenne.PersistenceState;
 import org.apache.cayenne.Persistent;
-import org.apache.cayenne.map.ObjAttribute;
 import org.apache.cayenne.map.ObjEntity;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.ioc.annotations.Marker;
@@ -36,16 +34,19 @@ public class CayenneEntityEncoder implements ValueEncoder<Persistent> {
     private final Pattern _pattern = Pattern.compile("::");
     private final TypeCoercer _coercer;
     private final NonPersistedObjectStorer _storer;
+    private final PersistentManager _manager;
     
     
     @SuppressWarnings("unchecked")
     public CayenneEntityEncoder(
             final ObjectContextProvider provider,
             final TypeCoercer coercer,
+            final PersistentManager manager,
             final NonPersistedObjectStorer storer) {
         _provider = provider;
         _coercer = coercer;
         _storer=storer;
+        _manager = manager;
     }
 
     public String toClient(final Persistent dao)
@@ -90,20 +91,6 @@ public class CayenneEntityEncoder implements ValueEncoder<Persistent> {
             }
             return obj; 
         }
-        
-        final Object pk = _coercer.coerce(vals[1], pkTypeForEntity(vals[0]));
-        return (Persistent) 
-            DataObjectUtils.objectForPK(_provider.currentContext(), vals[0], pk);
-    }
-    
-    private Class<?> pkTypeForEntity(String entity) {
-        final ObjEntity oent = _provider.currentContext().getEntityResolver().getObjEntity(entity);
-        final Collection<ObjAttribute> atts = oent.getPrimaryKeys();
-        if (atts.size() > 1) {
-            throw new RuntimeException("CayenneEntityEncoder can't handle multi-column pks");
-        }
-
-        final ObjAttribute attribute = atts.iterator().next(); 
-        return attribute.getJavaClass();
+        return _manager.find(vals[0], vals[1]);
     }
 }

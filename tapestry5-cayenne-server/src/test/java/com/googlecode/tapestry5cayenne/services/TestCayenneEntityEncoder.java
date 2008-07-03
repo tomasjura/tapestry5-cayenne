@@ -30,15 +30,18 @@ public class TestCayenneEntityEncoder extends Assert {
     private CayenneEntityEncoder _encoder;
     private ObjectContextProvider _provider;
     private Registry _registry;
+    private PersistentManager _manager;
 
     @BeforeClass
     void setupDB() throws Exception {
         TestUtils.setupdb();
         _registry = TestUtils.setupRegistry("App0",TapestryCayenneModule.class);
         _provider = _registry.getService(ObjectContextProvider.class);
+        _manager = _registry.getService(PersistentManager.class);
         _encoder = new CayenneEntityEncoder(
                 _provider,
                 _registry.getService(TypeCoercer.class),
+                _manager,
                 _registry.getService(NonPersistedObjectStorer.class));
     }
     
