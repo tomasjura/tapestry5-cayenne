@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.apache.cayenne.DataObjectUtils;
 import org.apache.cayenne.ObjectContext;
-import org.apache.cayenne.Persistent;
 import org.apache.cayenne.exp.Expression;
+import org.apache.cayenne.exp.ExpressionFactory;
 import org.apache.cayenne.map.ObjAttribute;
 import org.apache.cayenne.map.ObjEntity;
 import org.apache.cayenne.query.Ordering;
@@ -124,7 +124,7 @@ public class PersistentManagerImpl implements PersistentManager {
         return res;
     }
 
-    public <T extends Persistent> T find(Class<T> type, Object id) {
+    public <T> T find(Class<T> type, Object id) {
         Object pk = _coercer.coerce(id, pkTypeForEntity(type));
         return DataObjectUtils.objectForPK(_provider.currentContext(),type,pk);
     }
@@ -150,6 +150,42 @@ public class PersistentManagerImpl implements PersistentManager {
     public <T> T find(String entity, Object id) {
         Object pk = _coercer.coerce(id,pkTypeForEntity(entity));
         return (T) DataObjectUtils.objectForPK(_provider.currentContext(), entity, pk);
+    }
+
+    public <T> List<T> findByProperty(Class<T> type, Object... properties) {
+        return findByProperties(type,true,properties);
+    }
+    
+    private <T> List<T> findByProperties(Class<T> type, boolean matchAll, Object... properties) {
+        
+        if (properties.length%2 != 0) {
+            throw new IllegalArgumentException("Unbalanced property array");
+        }
+        if (properties.length < 2) {
+                throw new IllegalArgumentException("Must provide at least one property pair, but no pairs were provided");
+        }
+        
+        //check to make sure every "even" indexed property is a string...
+        if (!(properties[0] instanceof String)) {
+            throw new IllegalArgumentException("Non-string property name: " + properties[0]);
+        }
+        Expression e=ExpressionFactory.matchExp((String)properties[0], properties[1]);
+        for(int i=2;i<properties.length;i+=2) {
+            if (!(properties[i] instanceof String)) {
+                throw new IllegalArgumentException("Non-string property name: " + properties[i]);
+            }
+            if (matchAll) {
+                e = e.andExp(ExpressionFactory.matchExp((String)properties[i], properties[i+1]));
+            } else {
+                e = e.orExp(ExpressionFactory.matchExp((String)properties[i], properties[i+1]));
+            }
+        }
+        return listMatching(type,e);
+        
+    }
+
+    public <T> List<T> findByAnyProperty(Class<T> type, Object... properties) {
+        return findByProperties(type,false,properties);
     }
 
 }

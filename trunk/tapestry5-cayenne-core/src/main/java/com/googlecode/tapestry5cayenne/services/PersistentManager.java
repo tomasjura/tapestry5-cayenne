@@ -2,7 +2,6 @@ package com.googlecode.tapestry5cayenne.services;
 
 import java.util.List;
 
-import org.apache.cayenne.Persistent;
 import org.apache.cayenne.exp.Expression;
 import org.apache.cayenne.query.Ordering;
 
@@ -52,7 +51,7 @@ public interface PersistentManager {
      * @param id The id (pk) of the object.
      * @return The matching object, if any, or null.
      */
-    <T extends Persistent> T find(Class<T> type, Object id);
+    <T> T find(Class<T> type, Object id);
     
     /**
      * Finds the object of type T, based on the object entity name and the given id.
@@ -67,4 +66,32 @@ public interface PersistentManager {
      * @throws ClassCastException if the java class for entity does not match <T>.
      */
     <T> T find(String entity, Object id);
+
+    /**
+     * Finds all objects of the provided type, matching the entire set of properties provided.
+     * @param <T> 
+     * @param type the type to match
+     * @param properties The properties to match
+     * @return A list containing objects which match all of the given properties
+     * @throws IllegalArgumentException if: properties.length%2 !=0, or any properties[i] (i%2==0) is not a string.
+     * This method takes the provided properties and builds an expression from them.  The assumption is that 
+     * properties looks like: { propertyName, propertyValue, propertyName2, propertyValue2,...}.
+     * The properties are "and'ed" together. The objects are ordered according to the rules for listAll. 
+     * For more control over the expression and/or ordering, try listMatching.
+     */
+    <T> List<T> findByProperty(Class<T> type, Object... properties);
+    
+    /**
+     * Finds all objects of the provided type which match any of the properties provided.
+     * @param <T>
+     * @param type the type to match
+     * @param properties  the properties to match
+     * @return A list containing the objects which match any of the given properties
+     * @throws IllegalArgumentException if: properties.length%2 != 0 or any properties[i] is not a string, with i%2==0.
+     * This method takes the provided properties and builds an expression from them.  The assumption as that properties looks like:
+     * { propertyName, propertyValue, propertyName2, propertyValue2,...}.
+     * The properties are "or'ed" together.  The objects are ordered according to the rules for listAll.
+     * For more control over the expression, try listMatching.
+     */
+    <T> List<T> findByAnyProperty(Class<T> type, Object... properties);
 }

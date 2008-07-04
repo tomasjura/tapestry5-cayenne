@@ -1,17 +1,18 @@
 package com.googlecode.tapestry5cayenne.internal;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.cayenne.DataObjectUtils;
 import org.apache.cayenne.ObjectContext;
+import org.apache.cayenne.Persistent;
 import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.exp.Expression;
 import org.apache.cayenne.exp.ExpressionFactory;
@@ -32,7 +33,7 @@ import com.googlecode.tapestry5cayenne.model.TinyIntPKEntity;
 import com.googlecode.tapestry5cayenne.services.ObjectContextProvider;
 import com.googlecode.tapestry5cayenne.services.PersistentManager;
 
-@Test(groups="all")
+@Test(groups="all",sequential=true)
 public class TestPersistentManagerImpl {
 
     private ObjectContext _context;
@@ -123,12 +124,8 @@ public class TestPersistentManagerImpl {
         List<Artist> objs = _manager.listAll(
                 Artist.class, 
                 OrderingUtils.stringToOrdering(Artist.NAME_PROPERTY));
-        assertEquals(objs.size(),_data.size());
         new Ordering(Artist.NAME_PROPERTY,true).orderList(_data);
-        Iterator<Artist> it = objs.iterator();
-        for(Artist a : _data) {
-            assertEquals(it.next(),a);
-        }
+        assertEquals(objs,_data);
     }
     
     public void testDefaultOrdering() {
@@ -210,12 +207,11 @@ public class TestPersistentManagerImpl {
     
     @Test(dataProvider="list_matching")
     public void testListMatching(Class<?> type, Expression qualifier, List<?> expected, Ordering... orderings) {
-        List<?> ret = _manager.listMatching(type, qualifier, orderings);
-        assertEquals(ret.size(), expected.size());
-        Iterator<?> it = ret.iterator();
-        for(Object obj : expected) {
-            assertEquals(it.next(),obj);
+        for(Ordering o : orderings) {
+            System.out.println("with ordering: "+ o);
         }
+        List<?> ret = _manager.listMatching(type, qualifier, orderings);
+        assertEquals(ret,expected);
     }
     
     
@@ -227,5 +223,105 @@ public class TestPersistentManagerImpl {
     public void testFind_String() {
         Artist a = _manager.find("Artist", DataObjectUtils.intPKForObject(_data.get(0)));
         assertEquals(_data.get(0),a);
+    }
+    
+    @DataProvider(name="find_by_property")
+    Object[][] findByProperty() {
+        Painting p = _data.get(0).getPaintingList().get(0);
+        return new Object[][] {
+                /* test to make sure that "unbalanced" property sets throw Illegal Argument Exception*/
+                {Artist.class,null,new IllegalArgumentException("Unbalanced property array"), new Object[]{Artist.NAME_PROPERTY}},
+                /* test to make sure that non-string "property names" throw Illegal Argument Exception */
+                {Artist.class,null,new IllegalArgumentException("Non-string property name: 123"), new Object[] {123,"foo"}},
+                /* what if the non-string prop is further in the array?*/
+                {Artist.class,null,new IllegalArgumentException("Non-string property name: 123"), new Object[] {Artist.NAME_PROPERTY,"Picasso",123,"foo"}},
+                /* test to make sure that an empty property list throws an IllegalArgumentException */
+                {Artist.class,null,new IllegalArgumentException("Must provide at least one property pair, but no pairs were provided"),new Object[]{}},
+                /* test to make sure that finding by one property returns the correct object...*/
+                {Artist.class,Arrays.asList(_data.get(0)),null,new Object[]{Artist.NAME_PROPERTY,_data.get(0).getName()}},
+                /* test multiple properties and deeper navigation paths... */
+                {
+                    Painting.class,
+                    Arrays.asList(p),
+                    null,
+                    new Object[]{
+                        Painting.TITLE_PROPERTY,p.getTitle(),
+                        Painting.ARTIST_PROPERTY + "." + Artist.NAME_PROPERTY,_data.get(0).getName()}
+                },
+        };
+    }
+    
+     
+    /**
+     * Tests PersistentManagerImpl.findByProperty.
+     * If expectedResult is null and expectedException is not, then the test ensures that the appropriate exception was thrown.
+     * Otherwise it ensures that the call returns the expectedResult.
+     */
+    @Test(dataProvider="find_by_property")
+    public void test_find_by_property(Class<? extends Persistent> type, List<?>expectedResults, Throwable expectedException, Object...properties) {
+        testPropFind(type,expectedResults,expectedException,true,properties);
+    }
+    
+    private void testPropFind(Class<?> type, List<?> expectedResults, Throwable expectedException, boolean matchAll, Object...properties) {
+        Throwable t=null;
+        List<?> results=null;
+        try {
+          if (matchAll) {
+              results = _manager.findByProperty(type,properties);
+          } else {
+              results = _manager.findByAnyProperty(type, properties);
+          }
+        } catch (Exception e) {
+            t = e;
+        }
+        if (expectedException != null) {
+            assertNotNull(t);
+            assertEquals(t.getClass(),expectedException.getClass());
+            assertEquals(t.getMessage(),expectedException.getMessage());
+        } else {
+            System.out.println(t);
+            if (t != null) {
+                t.printStackTrace();
+            }
+            assertNull(t);
+        }
+        assertEquals(results,expectedResults);
+    }
+    
+    @DataProvider(name="find_by_any_property")
+    Object[][] findByAnyProperty() {
+        new Ordering(Painting.TITLE_PROPERTY,true).orderList(_data.get(0).getPaintingList());
+        Painting p = _data.get(0).getPaintingList().get(0);
+        return new Object[][] {
+                /* test to make sure that "unbalanced" property sets throw Illegal Argument Exception*/
+                {Artist.class,null,new IllegalArgumentException("Unbalanced property array"), new Object[]{Artist.NAME_PROPERTY}},
+                /* test to make sure that non-string "property names" throw Illegal Argument Exception */
+                {Artist.class,null,new IllegalArgumentException("Non-string property name: 123"), new Object[] {123,"foo"}},
+                /* what if the non-string prop is further in the array?*/
+                {Artist.class,null,new IllegalArgumentException("Non-string property name: 123"), new Object[] {Artist.NAME_PROPERTY,"Picasso",123,"foo"}},
+                /* test to make sure that an empty property list throws an IllegalArgumentException */
+                {Artist.class,null,new IllegalArgumentException("Must provide at least one property pair, but no pairs were provided"),new Object[]{}},
+                /* test to make sure that finding by one property returns the correct object...*/
+                {Artist.class,Arrays.asList(_data.get(0)),null,new Object[]{Artist.NAME_PROPERTY,_data.get(0).getName()}},
+                /* test multiple properties and deeper navigation paths... */
+                {
+                    Painting.class,
+                    _data.get(0).getPaintingList(),
+                    null,
+                    new Object[]{
+                        Painting.TITLE_PROPERTY,p.getTitle(),
+                        Painting.ARTIST_PROPERTY + "." + Artist.NAME_PROPERTY,_data.get(0).getName()}
+                },
+        };
+    }
+    
+    /**
+     * Tests PersistentManagerImpl.findByProperty.
+     * If expectedResult is null and expectedException is not, then the test ensures that the appropriate exception was thrown.
+     * Otherwise, it ensures that the call returns the expectedResult.
+     */
+    @Test(dataProvider="find_by_any_property")
+    public void test_find_by_any_property(Class<? extends Persistent> type, List<?> expectedResults, Throwable expectedException, Object...properties) {
+        testPropFind(type,expectedResults,expectedException,false,properties);
     }
 }
