@@ -78,7 +78,7 @@ public class TapestryCayenneCoreModule {
     }
     
     public static void contributeComponentClassResolver(Configuration<LibraryMapping> configuration) {
-        configuration.add(new LibraryMapping("t5cayenne", "com.googlecode.tapestry5cayenne"));
+        configuration.add(new LibraryMapping("cay", "com.googlecode.tapestry5cayenne"));
     }
 
     public static void contributeValueEncoderSource(MappedConfiguration<Class, ValueEncoderFactory> configuration,
@@ -111,17 +111,17 @@ public class TapestryCayenneCoreModule {
     }
     
     public static void contributeBeanBlockSource(Configuration<BeanBlockContribution> conf) {
-        conf.add(new BeanBlockContribution("to_one", "t5cayenne/CayenneEditBlockContributions", "to_one_editor", true));
-        conf.add(new BeanBlockContribution("to_one","t5cayenne/CayenneViewBlockContributions","to_one_viewer",false));
-        conf.add(new BeanBlockContribution("to_many_map","t5cayenne/CayenneViewBlockContributions","to_many_map_viewer",false));
-        conf.add(new BeanBlockContribution("to_many_collection","t5cayenne/CayenneViewBlockContributions","to_many_collection_viewer",false));
+        conf.add(new BeanBlockContribution("to_one", "cay/CayenneEditBlockContributions", "to_one_editor", true));
+        conf.add(new BeanBlockContribution("to_one","cay/CayenneViewBlockContributions","to_one_viewer",false));
+        conf.add(new BeanBlockContribution("to_many_map","cay/CayenneViewBlockContributions","to_many_map_viewer",false));
+        conf.add(new BeanBlockContribution("to_many_collection","cay/CayenneViewBlockContributions","to_many_collection_viewer",false));
     }
     
     public static void contributeClasspathAssetAliasManager(MappedConfiguration<String,String> configuration,
                                                             @Symbol(T5CAYENNE_VERSION)
                                                             String version)
     {
-        configuration.add("t5cayenne/" + version,"com/googlecode/tapestry5cayenne");
+        configuration.add("cay/" + version,"com/googlecode/tapestry5cayenne");
     }
     
     /**
