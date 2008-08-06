@@ -33,10 +33,17 @@ public class PersistentManagerImpl implements PersistentManager {
     @SuppressWarnings("unchecked")
     public <T> List<T> listAll(Class<T> type,
             Ordering... orderings) {
+        return listAll(type,0,orderings);
+    }
+    
+    public <T> List<T> listAll(Class<T> type, int limit, Ordering... orderings) {
         SelectQuery sq = new SelectQuery(type);
         ObjectContext context = _provider.currentContext();
         Method label = AnnotationFinder.methodForAnnotation(Label.class, type);
         QuerySortResult rslt = querySort(sq,label,context,type,orderings);
+        if (limit > 0) {
+            sq.setFetchLimit(0);
+        }
         List<T> values = context.performQuery(sq);
         rslt.type.sort(values,rslt.ordering,label);
         return values;
@@ -44,15 +51,23 @@ public class PersistentManagerImpl implements PersistentManager {
     
     @SuppressWarnings("unchecked")
     public <T> List<T> listMatching(Class<T> type, Expression qualifier, Ordering... orderings) {
+        return listMatching(type,qualifier,0,orderings);
+    }
+    
+    public <T> List<T> listMatching(Class<T> type, Expression qualifier, int limit, Ordering... orderings) {
         SelectQuery sq = new SelectQuery(type);
         ObjectContext context = _provider.currentContext();
         Method label = AnnotationFinder.methodForAnnotation(Label.class, type);
         QuerySortResult rslt = querySort(sq,label,context,type,orderings);
         sq.setQualifier(qualifier);
+        if (limit > 0) {
+            sq.setFetchLimit(limit);
+        }
         List<T> values = context.performQuery(sq);
         rslt.type.sort(values,rslt.ordering,label);
         return values;
     }
+
 
     /**
      * Determines what type of sorting to use for the given class.
@@ -153,10 +168,14 @@ public class PersistentManagerImpl implements PersistentManager {
     }
 
     public <T> List<T> findByProperty(Class<T> type, Object... properties) {
-        return findByProperties(type,true,properties);
+        return findByProperties(type,0,true,true,properties);
     }
     
-    private <T> List<T> findByProperties(Class<T> type, boolean matchAll, Object... properties) {
+    public <T> List<T> findByProperty(Class<T> type, int limit, Object... properties) {
+        return findByProperties(type,limit,true,true,properties);
+    }
+    
+    private <T> List<T> findByProperties(Class<T> type, int limit, boolean matchAll, boolean exactMatch, Object... properties) {
         
         if (properties.length%2 != 0) {
             throw new IllegalArgumentException("Unbalanced property array");
@@ -169,24 +188,52 @@ public class PersistentManagerImpl implements PersistentManager {
         if (!(properties[0] instanceof String)) {
             throw new IllegalArgumentException("Non-string property name: " + properties[0]);
         }
-        Expression e=ExpressionFactory.matchExp((String)properties[0], properties[1]);
+        Expression e;
+        if (exactMatch) {
+            e=ExpressionFactory.matchExp((String)properties[0], properties[1]);
+        } else {
+            e = ExpressionFactory.likeExp((String)properties[0], properties[1]);
+        }
         for(int i=2;i<properties.length;i+=2) {
             if (!(properties[i] instanceof String)) {
                 throw new IllegalArgumentException("Non-string property name: " + properties[i]);
             }
             if (matchAll) {
-                e = e.andExp(ExpressionFactory.matchExp((String)properties[i], properties[i+1]));
+                if (exactMatch) {
+                    e = e.andExp(ExpressionFactory.matchExp((String)properties[i], properties[i+1]));
+                } else {
+                    e = e.andExp(ExpressionFactory.likeExp((String)properties[i], properties[i+1]));
+                }
             } else {
-                e = e.orExp(ExpressionFactory.matchExp((String)properties[i], properties[i+1]));
+                if (exactMatch) {
+                    e = e.orExp(ExpressionFactory.matchExp((String)properties[i], properties[i+1]));
+                } else {
+                    e = e.orExp(ExpressionFactory.likeExp((String)properties[i], properties[i+1]));
+                }
             }
         }
-        return listMatching(type,e);
+        return listMatching(type,e,limit);
         
     }
 
     public <T> List<T> findByAnyProperty(Class<T> type, Object... properties) {
-        return findByProperties(type,false,properties);
+        return findByProperties(type,0,false,true,properties);
     }
+    
+    public <T> List<T> findByAnyProperty(Class<T> type, int limit, Object... properties) {
+        return findByProperties(type,limit,false,true,properties);
+    }
+
+
+    public <T> List<T> findLikeAnyProperty(Class<T> type, Object... properties) {
+        return findByProperties(type, 0,false, false, properties);
+    }
+
+
+    public <T> List<T> findLikeAnyProperty(Class<T> type, int limit, Object... properties) {
+        return findByProperties(type, limit,false, false, properties);
+    }
+
 
 }
 
