@@ -33,18 +33,24 @@ import com.googlecode.tapestry5cayenne.model.TinyIntPKEntity;
 import com.googlecode.tapestry5cayenne.services.ObjectContextProvider;
 import com.googlecode.tapestry5cayenne.services.PersistentManager;
 
-@Test(groups="all",sequential=true)
+@Test(groups="all")
 public class TestPersistentManagerImpl {
 
     private ObjectContext _context;
     private PersistentManager _manager;
-    private List<Artist> _data;
+    private Artist picasso;
+    private Artist dali;
     
     @BeforeClass
     void setup() throws Exception {
         TestUtils.setupdb();
         _context = DataContext.getThreadDataContext();
-        _data = TestUtils.basicData(_context);
+        List<Artist> data = TestUtils.basicData(_context);
+        new Ordering(Artist.NAME_PROPERTY,true).orderList(data);
+        dali = data.get(0);
+        picasso=data.get(1);
+        assertEquals(dali.getName(),"Dali");
+        assertEquals(picasso.getName(),"Picasso");
         TypeCoercer coercer = new TypeCoercer() {
             public void clearCache() {}
             @SuppressWarnings("unchecked")
@@ -124,16 +130,15 @@ public class TestPersistentManagerImpl {
         List<Artist> objs = _manager.listAll(
                 Artist.class, 
                 OrderingUtils.stringToOrdering(Artist.NAME_PROPERTY));
-        new Ordering(Artist.NAME_PROPERTY,true).orderList(_data);
-        assertEquals(objs,_data);
+        assertEquals(objs,Arrays.asList(dali,picasso));
     }
     
     public void testDefaultOrdering() {
         Bid b = new Bid();
-        b.setPainting(_data.get(0).getPaintingList().get(0));
+        b.setPainting(dali.getPaintingList().get(0));
         b.setAmount(new BigDecimal(27.00));
         Bid b2 = new Bid();
-        b2.setPainting(_data.get(0).getPaintingList().get(0));
+        b2.setPainting(dali.getPaintingList().get(0));
         b2.setAmount(new BigDecimal(25.00));
         _context.commitChanges();
         List<Bid> objs = _manager.listAll(Bid.class);
@@ -179,15 +184,15 @@ public class TestPersistentManagerImpl {
                 {
                     Artist.class,
                     ExpressionFactory.matchExp(Artist.NAME_PROPERTY, "Picasso"),
-                    Arrays.asList(_data.get(0)),
+                    Arrays.asList(picasso),
                     new Ordering[]{}
                 },
                 {
                     Painting.class,
                     ExpressionFactory.likeExp(Painting.TITLE_PROPERTY, "%P%"),
                     Arrays.asList(
-                            _data.get(0).getPaintingsByTitle().get("Portrait of Igor Stravinsky"),
-                            _data.get(1).getPaintingsByTitle().get("The Persistence of Memory")
+                            picasso.getPaintingsByTitle().get("Portrait of Igor Stravinsky"),
+                            dali.getPaintingsByTitle().get("The Persistence of Memory")
                             ),
                     new Ordering[]{}
                 },
@@ -195,8 +200,8 @@ public class TestPersistentManagerImpl {
                     Painting.class,
                     ExpressionFactory.likeExp(Painting.TITLE_PROPERTY, "%P%"),
                     Arrays.asList(
-                            _data.get(1).getPaintingsByTitle().get("The Persistence of Memory"),
-                            _data.get(0).getPaintingsByTitle().get("Portrait of Igor Stravinsky")
+                            dali.getPaintingsByTitle().get("The Persistence of Memory"),
+                            picasso.getPaintingsByTitle().get("Portrait of Igor Stravinsky")
                             ),
                     new Ordering[]{
                        new Ordering("title",false)
@@ -216,18 +221,18 @@ public class TestPersistentManagerImpl {
     
     
     public void testFind_Class() {
-        assertEquals(_data.get(0),_manager.find(Artist.class, DataObjectUtils.intPKForObject(_data.get(0))));
+        assertEquals(picasso,_manager.find(Artist.class, DataObjectUtils.intPKForObject(picasso)));
     }
     
     
     public void testFind_String() {
-        Artist a = _manager.find("Artist", DataObjectUtils.intPKForObject(_data.get(0)));
-        assertEquals(_data.get(0),a);
+        Artist a = _manager.find("Artist", DataObjectUtils.intPKForObject(dali));
+        assertEquals(dali,a);
     }
     
     @DataProvider(name="find_by_property")
     Object[][] findByProperty() {
-        Painting p = _data.get(0).getPaintingList().get(0);
+        Painting p = dali.getPaintingsByTitle().get("The Persistence of Memory");
         return new Object[][] {
                 /* test to make sure that "unbalanced" property sets throw Illegal Argument Exception*/
                 {Artist.class,null,new IllegalArgumentException("Unbalanced property array"), new Object[]{Artist.NAME_PROPERTY}},
@@ -238,7 +243,7 @@ public class TestPersistentManagerImpl {
                 /* test to make sure that an empty property list throws an IllegalArgumentException */
                 {Artist.class,null,new IllegalArgumentException("Must provide at least one property pair, but no pairs were provided"),new Object[]{}},
                 /* test to make sure that finding by one property returns the correct object...*/
-                {Artist.class,Arrays.asList(_data.get(0)),null,new Object[]{Artist.NAME_PROPERTY,_data.get(0).getName()}},
+                {Artist.class,Arrays.asList(dali),null,new Object[]{Artist.NAME_PROPERTY,dali.getName()}},
                 /* test multiple properties and deeper navigation paths... */
                 {
                     Painting.class,
@@ -246,7 +251,7 @@ public class TestPersistentManagerImpl {
                     null,
                     new Object[]{
                         Painting.TITLE_PROPERTY,p.getTitle(),
-                        Painting.ARTIST_PROPERTY + "." + Artist.NAME_PROPERTY,_data.get(0).getName()}
+                        Painting.ARTIST_PROPERTY + "." + Artist.NAME_PROPERTY,dali.getName()}
                 },
         };
     }
@@ -259,17 +264,21 @@ public class TestPersistentManagerImpl {
      */
     @Test(dataProvider="find_by_property")
     public void test_find_by_property(Class<? extends Persistent> type, List<?>expectedResults, Throwable expectedException, Object...properties) {
-        testPropFind(type,expectedResults,expectedException,true,properties);
+        testPropFind(type,expectedResults,expectedException,true,true,properties);
     }
     
-    private void testPropFind(Class<?> type, List<?> expectedResults, Throwable expectedException, boolean matchAll, Object...properties) {
+    private void testPropFind(Class<?> type, List<?> expectedResults, Throwable expectedException, boolean matchAll, boolean exactMatch, Object...properties) {
         Throwable t=null;
         List<?> results=null;
         try {
           if (matchAll) {
               results = _manager.findByProperty(type,properties);
           } else {
-              results = _manager.findByAnyProperty(type, properties);
+              if (exactMatch) {
+                  results = _manager.findByAnyProperty(type, properties);
+              } else {
+                  results = _manager.findLikeAnyProperty(type, properties);
+              }
           }
         } catch (Exception e) {
             t = e;
@@ -290,8 +299,10 @@ public class TestPersistentManagerImpl {
     
     @DataProvider(name="find_by_any_property")
     Object[][] findByAnyProperty() {
-        new Ordering(Painting.TITLE_PROPERTY,true).orderList(_data.get(0).getPaintingList());
-        Painting p = _data.get(0).getPaintingList().get(0);
+        Painting p1 = dali.getPaintingsByTitle().get("The Persistence of Memory");
+        assertNotNull(p1);
+        Painting p2 = dali.getPaintingsByTitle().get("Self-portrait");
+        assertNotNull(p2);
         return new Object[][] {
                 /* test to make sure that "unbalanced" property sets throw Illegal Argument Exception*/
                 {Artist.class,null,new IllegalArgumentException("Unbalanced property array"), new Object[]{Artist.NAME_PROPERTY}},
@@ -302,15 +313,15 @@ public class TestPersistentManagerImpl {
                 /* test to make sure that an empty property list throws an IllegalArgumentException */
                 {Artist.class,null,new IllegalArgumentException("Must provide at least one property pair, but no pairs were provided"),new Object[]{}},
                 /* test to make sure that finding by one property returns the correct object...*/
-                {Artist.class,Arrays.asList(_data.get(0)),null,new Object[]{Artist.NAME_PROPERTY,_data.get(0).getName()}},
+                {Artist.class,Arrays.asList(picasso),null,new Object[]{Artist.NAME_PROPERTY,picasso.getName()}},
                 /* test multiple properties and deeper navigation paths... */
                 {
                     Painting.class,
-                    _data.get(0).getPaintingList(),
+                    Arrays.asList(p2,p1),
                     null,
                     new Object[]{
-                        Painting.TITLE_PROPERTY,p.getTitle(),
-                        Painting.ARTIST_PROPERTY + "." + Artist.NAME_PROPERTY,_data.get(0).getName()}
+                        Painting.TITLE_PROPERTY,p1.getTitle(),
+                        Painting.ARTIST_PROPERTY + "." + Artist.NAME_PROPERTY,dali.getName()}
                 },
         };
     }
@@ -322,6 +333,36 @@ public class TestPersistentManagerImpl {
      */
     @Test(dataProvider="find_by_any_property")
     public void test_find_by_any_property(Class<? extends Persistent> type, List<?> expectedResults, Throwable expectedException, Object...properties) {
-        testPropFind(type,expectedResults,expectedException,false,properties);
+        testPropFind(type,expectedResults,expectedException,false,true,properties);
+    }
+    
+    
+    @DataProvider(name="find_like_any_property")
+    Object[][] findLikeAnyProperty() {
+        Painting p = dali.getPaintingsByTitle().get("Self-portrait");
+        Painting p2 = dali.getPaintingsByTitle().get("The Persistence of Memory");
+        String strippedName = "Dal%";
+        return new Object[][] {
+                {Artist.class,null,new IllegalArgumentException("Unbalanced property array"),new Object[]{Artist.NAME_PROPERTY}},
+                {Artist.class,null,new IllegalArgumentException("Unbalanced property array"),new Object[]{Artist.NAME_PROPERTY,"Picasso","blah"}},
+                {Artist.class,null,new IllegalArgumentException("Non-string property name: 123"), new Object[] {123,"foo"}},
+                {Artist.class,null, new IllegalArgumentException("Non-string property name: 123"), new Object[] {Artist.NAME_PROPERTY,"Picasso",123,"foo"}},
+                {Artist.class,null,new IllegalArgumentException("Must provide at least one property pair, but no pairs were provided"), new Object[]{}},
+                {Artist.class,Arrays.asList(dali),null,new Object[]{Artist.NAME_PROPERTY,strippedName}},
+                {
+                    Painting.class,
+                    Arrays.asList(p,p2),
+                    null,
+                    new Object[] {
+                        Painting.TITLE_PROPERTY,"Self-portrai%",
+                        Painting.ARTIST_PROPERTY + "." + Artist.NAME_PROPERTY,strippedName,
+                    }
+                },
+                
+        };
+    }
+    @Test(dataProvider="find_like_any_property")
+    public void test_find_like_any_property(Class<? extends Persistent> type, List<?> expectedResults, Throwable expectedException, Object...properties) {
+        testPropFind(type,expectedResults,expectedException,false,false,properties);
     }
 }
