@@ -24,6 +24,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.googlecode.tapestry5cayenne.TestUtils;
+import com.googlecode.tapestry5cayenne.annotations.DefaultOrder;
 import com.googlecode.tapestry5cayenne.model.Artist;
 import com.googlecode.tapestry5cayenne.model.Bid;
 import com.googlecode.tapestry5cayenne.model.BigIntPKEntity;
@@ -267,17 +268,29 @@ public class TestPersistentManagerImpl {
         testPropFind(type,expectedResults,expectedException,true,true,properties);
     }
     
-    private void testPropFind(Class<?> type, List<?> expectedResults, Throwable expectedException, boolean matchAll, boolean exactMatch, Object...properties) {
+    private void testPropFind(Class<?> type, int limit, List<?> expectedResults, Throwable expectedException, boolean matchAll, boolean exactMatch, Object... properties) {
         Throwable t=null;
         List<?> results=null;
         try {
           if (matchAll) {
-              results = _manager.findByProperty(type,properties);
+              if (limit >0) {
+                  results = _manager.findByProperty(type,limit,properties);
+              } else {
+                  results = _manager.findByProperty(type,properties);
+              }
           } else {
               if (exactMatch) {
-                  results = _manager.findByAnyProperty(type, properties);
+                  if (limit > 0) {
+                      results = _manager.findByAnyProperty(type, limit,properties);
+                  } else {
+                      results = _manager.findByAnyProperty(type, properties);
+                  }
               } else {
-                  results = _manager.findLikeAnyProperty(type, properties);
+                  if (limit > 0) {
+                      results = _manager.findLikeAnyProperty(type, limit, properties);
+                  } else {
+                      results = _manager.findLikeAnyProperty(type, properties);
+                  }
               }
           }
         } catch (Exception e) {
@@ -295,6 +308,10 @@ public class TestPersistentManagerImpl {
             assertNull(t);
         }
         assertEquals(results,expectedResults);
+    }
+    
+    private void testPropFind(Class<?> type, List<?> expectedResults, Throwable expectedException, boolean matchAll, boolean exactMatch, Object...properties) {
+        testPropFind(type,0,expectedResults,expectedException,matchAll,exactMatch,properties);
     }
     
     @DataProvider(name="find_by_any_property")
@@ -361,8 +378,39 @@ public class TestPersistentManagerImpl {
                 
         };
     }
+    
     @Test(dataProvider="find_like_any_property")
     public void test_find_like_any_property(Class<? extends Persistent> type, List<?> expectedResults, Throwable expectedException, Object...properties) {
         testPropFind(type,expectedResults,expectedException,false,false,properties);
+    }
+    
+    @DataProvider(name="find_like_any_property_with_limit")
+    Object[][] findLikeAnyPropertyWithLimit() {
+        Painting p = dali.getPaintingsByTitle().get("Self-portrait");
+        Painting p2 = dali.getPaintingsByTitle().get("The Persistence of Memory");
+        String strippedName = "Dal%";
+        return new Object[][] {
+                {Artist.class,1,null,new IllegalArgumentException("Unbalanced property array"),new Object[]{Artist.NAME_PROPERTY}},
+                {Artist.class,1,null,new IllegalArgumentException("Unbalanced property array"),new Object[]{Artist.NAME_PROPERTY,"Picasso","blah"}},
+                {Artist.class,1,null,new IllegalArgumentException("Non-string property name: 123"), new Object[] {123,"foo"}},
+                {Artist.class,1,null, new IllegalArgumentException("Non-string property name: 123"), new Object[] {Artist.NAME_PROPERTY,"Picasso",123,"foo"}},
+                {Artist.class,1,null,new IllegalArgumentException("Must provide at least one property pair, but no pairs were provided"), new Object[]{}},
+                {Artist.class,1,Arrays.asList(dali),null,new Object[]{Artist.NAME_PROPERTY,strippedName}},
+                {
+                    Painting.class,
+                    1,
+                    Arrays.asList(p),
+                    null,
+                    new Object[] {
+                        Painting.TITLE_PROPERTY,"Self-portrai%",
+                        Painting.ARTIST_PROPERTY + "." + Artist.NAME_PROPERTY,strippedName,
+                    }
+                },
+                
+        };
+    }
+    @Test(dataProvider="find_like_any_property_with_limit")
+    public void test_find_like_any_property_with_limit(Class<? extends Persistent> type, int limit, List<?> expectedResults, Throwable expectedException, Object...properties) {
+        testPropFind(type,limit,expectedResults,expectedException,false,false,properties);
     }
 }
