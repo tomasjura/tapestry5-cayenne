@@ -2,6 +2,7 @@ package com.googlecode.tapestry5cayenne.services;
 
 import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.Persistent;
+import org.apache.cayenne.exp.Expression;
 import org.apache.tapestry5.PrimaryKeyEncoder;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.VersionUtils;
@@ -11,6 +12,8 @@ import org.apache.tapestry5.ioc.ObjectLocator;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.apache.tapestry5.ioc.services.Coercion;
+import org.apache.tapestry5.ioc.services.CoercionTuple;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.services.AliasContribution;
 import org.apache.tapestry5.services.BeanBlockContribution;
@@ -134,5 +137,12 @@ public class TapestryCayenneCoreModule {
     {
         configuration.add("cayenneentity", locator.autobuild(CayenneEntityPersistentFieldStrategy.class));
     }       
-
+    
+    public static void contributeTypeCoercer(Configuration<CoercionTuple<String, Expression>> conf) {
+        conf.add(new CoercionTuple<String, Expression>(String.class,Expression.class,new Coercion<String, Expression>() {
+            public Expression coerce(String input) {
+                return Expression.fromString(input);
+            }
+        }));
+    }
 }
