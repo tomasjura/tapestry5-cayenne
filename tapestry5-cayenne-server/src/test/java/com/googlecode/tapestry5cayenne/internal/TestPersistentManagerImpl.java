@@ -24,7 +24,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.googlecode.tapestry5cayenne.TestUtils;
-import com.googlecode.tapestry5cayenne.annotations.DefaultOrder;
 import com.googlecode.tapestry5cayenne.model.Artist;
 import com.googlecode.tapestry5cayenne.model.Bid;
 import com.googlecode.tapestry5cayenne.model.BigIntPKEntity;
@@ -387,7 +386,6 @@ public class TestPersistentManagerImpl {
     @DataProvider(name="find_like_any_property_with_limit")
     Object[][] findLikeAnyPropertyWithLimit() {
         Painting p = dali.getPaintingsByTitle().get("Self-portrait");
-        Painting p2 = dali.getPaintingsByTitle().get("The Persistence of Memory");
         String strippedName = "Dal%";
         return new Object[][] {
                 {Artist.class,1,null,new IllegalArgumentException("Unbalanced property array"),new Object[]{Artist.NAME_PROPERTY}},
