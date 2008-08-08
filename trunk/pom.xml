@@ -133,6 +133,11 @@
                     </configuration>
                 </plugin>
                 <plugin>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <!-- according to t5 master pom, snapshots after this are broken -->
+                    <version>2.0-beta-5</version>
+                </plugin>
+                <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
                     <configuration>
                         <archive>
@@ -192,7 +197,7 @@
     </reporting>
 
     <properties>
-        <tapestry-release-version>5.0.13</tapestry-release-version>
+        <tapestry-release-version>5.0.14</tapestry-release-version>
     </properties>
 
     <repositories>
@@ -211,6 +216,11 @@
           <id>tapestry-snapshots</id>
           <url>http://tapestry.formos.com/maven-snapshot-repository/</url>
         </repository>
+        <!-- tapestry (pre) release repository -->
+        <repository>
+          <id>tapestry-pending-releases</id>
+          <url>http://people.apache.org/~hlship/tapestry-ibiblio-rsynch-repository/</url>
+        </repository>
     </repositories>
 
     <distributionManagement>
@@ -219,5 +229,10 @@
             <name>ObjectStyle Maven Repository</name>
             <url>dav:https://objectstyle.org/maven2</url>
         </repository>
+        <site>
+            <id>saiwai-solutions-site</id>
+            <name>T5Cayenne Website</name>
+            <url>scp://t5cayenne.saiwai-solutions.com/var/www/vhosts/saiwai-solutions.com/t5cayenne</url>
+        </site>
     </distributionManagement>
 </project>

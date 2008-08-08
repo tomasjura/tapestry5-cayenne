@@ -47,6 +47,9 @@ public class CayenneDataTypeAnalyzer implements DataTypeAnalyzer {
         EntityResolver er = _provider.currentContext().getEntityResolver();
         Class<?> type = _environment.peek(BeanModelTypeHolder.class).getType();
         ObjEntity ent = er.lookupObjEntity(type);
+        if (ent == null) {
+            return null;
+        }
         ObjRelationship rel = (ObjRelationship) ent.getRelationship(adapter.getName());
 
         if (rel == null) { 

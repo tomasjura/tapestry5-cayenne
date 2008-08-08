@@ -113,12 +113,9 @@ public class TestCayenneBeanModelSource extends Assert {
     public void test_properties(Class<?> type,boolean filterReadable,Map<String,String> props) {
         //ensure all properties specified are included.
         Messages msgs = createMock(Messages.class);
-        ComponentResources res = createMock(ComponentResources.class);
-        expect(res.getMessages()).andReturn(msgs);
-        
         expect(msgs.contains((String)anyObject())).andReturn(false).anyTimes();
-        replay(res,msgs);
-        BeanModel<?> model = _source.create(type, filterReadable, res);
+        replay(msgs);
+        BeanModel<?> model = _source.create(type, filterReadable, msgs);
         List<String> names = model.getPropertyNames();
         for(String key : props.keySet()) {
             assertTrue(names.contains(key),"Model missing property " + key);

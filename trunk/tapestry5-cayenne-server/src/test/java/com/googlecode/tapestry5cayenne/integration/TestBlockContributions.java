@@ -103,9 +103,11 @@ public class TestBlockContributions extends Assert {
         assertTrue(els.get(2).getChildMarkup().equals("Picasso"));
         
         //make sure the output is correct.
-        els = TestUtils.DOMFindAll(doc.getRootElement(),"body/div/div/div");
-        assertEquals(els.get(4).getChildMarkup(),"Artist:");
-        assertEquals(els.get(5).getChildMarkup(),"Picasso");
+        System.out.println(doc);
+        String markup = TestUtils.DOMFindAll(doc.getRootElement(), "body/dl/dt").get(2).getChildMarkup();
+        assertEquals(markup,"Artist");
+        markup = TestUtils.DOMFindAll(doc.getRootElement(),"body/dl/dd").get(2).getChildMarkup();
+        assertEquals(markup,"Picasso");
     }
     
     /**
@@ -130,7 +132,7 @@ public class TestBlockContributions extends Assert {
     public void testToManyViewer_fewElements() {
         assertEquals(_data.get(0).getName(),"Dali");
         Document doc = assertToManyHead();
-        List<Element> els = TestUtils.DOMFindAll(doc.getRootElement(),"body/div/div/div/ul");
+        List<Element> els = TestUtils.DOMFindAll(doc.getRootElement(),"body/dl/dd/ul");
         //one for the paintingList property, and one for the paintings as a map property.
         assertEquals(els.size(),2);
         assertEquals(els.get(0).getChildren().size(),_data.get(0).getPaintingList().size());
@@ -168,10 +170,9 @@ public class TestBlockContributions extends Assert {
             _data.get(0).addToPaintingList(p);
         }
         Document doc = assertToManyHead();
-        //no ul to grab anymore...
-        List<Element> els = TestUtils.DOMFindAll(doc.getRootElement(), "body/div/div/div");
+        List<Element> els = TestUtils.DOMFindAll(doc.getRootElement(), "body/dl/dd");
+        assertEquals(els.get(0).getChildMarkup().trim(),"20 associated items");
         assertEquals(els.get(1).getChildMarkup().trim(),"20 associated items");
-        assertEquals(els.get(3).getChildMarkup().trim(),"20 associated items");
     }
 
     /**

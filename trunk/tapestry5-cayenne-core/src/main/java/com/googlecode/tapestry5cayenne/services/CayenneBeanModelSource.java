@@ -1,7 +1,7 @@
 package com.googlecode.tapestry5cayenne.services;
 
 import org.apache.cayenne.map.ObjEntity;
-import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.Marker;
@@ -44,10 +44,10 @@ public class CayenneBeanModelSource implements BeanModelSource {
 
     @SuppressWarnings("unchecked")
     public <T> BeanModel<T> create(Class<T> type, boolean filterReadOnlyProperties, 
-            ComponentResources resources)
+            Messages messages)
     {
         _environment.push(BeanModelTypeHolder.class, new BeanModelTypeHolder(type));
-        BeanModel<T> model = _source.create(type, filterReadOnlyProperties, resources);
+        BeanModel<T> model = _source.create(type, filterReadOnlyProperties, messages);
 
         _environment.pop(BeanModelTypeHolder.class);
         ObjEntity ent = _provider.currentContext().getEntityResolver().lookupObjEntity(type);
