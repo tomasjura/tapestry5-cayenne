@@ -57,11 +57,12 @@ public class CayenneEntityEncoder implements ValueEncoder<Persistent> {
 
         if (dao.getPersistenceState() == PersistenceState.NEW
                 || dao.getPersistenceState() == PersistenceState.TRANSIENT) {
-            String key = _storer.store(dao);
+            
+            final String key = _storer.store(dao);
+
             //TODO smells of tight coupling here, having to dig through so many layers of objects.
             ObjEntity ent = _provider.currentContext().getEntityResolver().lookupObjEntity(dao.getClass());
             return ent.getName() + "::t::" + key;
-            
         }
 
         final String pk = _coercer.coerce(DataObjectUtils.pkForObject(dao),String.class);
@@ -74,11 +75,11 @@ public class CayenneEntityEncoder implements ValueEncoder<Persistent> {
         }
 
         final String[] vals = _pattern.split(val);
-        if (vals.length < 2)
-        {
+        if (vals.length < 2) {
             if (vals[0].equals("nil")) {
                 return null;
             }
+
             //TODO i18n this
             throw new RuntimeException("Unable to convert " + val + " into a Cayenne Persistent object");
         }
@@ -89,8 +90,10 @@ public class CayenneEntityEncoder implements ValueEncoder<Persistent> {
             if (obj == null) { 
                 throw new RuntimeException("Unable to convert " + val + " into a Cayenne Persistent object: missing object");
             }
+
             return obj; 
         }
+        
         return _manager.find(vals[0], vals[1]);
     }
 }
