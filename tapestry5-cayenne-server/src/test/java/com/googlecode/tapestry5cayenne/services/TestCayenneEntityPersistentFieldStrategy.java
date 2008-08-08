@@ -84,4 +84,19 @@ public class TestCayenneEntityPersistentFieldStrategy {
         assertEquals(a.getName(),"TemporaryChange");
         assertEquals(a.getPersistenceState(),PersistenceState.MODIFIED);
     }
+    
+    public void testGatherFieldChangesWithNull() {
+        List<String> vals = new ArrayList<String>();
+        vals.add("CayenneEntity:testPage:foo:bar");
+        EasyMock.expect(_session.getAttributeNames("CayenneEntity:testPage:")).andReturn(vals);
+        EasyMock.expect(_session.getAttribute("CayenneEntity:testPage:foo:bar"))
+            .andReturn(null);
+        EasyMock.replay(_session);
+        Collection<PersistentFieldChange> changes = _strategy.gatherFieldChanges("testPage");
+        assertEquals(changes.size(),1);
+        PersistentFieldChange c = changes.iterator().next();
+        assertEquals(c.getComponentId(),"foo");
+        assertEquals(c.getFieldName(),"bar");
+        assertNull(c.getValue());
+    }
 }
