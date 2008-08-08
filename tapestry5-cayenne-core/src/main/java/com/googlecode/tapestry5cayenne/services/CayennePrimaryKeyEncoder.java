@@ -37,5 +37,4 @@ public class CayennePrimaryKeyEncoder implements PrimaryKeyEncoder<String,Persis
     public Persistent toValue(String key) {
         return _encoder.toValue(key);
     }
-
 }

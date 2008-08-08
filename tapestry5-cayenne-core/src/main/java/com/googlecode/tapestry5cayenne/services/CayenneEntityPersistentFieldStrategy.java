@@ -65,7 +65,7 @@ public class CayenneEntityPersistentFieldStrategy implements
     
     private static final class CayenneEntityStrategy extends AbstractSessionPersistentFieldStrategy {
         public CayenneEntityStrategy(Request r) {
-            super("CayenneEntity:",r);
+            super("CayenneEntity:", r);
         }
     }
     
@@ -92,7 +92,5 @@ public class CayenneEntityPersistentFieldStrategy implements
         public Object getValue() {
             return _value;
         }
-        
     }
-
 }
