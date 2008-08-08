@@ -42,6 +42,7 @@ public class CayenneEntityPersistentFieldStrategy implements
         for(PersistentFieldChange change : _strategy.gatherFieldChanges(pageName)) {
             if(change.getValue()==null) {
                 changes.add(change);
+                continue;
             }
             changes.add(
                     new CayennePersistentChange(
