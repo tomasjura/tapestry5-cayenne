@@ -36,9 +36,9 @@
         </menu>
 
         <menu name="Modules">
-            <item name="Core" href="tapestry5-cayenne-core/index.html"/>
-			<item name="Server" href="tapestry5-cayenne-server/index.html"/>
-            <item name="Client" href="tapestry5-cayenne-client/index.html"/>
+            <item name="Core" href="tapestry5-cayenne-core/"/>
+			<item name="Server" href="tapestry5-cayenne-server/"/>
+            <item name="Client" href="tapestry5-cayenne-client/"/>
         </menu>
 
         <menu ref="reports"/>

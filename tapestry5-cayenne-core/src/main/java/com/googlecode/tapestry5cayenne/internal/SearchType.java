@@ -11,6 +11,9 @@ package com.googlecode.tapestry5cayenne.internal;
  *
  */
 public enum SearchType {
+    /**
+     * Search performed as: field LIKE 'input%'
+     */
 PREFIX {
     public String maskInput(String input){
         if (input == null || "".equals(input)) {
@@ -19,6 +22,9 @@ PREFIX {
         return input + "%";
     }  
 },
+/**
+ * Search performed as: field LIKE '%input'
+ */
 SUFFIX {
   public String maskInput(String input) {
       if (input == null || "".equals(input)) {
@@ -27,7 +33,15 @@ SUFFIX {
       return "%" + input;
   }
 },
+/**
+ * Search performed as: field LIKE '%input%'
+ */
 ANYWHERE,//default.
+/**
+ * Search performed as:field LIKE soundex(input);
+ * Where soundex is computed as in "The Art of Computing" pgs. 372-373.
+ * It is assumed that the field(s) being compared are already in soundex-form.
+ */
 SOUNDEX {
   public String maskInput(String input) {
       //perform the soundex algorithm...
