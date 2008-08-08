@@ -5,10 +5,15 @@
  */
 package com.googlecode.tapestry5cayenne.services;
 
-import org.apache.cayenne.access.DataContext;
-import org.apache.tapestry5.services.*;
-
 import java.io.IOException;
+
+import org.apache.cayenne.ObjectContext;
+import org.apache.cayenne.access.DataContext;
+import org.apache.tapestry5.services.ApplicationStateManager;
+import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.RequestFilter;
+import org.apache.tapestry5.services.RequestHandler;
+import org.apache.tapestry5.services.Response;
 
 /**
  * Provides a RequestFilter which ensures that there is a DataContext associated with the current request.
@@ -19,21 +24,27 @@ import java.io.IOException;
 public class CayenneRequestFilter implements RequestFilter {
     
     private final ApplicationStateManager _asm;
+    private final ObjectContextProvider _provider;
     
-    public CayenneRequestFilter(final ApplicationStateManager asm) {
+    public CayenneRequestFilter(
+            final ApplicationStateManager asm,
+            final ObjectContextProvider provider) {
         _asm = asm;
+        _provider = provider;
     }
 
     public boolean service(Request request, Response response, RequestHandler handler)
             throws IOException {
-        DataContext dc;
-        if (_asm.exists(DataContext.class)) {
-            dc = _asm.get(DataContext.class);
+        ObjectContext oc;
+        if (_asm.exists(ObjectContext.class)) {
+            oc = _asm.get(ObjectContext.class);
         } else {
-            dc = DataContext.createDataContext();
-            _asm.set(DataContext.class, dc);
+            oc = _provider.newContext();
+            _asm.set(ObjectContext.class, oc);
         }
-        DataContext.bindThreadDataContext(dc);
+        if (oc instanceof DataContext) {
+            DataContext.bindThreadDataContext((DataContext)oc);
+        }
         try {
             return handler.service(request, response);
         } finally {
