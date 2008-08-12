@@ -36,6 +36,7 @@ public class PersistentManagerImpl implements PersistentManager {
         return listAll(type,0,orderings);
     }
     
+    @SuppressWarnings("unchecked")
     public <T> List<T> listAll(Class<T> type, int limit, Ordering... orderings) {
         SelectQuery sq = new SelectQuery(type);
         ObjectContext context = _provider.currentContext();
@@ -54,6 +55,7 @@ public class PersistentManagerImpl implements PersistentManager {
         return listMatching(type,qualifier,0,orderings);
     }
     
+    @SuppressWarnings("unchecked")
     public <T> List<T> listMatching(Class<T> type, Expression qualifier, int limit, Ordering... orderings) {
         SelectQuery sq = new SelectQuery(type);
         ObjectContext context = _provider.currentContext();
