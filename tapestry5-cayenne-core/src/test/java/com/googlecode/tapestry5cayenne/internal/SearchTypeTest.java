@@ -4,6 +4,7 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+@Test(groups="all")
 public class SearchTypeTest extends Assert {
 
     @DataProvider(name="prefixes")
