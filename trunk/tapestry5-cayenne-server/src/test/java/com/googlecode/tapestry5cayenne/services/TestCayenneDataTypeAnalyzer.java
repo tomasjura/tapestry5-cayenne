@@ -16,7 +16,7 @@ import com.googlecode.tapestry5cayenne.TestUtils;
 import com.googlecode.tapestry5cayenne.internal.BeanModelTypeHolder;
 import com.googlecode.tapestry5cayenne.model.Artist;
 
-@Test(groups="alltests")
+@Test(groups="all")
 public class TestCayenneDataTypeAnalyzer extends Assert {
     
     private Registry _reg;
