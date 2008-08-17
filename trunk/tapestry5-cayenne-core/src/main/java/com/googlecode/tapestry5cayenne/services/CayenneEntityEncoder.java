@@ -35,24 +35,26 @@ public class CayenneEntityEncoder implements ValueEncoder<Persistent> {
     private final TypeCoercer _coercer;
     private final NonPersistedObjectStorer _storer;
     private final PersistentManager _manager;
-    
+    private final EncodedValueEncrypter _encrypter;
     
     @SuppressWarnings("unchecked")
     public CayenneEntityEncoder(
             final ObjectContextProvider provider,
             final TypeCoercer coercer,
             final PersistentManager manager,
-            final NonPersistedObjectStorer storer) {
+            final NonPersistedObjectStorer storer,
+            final EncodedValueEncrypter encrypter) {
         _provider = provider;
         _coercer = coercer;
         _storer=storer;
         _manager = manager;
+        _encrypter = encrypter;
     }
 
     public String toClient(final Persistent dao)
     {
         if (dao == null) {
-            return "nil";
+            return _encrypter.encrypt("nil");
         }
 
         if (dao.getPersistenceState() == PersistenceState.NEW
@@ -62,19 +64,20 @@ public class CayenneEntityEncoder implements ValueEncoder<Persistent> {
 
             //TODO smells of tight coupling here, having to dig through so many layers of objects.
             ObjEntity ent = _provider.currentContext().getEntityResolver().lookupObjEntity(dao.getClass());
-            return ent.getName() + "::t::" + key;
+            return _encrypter.encrypt(ent.getName() + "::t::" + key);
         }
 
         final String pk = _coercer.coerce(DataObjectUtils.pkForObject(dao),String.class);
-        return dao.getObjectId().getEntityName() + "::" + pk;
+        return _encrypter.encrypt(dao.getObjectId().getEntityName() + "::" + pk);
     }
 
-    public Persistent toValue(final String val) {
+    public Persistent toValue(String val) {
+        val = _encrypter.decrypt(val);
         if (val == null || val.trim().length() == 0) { 
             return null;
         }
 
-        final String[] vals = _pattern.split(val);
+        String[] vals = _pattern.split(val);
         if (vals.length < 2) {
             if (vals[0].equals("nil")) {
                 return null;
@@ -86,7 +89,7 @@ public class CayenneEntityEncoder implements ValueEncoder<Persistent> {
 
         if (vals.length == 3) {
             //check to see if it's in storage...
-            final Persistent obj = _storer.retrieve(vals[2],vals[0]);
+            Persistent obj = _storer.retrieve(vals[2],vals[0]);
             if (obj == null) { 
                 throw new RuntimeException("Unable to convert " + val + " into a Cayenne Persistent object: missing object");
             }
