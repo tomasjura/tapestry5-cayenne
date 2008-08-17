@@ -11,6 +11,7 @@ import org.apache.cayenne.ObjectId;
 import org.apache.cayenne.Persistent;
 import org.apache.tapestry5.ioc.Registry;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
+import org.easymock.EasyMock;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeClass;
@@ -18,11 +19,11 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.googlecode.tapestry5cayenne.TestUtils;
-import com.googlecode.tapestry5cayenne.model.*;
-import com.googlecode.tapestry5cayenne.services.CayenneEntityEncoder;
-import com.googlecode.tapestry5cayenne.services.NonPersistedObjectStorer;
-import com.googlecode.tapestry5cayenne.services.ObjectContextProvider;
-import com.googlecode.tapestry5cayenne.services.TapestryCayenneModule;
+import com.googlecode.tapestry5cayenne.model.Artist;
+import com.googlecode.tapestry5cayenne.model.BigIntPKEntity;
+import com.googlecode.tapestry5cayenne.model.SmallIntPKEntity;
+import com.googlecode.tapestry5cayenne.model.StringPKEntity;
+import com.googlecode.tapestry5cayenne.model.TinyIntPKEntity;
 
 @Test(groups="all")
 public class TestCayenneEntityEncoder extends Assert {
@@ -38,11 +39,8 @@ public class TestCayenneEntityEncoder extends Assert {
         _registry = TestUtils.setupRegistry("App0",TapestryCayenneModule.class);
         _provider = _registry.getService(ObjectContextProvider.class);
         _manager = _registry.getService(PersistentManager.class);
-        _encoder = new CayenneEntityEncoder(
-                _provider,
-                _registry.getService(TypeCoercer.class),
-                _manager,
-                _registry.getService(NonPersistedObjectStorer.class));
+        EncodedValueEncrypter enc = _registry.getService("PlainTextEncrypter",EncodedValueEncrypter.class);
+        _encoder = createEncoder(enc);
     }
     
     @AfterTest
@@ -123,4 +121,89 @@ public class TestCayenneEntityEncoder extends Assert {
     void testEmptyStringHandling(String string) {
         assertNull(_encoder.toValue(string));
     }
+    
+    
+    public void test_encrypt_called_in_toClient() {
+        Artist a = _provider.currentContext().newObject(Artist.class);
+        a.setName("test");
+        _provider.currentContext().commitChanges();
+        String value = "Artist::" + DataObjectUtils.intPKForObject(a);
+        
+        EncodedValueEncrypter enc = EasyMock.createMock(EncodedValueEncrypter.class);
+        EasyMock.expect(enc.encrypt(value)).andReturn(value);
+        EasyMock.replay(enc);
+        
+        CayenneEntityEncoder encoder = createEncoder(enc);
+        
+        String actualValue = encoder.toClient(a);
+        assertEquals(actualValue,value);
+        EasyMock.verify(enc);
+    }
+    
+    public void test_encrypt_called_for_nullvalue() {
+        EncodedValueEncrypter enc = EasyMock.createMock(EncodedValueEncrypter.class);
+        EasyMock.expect(enc.encrypt("nil")).andReturn("nil");
+        EasyMock.replay(enc);
+        
+        CayenneEntityEncoder encoder = createEncoder(enc);
+        assertEquals(encoder.toClient(null),"nil");
+        EasyMock.verify(enc);
+    }
+    
+    public void test_encrypt_called_for_transientvalue() {
+        Artist a = new Artist();
+        
+        EncodedValueEncrypter enc = EasyMock.createMock(EncodedValueEncrypter.class);
+        String val = "Artist::t::" + a.hashCode();
+        EasyMock.expect(enc.encrypt(val)).andReturn(val);
+        EasyMock.replay(enc);
+        
+        CayenneEntityEncoder encoder = createEncoder(enc);
+        
+        assertEquals(encoder.toClient(a),val);
+        EasyMock.verify(enc);
+        
+    }
+    
+    public void test_encrypt_called_for_newvalue() {
+        Artist a = _provider.currentContext().newObject(Artist.class);
+        
+        EncodedValueEncrypter enc = EasyMock.createMock(EncodedValueEncrypter.class);
+        String val = "Artist::t::" + a.hashCode();
+        EasyMock.expect(enc.encrypt(val)).andReturn(val);
+        EasyMock.replay(enc);
+        
+        CayenneEntityEncoder encoder = createEncoder(enc);
+        
+        assertEquals(encoder.toClient(a),val);
+        EasyMock.verify(enc);
+        
+    }
+    
+    public void test_decrypt_called_in_toValue() {
+        Artist a = _provider.currentContext().newObject(Artist.class);
+        a.setName("test");
+        _provider.currentContext().commitChanges();
+        String value = "Artist::" + DataObjectUtils.intPKForObject(a);
+        
+        EncodedValueEncrypter enc = EasyMock.createMock(EncodedValueEncrypter.class);
+        EasyMock.expect(enc.decrypt(value)).andReturn(value);
+        EasyMock.replay(enc);
+        
+        CayenneEntityEncoder encoder = createEncoder(enc);
+        Artist a2  = (Artist) encoder.toValue(value);
+        assertEquals(a2,a);
+        EasyMock.verify(enc);
+    }
+    
+    private CayenneEntityEncoder createEncoder(EncodedValueEncrypter enc) {
+        return new CayenneEntityEncoder(
+                _provider,
+                _registry.getService(TypeCoercer.class),
+                _manager,
+                _registry.getService(NonPersistedObjectStorer.class),
+                enc);
+    }
+    
+    
 }
