@@ -27,6 +27,7 @@ import org.apache.tapestry5.services.ValueEncoderFactory;
 
 import com.googlecode.tapestry5cayenne.annotations.Cayenne;
 import com.googlecode.tapestry5cayenne.internal.PersistentManagerImpl;
+import com.googlecode.tapestry5cayenne.internal.PlainTextEncodedValueEncrypter;
 
 /**
  * Core module.  This module is a "SubModule" of the TapestryModule, defined in
@@ -81,6 +82,8 @@ public class TapestryCayenneCoreModule {
         binder.bind(PersistentManager.class,PersistentManagerImpl.class);
         binder.bind(PrimaryKeyEncoder.class,CayennePrimaryKeyEncoder.class).withId("CayennePrimaryKeyEncoder");
         binder.bind(ObjectProvider.class,ObjectContextObjectProvider.class).withId("OCObjectProvider");
+        binder.bind(EncodedValueEncrypter.class,PlainTextEncodedValueEncrypter.class)
+              .withId("PlainTextEncrypter");
     }
     
     public static void contributeMasterObjectProvider(OrderedConfiguration<ObjectProvider> conf,
@@ -96,13 +99,14 @@ public class TapestryCayenneCoreModule {
                                                     @Cayenne final ObjectContextProvider provider,
                                                     final TypeCoercer coercer,
                                                     final PersistentManager manager,
-                                                    final NonPersistedObjectStorer storer)
+                                                    final NonPersistedObjectStorer storer,
+                                                    final EncodedValueEncrypter enc)
     {
         configuration.add(Persistent.class, new ValueEncoderFactory<Persistent>()
         {
             public ValueEncoder<Persistent> create(Class<Persistent> persistentClass)
             {
-                return new CayenneEntityEncoder(provider,coercer,manager, storer);
+                return new CayenneEntityEncoder(provider,coercer,manager, storer,enc);
             }
         });
     }
@@ -110,6 +114,11 @@ public class TapestryCayenneCoreModule {
     public static void contributeAliasOverrides(Configuration<AliasContribution> conf,
             @Cayenne BeanModelSource source) {
         conf.add(AliasContribution.create(BeanModelSource.class, source));
+    }
+    
+    public static void contributeAlias(Configuration<AliasContribution> conf, 
+            @InjectService("PlainTextEncrypter") EncodedValueEncrypter enc) {
+        conf.add(AliasContribution.create(EncodedValueEncrypter.class, enc));
     }
     
     public static void contributeDataTypeAnalyzer(
