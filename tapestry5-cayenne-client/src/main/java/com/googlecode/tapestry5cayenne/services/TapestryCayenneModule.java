@@ -6,11 +6,8 @@
 package com.googlecode.tapestry5cayenne.services;
 
 import org.apache.tapestry5.ioc.MappedConfiguration;
-import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.SubModule;
-import org.apache.tapestry5.ioc.annotations.Symbol;
-import org.apache.tapestry5.services.RequestFilter;
 import com.googlecode.tapestry5cayenne.annotations.Cayenne;
 
 @SubModule(TapestryCayenneCoreModule.class)
@@ -49,19 +46,5 @@ public class TapestryCayenneModule
     {
         binder.bind(ObjectContextProvider.class, CayenneContextProviderImpl.class)
             .withMarker(Cayenne.class).withId("CayenneContext");
-
-        binder.bind(RequestFilter.class, CayenneRequestFilter.class)
-            .withId("CayenneFilter")
-            .withMarker(Cayenne.class);
-    }
-
-    public static void contributeRequestHandler(final OrderedConfiguration<RequestFilter> configuration,
-            @Cayenne
-            RequestFilter filter,
-
-            @Symbol(TapestryCayenneCoreModule.FILTER_LOCATION)
-            String location)
-    {
-        configuration.add("cayenne", filter, location);
     }
 }

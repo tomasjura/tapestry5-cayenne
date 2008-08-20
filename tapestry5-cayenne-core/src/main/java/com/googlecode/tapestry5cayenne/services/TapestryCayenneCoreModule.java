@@ -17,13 +17,7 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.services.Coercion;
 import org.apache.tapestry5.ioc.services.CoercionTuple;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
-import org.apache.tapestry5.services.AliasContribution;
-import org.apache.tapestry5.services.BeanBlockContribution;
-import org.apache.tapestry5.services.BeanModelSource;
-import org.apache.tapestry5.services.DataTypeAnalyzer;
-import org.apache.tapestry5.services.LibraryMapping;
-import org.apache.tapestry5.services.PersistentFieldStrategy;
-import org.apache.tapestry5.services.ValueEncoderFactory;
+import org.apache.tapestry5.services.*;
 
 import com.googlecode.tapestry5cayenne.annotations.Cayenne;
 import com.googlecode.tapestry5cayenne.internal.PersistentManagerImpl;
@@ -84,6 +78,10 @@ public class TapestryCayenneCoreModule {
         binder.bind(ObjectProvider.class,ObjectContextObjectProvider.class).withId("OCObjectProvider");
         binder.bind(EncodedValueEncrypter.class,PlainTextEncodedValueEncrypter.class)
               .withId("PlainTextEncrypter");
+
+        binder.bind(RequestFilter.class, CayenneRequestFilter.class)
+            .withId("CayenneFilter")
+            .withMarker(Cayenne.class);
     }
     
     public static void contributeMasterObjectProvider(OrderedConfiguration<ObjectProvider> conf,
@@ -161,5 +159,14 @@ public class TapestryCayenneCoreModule {
                 return Expression.fromString(input);
             }
         }));
+    }
+
+    public static void contributeRequestHandler(OrderedConfiguration<RequestFilter> configuration,
+            @Cayenne
+            RequestFilter filter,
+            @Symbol(TapestryCayenneCoreModule.FILTER_LOCATION)
+            String location)
+    {
+        configuration.add("cayenne", filter, location);
     }
 }
