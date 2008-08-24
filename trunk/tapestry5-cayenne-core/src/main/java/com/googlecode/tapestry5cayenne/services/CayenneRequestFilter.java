@@ -8,6 +8,7 @@ package com.googlecode.tapestry5cayenne.services;
 import java.io.IOException;
 
 import org.apache.cayenne.ObjectContext;
+import org.apache.cayenne.BaseContext;
 import org.apache.cayenne.access.DataContext;
 import org.apache.tapestry5.services.ApplicationStateManager;
 import org.apache.tapestry5.services.Request;
@@ -42,13 +43,13 @@ public class CayenneRequestFilter implements RequestFilter {
             oc = _provider.newContext();
             _asm.set(ObjectContext.class, oc);
         }
-        if (oc instanceof DataContext) {
-            DataContext.bindThreadDataContext((DataContext)oc);
-        }
+
+        BaseContext.bindThreadObjectContext(oc);
+
         try {
             return handler.service(request, response);
         } finally {
-            DataContext.bindThreadDataContext(null);
+            BaseContext.bindThreadObjectContext(null);
         }
     }
 }

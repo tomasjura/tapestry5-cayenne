@@ -3,6 +3,7 @@ package com.googlecode.tapestry5cayenne.services;
 import org.apache.cayenne.CayenneContext;
 import org.apache.cayenne.DataChannel;
 import org.apache.cayenne.ObjectContext;
+import org.apache.cayenne.BaseContext;
 import org.apache.cayenne.remote.ClientChannel;
 import org.apache.cayenne.remote.ClientConnection;
 import org.apache.cayenne.remote.hessian.HessianConnection;
@@ -54,12 +55,7 @@ public class CayenneContextProviderImpl implements ObjectContextProvider
 
     public ObjectContext currentContext()
     {
-        if (asm.exists(ObjectContext.class))
-        {
-            return asm.get(ObjectContext.class);
-        }
-
-        return null;
+        return BaseContext.getThreadObjectContext();
     }
 
     public ObjectContext newContext()
