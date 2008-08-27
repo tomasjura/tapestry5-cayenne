@@ -8,7 +8,7 @@ Symbols
 *-------------------------------------------+---------------------------------------------------+-----------------------------+
 |               Symbol                      |                      Meaning                      |        Default Value        |
 *-------------------------------------------+---------------------------------------------------+-----------------------------+
-| TapestryCayenneModule.WEB_SERVICE_URL     | The URL of the ROP server.                        | "http*//localhost*8080/cws" |
+| TapestryCayenneModule.WEB_SERVICE_URL     | The URL of the ROP server.                        | "http://localhost:8080/cws" |
 | TapestryCayenneModule.USERNAME            | Username to authenticate against ROP server with. | ""                          |
 | TapestryCayenneModule.PASSWORD            | Password to authenticate against ROP server with. | ""                          |
 | TapestryCayenneModule.SHARED_SESSION_NAME | Hessian shared session name.                      | ""                          |
