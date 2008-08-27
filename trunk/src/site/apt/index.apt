@@ -18,14 +18,19 @@ Current Status
 Features
 	
 	* ObjectContext creation and binding to Application State Object for easy context retrieval
+
+	* Injectable ObjectContext (with on-demand creation) for sessionless applications
 	
 	* ValueEncoder for all Persistent objects
 	
 	* BeanModelSource implementation to hide Cayenne's "non-editable" fields
+
+	* Pluggable ID encoding strategies for URL generation in order to prevent data tampering
 	
 	* Editors and viewers for Persistent objects, allowing Persistent objects to be used in BeanEditor and BeanDisplay with no effort
 	
-	* Components and supporting services for making working with Persistent objects as simple as possible
+	* Rich components and supporting services for making working with Persistent objects as simple as possible
+
 
 Additional Information
 
