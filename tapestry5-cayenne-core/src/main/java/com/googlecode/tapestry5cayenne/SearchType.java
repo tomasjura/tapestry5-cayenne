@@ -1,4 +1,4 @@
-package com.googlecode.tapestry5cayenne.internal;
+package com.googlecode.tapestry5cayenne;
 
 
 /**

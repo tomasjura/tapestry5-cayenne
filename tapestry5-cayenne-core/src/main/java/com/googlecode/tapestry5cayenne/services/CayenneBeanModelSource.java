@@ -42,6 +42,14 @@ public class CayenneBeanModelSource implements BeanModelSource {
         _provider = provider;
         _environment = environment;
     }
+
+    public <T> BeanModel<T> createEditModel(Class<T> type, Messages messages) {
+        return create(type,true,messages);
+    }
+
+    public <T> BeanModel<T> createDisplayModel(Class<T> type, Messages messages) {
+        return create(type,false,messages);
+    }
     
     @SuppressWarnings("unchecked")
     public <T> BeanModel<T> create(Class<T> type, boolean filterReadOnlyProperties, 
@@ -59,4 +67,5 @@ public class CayenneBeanModelSource implements BeanModelSource {
 
         return model.exclude(defaultExcludes);
     }
+
 }

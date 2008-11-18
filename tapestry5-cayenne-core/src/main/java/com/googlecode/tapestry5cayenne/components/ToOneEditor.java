@@ -10,7 +10,7 @@ import org.apache.tapestry5.corelib.components.Select;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.PropertyEditContext;
 
-import com.googlecode.tapestry5cayenne.internal.PersistentEntitySelectModel;
+import com.googlecode.tapestry5cayenne.PersistentEntitySelectModel;
 import com.googlecode.tapestry5cayenne.services.PersistentManager;
 
 /**
