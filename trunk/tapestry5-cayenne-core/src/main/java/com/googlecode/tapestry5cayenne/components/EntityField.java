@@ -20,11 +20,11 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.corelib.components.TextField;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import com.googlecode.tapestry5cayenne.SearchType;
 import com.googlecode.tapestry5cayenne.annotations.DefaultOrder;
 import com.googlecode.tapestry5cayenne.annotations.Label;
 import com.googlecode.tapestry5cayenne.internal.AnnotationFinder;
 import com.googlecode.tapestry5cayenne.internal.Labeler;
-import com.googlecode.tapestry5cayenne.internal.SearchType;
 import com.googlecode.tapestry5cayenne.services.ObjectContextProvider;
 import com.googlecode.tapestry5cayenne.services.PersistentManager;
 

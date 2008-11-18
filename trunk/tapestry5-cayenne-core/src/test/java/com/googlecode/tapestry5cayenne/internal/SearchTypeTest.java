@@ -4,6 +4,8 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import com.googlecode.tapestry5cayenne.SearchType;
+
 @Test(groups="all")
 public class SearchTypeTest extends Assert {
 

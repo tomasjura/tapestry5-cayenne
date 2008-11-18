@@ -1,4 +1,4 @@
-package com.googlecode.tapestry5cayenne.internal;
+package com.googlecode.tapestry5cayenne;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -10,6 +10,8 @@ import org.apache.tapestry5.OptionModel;
 import org.apache.tapestry5.util.AbstractSelectModel;
 
 import com.googlecode.tapestry5cayenne.annotations.Label;
+import com.googlecode.tapestry5cayenne.internal.AnnotationFinder;
+import com.googlecode.tapestry5cayenne.internal.MethodLabelOptionModel;
 import com.googlecode.tapestry5cayenne.services.PersistentManager;
 
 /**
