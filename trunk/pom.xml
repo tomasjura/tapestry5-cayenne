@@ -197,7 +197,7 @@
     </reporting>
 
     <properties>
-        <tapestry-release-version>5.0.15-SNAPSHOT</tapestry-release-version>
+        <tapestry-release-version>5.0.16</tapestry-release-version>
     </properties>
 
     <repositories>
