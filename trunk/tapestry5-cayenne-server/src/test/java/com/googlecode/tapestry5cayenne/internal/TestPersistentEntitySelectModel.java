@@ -14,6 +14,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.googlecode.tapestry5cayenne.PersistentEntitySelectModel;
 import com.googlecode.tapestry5cayenne.TestUtils;
 import com.googlecode.tapestry5cayenne.model.Artist;
 import com.googlecode.tapestry5cayenne.services.PersistentManager;

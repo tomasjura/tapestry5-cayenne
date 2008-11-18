@@ -142,8 +142,7 @@ public class TestBlockContributions extends Assert {
             Element el = (Element) n;
             assertEquals(el.getName(),"li");
             StringBuilder blder = new StringBuilder();
-            doc.getMarkupModel().encode(it.next().toString(), blder);
-            assertEquals(el.getChildMarkup().trim(),blder.toString());
+            assertEquals(el.getChildMarkup().trim(),doc.getMarkupModel().encode(it.next().toString()));
         }
         //now test the map...
         it = _data.get(0).getPaintingsByTitle().values().iterator();
@@ -151,8 +150,7 @@ public class TestBlockContributions extends Assert {
             Element el = (Element) n;
             assertEquals(el.getName(),"li");
             StringBuilder blder = new StringBuilder();
-            doc.getMarkupModel().encode(it.next().toString(),blder);
-            assertEquals(el.getChildMarkup().trim(),blder.toString());
+            assertEquals(el.getChildMarkup().trim(),doc.getMarkupModel().encode(it.next().toString()));
         }
     }
     
