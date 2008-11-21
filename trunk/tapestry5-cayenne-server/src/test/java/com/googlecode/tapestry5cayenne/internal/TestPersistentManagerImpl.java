@@ -13,6 +13,7 @@ import java.util.List;
 import org.apache.cayenne.DataObjectUtils;
 import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.Persistent;
+import org.apache.cayenne.BaseContext;
 import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.exp.Expression;
 import org.apache.cayenne.exp.ExpressionFactory;
@@ -44,7 +45,7 @@ public class TestPersistentManagerImpl {
     @BeforeClass
     void setup() throws Exception {
         TestUtils.setupdb();
-        _context = DataContext.getThreadDataContext();
+        _context = BaseContext.getThreadObjectContext();
         List<Artist> data = TestUtils.basicData(_context);
         new Ordering(Artist.NAME_PROPERTY,true).orderList(data);
         dali = data.get(0);
@@ -111,7 +112,7 @@ public class TestPersistentManagerImpl {
     
     @Test(dataProvider="sorts")
     public void query_sort(SelectQuery sq, Method label, Class<?> type, QuerySortResult expected) {
-        QuerySortResult result = PersistentManagerImpl.querySort(sq, label, DataContext.getThreadDataContext(), type,new Ordering[]{});
+        QuerySortResult result = PersistentManagerImpl.querySort(sq, label, BaseContext.getThreadObjectContext(), type,new Ordering[]{});
         assertEquals(result.type,expected.type);
         if (expected.ordering == null) {
             assertNull(result.ordering);

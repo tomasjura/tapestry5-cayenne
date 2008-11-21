@@ -8,6 +8,8 @@ package com.googlecode.tapestry5cayenne.integration.app0.services;
 import java.util.List;
 
 import org.apache.cayenne.access.DataContext;
+import org.apache.cayenne.BaseContext;
+import org.apache.cayenne.ObjectContext;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
@@ -36,10 +38,10 @@ public class AppModule {
             public void initializeApplication(Context context, ApplicationInitializer handler) {
                 try {
                     TestUtils.setupdb();
-                    DataContext dc = DataContext.getThreadDataContext();
-                    List<Artist> artists = TestUtils.basicData(dc);
-                    TestUtils.addPaintings(artists.get(0),15,dc);
-                    TestUtils.addPaintings(artists.get(1),18,dc);
+                    ObjectContext oc = BaseContext.getThreadObjectContext();
+                    List<Artist> artists = TestUtils.basicData(oc);
+                    TestUtils.addPaintings(artists.get(0),15,oc);
+                    TestUtils.addPaintings(artists.get(1),18,oc);
                 } catch (Exception e) { throw new RuntimeException(e); }
                 //put in some artists and paintings...
                 handler.initializeApplication(context);

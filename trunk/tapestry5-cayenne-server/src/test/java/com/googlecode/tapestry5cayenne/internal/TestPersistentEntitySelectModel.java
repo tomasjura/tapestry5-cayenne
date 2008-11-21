@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.cayenne.ObjectContext;
+import org.apache.cayenne.BaseContext;
 import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.query.Ordering;
 import org.apache.tapestry5.OptionModel;
@@ -29,7 +30,7 @@ public class TestPersistentEntitySelectModel extends Assert {
     @BeforeClass
     void setup() throws Exception {
         TestUtils.setupdb();
-        _context = DataContext.getThreadDataContext();
+        _context = BaseContext.getThreadObjectContext();
         _data = TestUtils.basicData(_context);
         _manager = EasyMock.createMock(PersistentManager.class);
         List<Artist> copy = new ArrayList<Artist>(_data);
