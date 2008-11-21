@@ -6,6 +6,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.apache.cayenne.ObjectContext;
+import org.apache.cayenne.BaseContext;
 import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.access.DataNode;
 import org.apache.cayenne.access.DbGenerator;
@@ -51,7 +52,7 @@ public class TestUtils {
             dbgen.setShouldCreateTables(true);
             dbgen.runGenerator(src);
         }
-        DataContext.bindThreadDataContext(dc);
+        BaseContext.bindThreadObjectContext(dc);
     }
     
     /**
