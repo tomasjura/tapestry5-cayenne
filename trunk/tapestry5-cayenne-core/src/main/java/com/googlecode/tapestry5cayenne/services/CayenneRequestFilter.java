@@ -7,9 +7,8 @@ package com.googlecode.tapestry5cayenne.services;
 
 import java.io.IOException;
 
-import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.BaseContext;
-import org.apache.cayenne.access.DataContext;
+import org.apache.cayenne.ObjectContext;
 import org.apache.tapestry5.services.ApplicationStateManager;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestFilter;

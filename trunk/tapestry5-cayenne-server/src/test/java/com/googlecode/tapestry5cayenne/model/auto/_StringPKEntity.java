@@ -13,6 +13,7 @@ public abstract class _StringPKEntity extends CayenneDataObject {
     public static final String ID_PROPERTY = "id";
     public static final String INT_PROP1_PROPERTY = "intProp1";
     public static final String STRING_PROP1_PROPERTY = "stringProp1";
+    public static final String STRING_PROP2_PROPERTY = "stringProp2";
 
     public static final String ID_PK_COLUMN = "id";
 
@@ -35,6 +36,13 @@ public abstract class _StringPKEntity extends CayenneDataObject {
     }
     public String getStringProp1() {
         return (String)readProperty("stringProp1");
+    }
+
+    public void setStringProp2(String stringProp2) {
+        writeProperty("stringProp2", stringProp2);
+    }
+    public String getStringProp2() {
+        return (String)readProperty("stringProp2");
     }
 
 }

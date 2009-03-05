@@ -37,7 +37,6 @@ public class CayenneEntityEncoder implements ValueEncoder<Persistent> {
     private final PersistentManager _manager;
     private final EncodedValueEncrypter _encrypter;
     
-    @SuppressWarnings("unchecked")
     public CayenneEntityEncoder(
             final ObjectContextProvider provider,
             final TypeCoercer coercer,

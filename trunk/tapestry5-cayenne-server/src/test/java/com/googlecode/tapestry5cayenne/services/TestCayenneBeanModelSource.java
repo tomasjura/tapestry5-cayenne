@@ -50,9 +50,11 @@ public class TestCayenneBeanModelSource extends Assert {
         Map<String,String> stringPKProps = new HashMap<String, String>();
         stringPKProps.put(StringPKEntity.ID_PROPERTY,"text");
         stringPKProps.put(StringPKEntity.INT_PROP1_PROPERTY,"number");
-        stringPKProps.put(StringPKEntity.STRING_PROP1_PROPERTY,"text");
+        stringPKProps.put(StringPKEntity.STRING_PROP1_PROPERTY,"longtext");
+        stringPKProps.put(StringPKEntity.STRING_PROP2_PROPERTY,"text");
         Map<String,String> artistProps = new HashMap<String, String>();
-        artistProps.put(Artist.NAME_PROPERTY, "text");
+        //name is a longvarchar, so, longtext.
+        artistProps.put(Artist.NAME_PROPERTY, "longtext");
         Map<String,String> artistPropsWithRelationship = new HashMap<String,String>(artistProps);
         artistPropsWithRelationship.put("paintingList", "to_many_collection");
         artistPropsWithRelationship.put("paintingsByTitle","to_many_map");
@@ -60,7 +62,7 @@ public class TestCayenneBeanModelSource extends Assert {
         Map<String,String> paintingProps = new HashMap<String,String>();
         paintingProps.put(Painting.ARTIST_PROPERTY,"to_one");
         paintingProps.put(Painting.PRICE_PROPERTY,"number");
-        paintingProps.put(Painting.TITLE_PROPERTY,"text");
+        paintingProps.put(Painting.TITLE_PROPERTY,"longtext");
         Map<String,String> bidProps = new HashMap<String,String>();
         bidProps.put(Bid.AMOUNT_PROPERTY, "number");
         bidProps.put(Bid.PAINTING_PROPERTY, "painting");
@@ -116,7 +118,8 @@ public class TestCayenneBeanModelSource extends Assert {
         Messages msgs = createMock(Messages.class);
         expect(msgs.contains((String)anyObject())).andReturn(false).anyTimes();
         replay(msgs);
-        BeanModel<?> model = _source.create(type, filterReadable, msgs);
+        
+        BeanModel<?> model = filterReadable?_source.createEditModel(type, msgs):_source.createDisplayModel(type, msgs);
         List<String> names = model.getPropertyNames();
         for(String key : props.keySet()) {
             assertTrue(names.contains(key),"Model missing property " + key);

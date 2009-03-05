@@ -35,6 +35,7 @@ public class TestEJBQLBindingAndCoercion extends Assert {
         new Ordering(Artist.NAME_PROPERTY,true).orderList(data);
     }
     
+    @SuppressWarnings("unchecked")
     public void testBindingFactory() {
         BindingFactory fact =  registry.getService("EJBQLBindingFactory",BindingFactory.class);
         ComponentResources mockResources = mockResources();
@@ -47,6 +48,7 @@ public class TestEJBQLBindingAndCoercion extends Assert {
         EasyMock.verify(mockResources);
     }
     
+    @SuppressWarnings("unchecked")
     public void testQueryToListAndGridDataSourceCoercions() {
         TypeCoercer coercer = registry.getService(TypeCoercer.class);
         Binding b = registry.getService("EJBQLBindingFactory",BindingFactory.class)
@@ -54,7 +56,7 @@ public class TestEJBQLBindingAndCoercion extends Assert {
         
         EJBQLQuery q = (EJBQLQuery) b.get();
         
-        List ret = coercer.coerce(q, List.class);
+        List<Artist> ret = coercer.coerce(q, List.class);
         
         assertArtists(ret);
         

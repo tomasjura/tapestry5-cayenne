@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.BaseContext;
-import org.apache.cayenne.access.DataContext;
+import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.query.Ordering;
 import org.apache.tapestry5.OptionModel;
 import org.easymock.EasyMock;

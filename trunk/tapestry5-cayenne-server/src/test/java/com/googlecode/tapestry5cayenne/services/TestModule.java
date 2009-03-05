@@ -15,6 +15,7 @@ public class TestModule {
         conf.add("tapestry.alias-mode","production");
     }
     
+    @SuppressWarnings("unchecked")
     public void contributeDefaultDataTypeAnalyzer(MappedConfiguration<Class,String> conf) {
         conf.add(Painting.class,"painting");
     }

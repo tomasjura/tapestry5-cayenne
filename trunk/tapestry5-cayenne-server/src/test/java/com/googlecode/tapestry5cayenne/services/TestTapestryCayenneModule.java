@@ -50,11 +50,13 @@ public class TestTapestryCayenneModule extends Assert {
         _registry.shutdown();
     }
     
+    @SuppressWarnings("unchecked")
     public void hasValueEncoderWithId() {
         ValueEncoder encoder = _registry.getService("CayenneEntityEncoder", ValueEncoder.class);
         assertNotNull(encoder);
     }
     
+    @SuppressWarnings("unchecked")
     public void hasValueEncoderWithMarker() {
         ValueEncoder encoder = _registry.getObject(
                 ValueEncoder.class, 

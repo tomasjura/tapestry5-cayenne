@@ -1,11 +1,15 @@
 package com.googlecode.tapestry5cayenne.services;
 
+import java.sql.Types;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.cayenne.map.DbAttribute;
 import org.apache.cayenne.map.EntityResolver;
+import org.apache.cayenne.map.ObjAttribute;
 import org.apache.cayenne.map.ObjEntity;
 import org.apache.cayenne.map.ObjRelationship;
+import org.apache.tapestry5.beaneditor.DataType;
 import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.Marker;
 import org.apache.tapestry5.ioc.services.PropertyAdapter;
@@ -40,16 +44,27 @@ public class CayenneDataTypeAnalyzer implements DataTypeAnalyzer {
     
     public String identifyDataType(PropertyAdapter adapter)
     {
-        String dt = _defaultAnalyzer.identifyDataType(adapter);
-        if (dt != null && !dt.equals("")) {
-            return dt;
-        }
         EntityResolver er = _provider.currentContext().getEntityResolver();
         Class<?> type = _environment.peek(BeanModelTypeHolder.class).getType();
         ObjEntity ent = er.lookupObjEntity(type);
+        
+        String dt = _defaultAnalyzer.identifyDataType(adapter);
+        if (dt != null && !dt.equals("")) {
+            return checkLongText(ent,adapter,dt);
+        }
+        
         if (ent == null) {
             return null;
         }
+        
+        //if we add any more "special cases" for datatypes, we should refactor this into a chain of command
+        //that passes in the object entity and the adapter. Then we can easily contribute new types.
+        //cleans up the code, too. But for only two main cases...
+        return checkRelationship(ent,adapter);
+        
+    }
+    
+    private String checkRelationship(ObjEntity ent,PropertyAdapter adapter) {
         ObjRelationship rel = (ObjRelationship) ent.getRelationship(adapter.getName());
 
         if (rel == null) { 
@@ -57,7 +72,7 @@ public class CayenneDataTypeAnalyzer implements DataTypeAnalyzer {
         }
 
         if (rel.isToMany()) {
-            Class clazz;
+            Class<?> clazz;
             try {
               clazz = Class.forName(rel.getCollectionType());
             } catch (Exception e) {
@@ -73,5 +88,34 @@ public class CayenneDataTypeAnalyzer implements DataTypeAnalyzer {
         }
 
         return "to_one";
+    }
+    
+    private String checkLongText(ObjEntity ent, PropertyAdapter adapter, String currentType) {
+        //only called if currentType isn't null, so...
+        //first check to make sure we don't have an explicitly declared data type.
+        if (adapter.getAnnotation(DataType.class) != null) {
+            return currentType;
+        }
+        
+        //only really care, currently, if currentType is text.
+        if (!currentType.equals("text")) {
+            return currentType;
+        }
+        
+        ObjAttribute att = (ObjAttribute) ent.getAttribute(adapter.getName());
+        if (att == null) return currentType;
+        
+        DbAttribute dbatt = att.getDbAttribute();
+        switch (dbatt.getType()) {
+            case Types.LONGVARCHAR:
+                return "longtext";
+            case Types.CHAR:
+            case Types.VARCHAR:
+                if (dbatt.getMaxLength() > 64) {
+                    return "longtext";
+                }
+            default:
+                return currentType;
+        }
     }
 }
