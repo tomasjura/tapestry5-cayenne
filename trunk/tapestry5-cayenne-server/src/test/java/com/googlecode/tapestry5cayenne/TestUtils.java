@@ -146,6 +146,14 @@ public class TestUtils {
         return searchels;
     }
 
+    /**
+     * Add a series of paintings to an artist. Each will be titled Paintingn where n is the nth added painting (0-based).
+     * The price will be 1000.0*n.
+     * @param artist the artist to add the paintings to.
+     * @param numPaintings the number of paintings to add
+     * @param context the context 
+     * @return the list of paintings.
+     */
     public static List<Painting> addPaintings(Artist artist, int numPaintings, ObjectContext context) {
         List<Painting> newPaintings = new ArrayList<Painting>();
         for(int i=1;i<=numPaintings;i++) {
