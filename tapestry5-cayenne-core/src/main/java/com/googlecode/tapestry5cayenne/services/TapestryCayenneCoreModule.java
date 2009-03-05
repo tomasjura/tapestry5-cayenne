@@ -1,8 +1,12 @@
 package com.googlecode.tapestry5cayenne.services;
 
+import java.util.List;
+
+import org.apache.cayenne.BaseContext;
 import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.Persistent;
 import org.apache.cayenne.exp.Expression;
+import org.apache.cayenne.query.EJBQLQuery;
 import org.apache.tapestry5.PrimaryKeyEncoder;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.VersionUtils;
@@ -13,11 +17,20 @@ import org.apache.tapestry5.ioc.ObjectProvider;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.InjectService;
+import org.apache.tapestry5.ioc.annotations.Local;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.services.Coercion;
 import org.apache.tapestry5.ioc.services.CoercionTuple;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
-import org.apache.tapestry5.services.*;
+import org.apache.tapestry5.services.AliasContribution;
+import org.apache.tapestry5.services.BeanBlockContribution;
+import org.apache.tapestry5.services.BeanModelSource;
+import org.apache.tapestry5.services.BindingFactory;
+import org.apache.tapestry5.services.DataTypeAnalyzer;
+import org.apache.tapestry5.services.LibraryMapping;
+import org.apache.tapestry5.services.PersistentFieldStrategy;
+import org.apache.tapestry5.services.RequestFilter;
+import org.apache.tapestry5.services.ValueEncoderFactory;
 
 import com.googlecode.tapestry5cayenne.annotations.Cayenne;
 import com.googlecode.tapestry5cayenne.internal.PersistentManagerImpl;
@@ -49,8 +62,15 @@ public class TapestryCayenneCoreModule {
      */
     public static final String T5CAYENNE_VERSION="tapestry5cayene.version";
     
+    /**
+     * Constant for the T5Cayenne Persistence strategy (storing only pk-info in the session, rather than the full object)
+     */
     public static final String T5CAYENNE_PERSISTENCE_STRATEGY="cayenneentity";
     
+    /**
+     * Constant for the binding prefix for ejbql binding (value: ejbq). 
+     */
+    public static final String T5CAYENNE_EJBQ_BINDING="ejbq";
     
     public static void contributeFactoryDefaults(MappedConfiguration<String,String> conf) {
         conf.add(FILTER_LOCATION,"after:*");
@@ -81,6 +101,10 @@ public class TapestryCayenneCoreModule {
 
         binder.bind(RequestFilter.class, CayenneRequestFilter.class)
             .withId("CayenneFilter")
+            .withMarker(Cayenne.class);
+        
+        binder.bind(BindingFactory.class,EJBQLBindingFactory.class)
+            .withId("EJBQLBindingFactory")
             .withMarker(Cayenne.class);
     }
     
@@ -153,11 +177,25 @@ public class TapestryCayenneCoreModule {
         configuration.add("cayenneentity", locator.autobuild(CayenneEntityPersistentFieldStrategy.class));
     }       
     
-    public static void contributeTypeCoercer(Configuration<CoercionTuple<String, Expression>> conf) {
+    @SuppressWarnings("unchecked")
+    public static void contributeTypeCoercer(Configuration<CoercionTuple> conf) {
         conf.add(new CoercionTuple<String, Expression>(String.class,Expression.class,new Coercion<String, Expression>() {
             public Expression coerce(String input) {
                 return Expression.fromString(input);
             }
+        }));
+        
+        
+        conf.add(new CoercionTuple<EJBQLQuery,List>(EJBQLQuery.class,List.class,new Coercion<EJBQLQuery,List>() {
+            public List coerce(EJBQLQuery input) {
+                /* as much as I would like to use ObjectContextProvider here,
+                 * injecting it results in TypeCoercer not instantiable b/c it depends on itself
+                 * although I have yet to figure out where the dependency issue comes into play, 
+                 * since the DataContextProvider doesn't have any dependencies of its own. Ah well.
+                 */
+                return BaseContext.getThreadObjectContext().performQuery(input);
+            }
+            
         }));
     }
 
@@ -169,4 +207,11 @@ public class TapestryCayenneCoreModule {
     {
         configuration.add("cayenne", filter, location);
     }
+    
+    public static void contributeBindingSource(MappedConfiguration<String,BindingFactory> configuration,
+            @Local BindingFactory ejbqlBindingFactory) {
+        configuration.add(T5CAYENNE_EJBQ_BINDING, ejbqlBindingFactory);
+    }
+    
+    
 }
