@@ -56,7 +56,9 @@ public class CayenneBeanModelSource implements BeanModelSource {
             Messages messages)
     {
         _environment.push(BeanModelTypeHolder.class, new BeanModelTypeHolder(type));
-        BeanModel<T> model = _source.create(type, filterReadOnlyProperties, messages);
+        BeanModel<T> model = filterReadOnlyProperties?
+                _source.createEditModel(type, messages):
+                _source.createDisplayModel(type, messages);
         _environment.pop(BeanModelTypeHolder.class);
         model.getBeanType();
         ObjEntity ent = _provider.currentContext().getEntityResolver().lookupObjEntity(type);

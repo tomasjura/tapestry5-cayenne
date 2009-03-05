@@ -28,7 +28,7 @@ public class CayennePrimaryKeyEncoder implements PrimaryKeyEncoder<String,Persis
         _encoder = encoder;
     }
 
-    public void prepareForKeys(List arg0) {}
+    public void prepareForKeys(List<String> arg0) {}
 
     public String toKey(Persistent dao) {
         return _encoder.toClient(dao);

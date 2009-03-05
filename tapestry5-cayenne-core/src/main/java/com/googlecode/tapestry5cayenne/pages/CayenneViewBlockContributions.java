@@ -23,24 +23,24 @@ public class CayenneViewBlockContributions {
     @SuppressWarnings("unused")
     private Object _tmp;
     
-    public Collection getCollection() {
+    public Collection<?> getCollection() {
         Object val = _context.getPropertyValue();
         if (!(val instanceof Collection)) {
             bad_state("bad_state_collection", val);
         }
-        return (Collection) _context.getPropertyValue();
+        return (Collection<?>) _context.getPropertyValue();
     }
     
     public String getToOneString() throws Exception {
         return Labeler.htmlLabelForObject(_context.getPropertyValue());
     }
     
-    public Collection getMapValues() {
+    public Collection<?> getMapValues() {
         Object val = _context.getPropertyValue();
         if (!(val instanceof Map)) {
             bad_state("bad_state_map",val);
         }
-        return ((Map)val).values();
+        return ((Map<?,?>)val).values();
     }
     
     private void bad_state(String key, Object val) {

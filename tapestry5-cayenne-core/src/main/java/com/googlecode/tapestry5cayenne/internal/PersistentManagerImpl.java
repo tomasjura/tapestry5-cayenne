@@ -30,7 +30,6 @@ public class PersistentManagerImpl implements PersistentManager {
         _coercer = coercer;
     }
 
-    @SuppressWarnings("unchecked")
     public <T> List<T> listAll(Class<T> type,
             Ordering... orderings) {
         return listAll(type,0,orderings);
@@ -50,7 +49,6 @@ public class PersistentManagerImpl implements PersistentManager {
         return values;
     }
     
-    @SuppressWarnings("unchecked")
     public <T> List<T> listMatching(Class<T> type, Expression qualifier, Ordering... orderings) {
         return listMatching(type,qualifier,0,orderings);
     }

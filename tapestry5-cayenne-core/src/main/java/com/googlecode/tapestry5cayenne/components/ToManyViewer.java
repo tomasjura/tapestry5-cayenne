@@ -40,7 +40,7 @@ public class ToManyViewer {
     /**
      * The collection representing the toMany relationship.
      */
-    private Collection _source;
+    private Collection<?> _source;
     
     @Inject
     private Messages _messages;

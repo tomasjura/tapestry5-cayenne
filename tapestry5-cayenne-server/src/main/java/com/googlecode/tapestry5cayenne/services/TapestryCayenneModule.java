@@ -22,6 +22,7 @@ public class TapestryCayenneModule {
             .withMarker(Cayenne.class).withId("DataContext");
     }
     
+    @SuppressWarnings("unchecked")
     public static void contributeAlias(Configuration<AliasContribution> conf,
             @Cayenne NonPersistedObjectStorer storer,
             @Cayenne ObjectContextProvider provider) {

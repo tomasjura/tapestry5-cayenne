@@ -1,13 +1,14 @@
 package com.googlecode.tapestry5cayenne.services;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
+import java.util.List;
 
+import org.apache.tapestry5.beaneditor.DataType;
 import org.apache.tapestry5.ioc.Registry;
-import org.apache.tapestry5.ioc.services.ClassPropertyAdapter;
 import org.apache.tapestry5.ioc.services.PropertyAdapter;
 import org.apache.tapestry5.services.DataTypeAnalyzer;
 import org.apache.tapestry5.services.Environment;
+import org.easymock.EasyMock;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -15,6 +16,7 @@ import org.testng.annotations.Test;
 import com.googlecode.tapestry5cayenne.TestUtils;
 import com.googlecode.tapestry5cayenne.internal.BeanModelTypeHolder;
 import com.googlecode.tapestry5cayenne.model.Artist;
+import com.googlecode.tapestry5cayenne.model.Painting;
 
 @Test(groups="all")
 public class TestCayenneDataTypeAnalyzer extends Assert {
@@ -32,22 +34,52 @@ public class TestCayenneDataTypeAnalyzer extends Assert {
     public void test_for_nonobjentity_types() {
         _reg.getService(Environment.class).push(BeanModelTypeHolder.class,new BeanModelTypeHolder(SomePOJO.class));
         try {
-        assertNull(_analyzer.identifyDataType(new PropertyAdapter() {
-                public Object get(Object instance) { return null; }
-                public Class getBeanType() { return SomePOJO.class; }
-                public ClassPropertyAdapter getClassAdapter() { return null; }
-                public String getName() { return "artist"; }
-                public Method getReadMethod() { return null; }
-                public Class getType() { return Artist.class; }
-                public Method getWriteMethod() { return null; }
-                public boolean isCastRequired() { return false; }
-                public boolean isRead() { return false; }
-                public boolean isUpdate() { return false; }
-                public void set(Object instance, Object value) { }
-                public <T extends Annotation> T getAnnotation(Class<T> annotationClass) { return null; }
-                }));
+            PropertyAdapter adaptor = EasyMock.createMock(PropertyAdapter.class);
+            EasyMock.expect(adaptor.getType()).andReturn(List.class);
+            EasyMock.replay(adaptor);
+	        assertNull(_analyzer.identifyDataType(adaptor));
+	        EasyMock.verify(adaptor);
         } catch (NullPointerException e) {
             fail("Should not have thrown a NPE analyzing the property: artist in bean class SomePOJO.",e);
+        }
+    }
+
+    public void test_longtext_types() {
+        _reg.getService(Environment.class).push(BeanModelTypeHolder.class,new BeanModelTypeHolder(Painting.class));
+        try {
+            PropertyAdapter adaptor = EasyMock.createMock(PropertyAdapter.class);
+            EasyMock.expect(adaptor.getName()).andReturn("title");
+            EasyMock.expect(adaptor.getType()).andReturn(String.class);
+            EasyMock.expect(adaptor.getAnnotation(DataType.class)).andReturn(null);
+            EasyMock.replay(adaptor);
+            String type = _analyzer.identifyDataType(adaptor);
+            assertEquals(type,"longtext");
+            EasyMock.verify(adaptor);
+        } catch (Exception e) {
+            fail("Should not have been an exception identifying the data type",e);
+        }
+    }
+    
+    public void test_longtext_type_with_datatypeannotation() {
+        _reg.getService(Environment.class).push(BeanModelTypeHolder.class, new BeanModelTypeHolder(Painting.class));
+        try {
+            PropertyAdapter adaptor = EasyMock.createMock(PropertyAdapter.class);
+            EasyMock.expect(adaptor.getType()).andReturn(String.class);
+            EasyMock.expect(adaptor.getAnnotation(DataType.class)).andReturn(new DataType() {
+                public String value() {
+                    return "text";
+                }
+                public Class<? extends Annotation> annotationType() {
+                    return DataType.class;
+                }
+                
+            });
+            EasyMock.replay(adaptor);
+            String type = _analyzer.identifyDataType(adaptor);
+            assertEquals(type,"text");
+            EasyMock.verify(adaptor);
+        } catch(Exception e) {
+            fail("Should not have been an exception identifying the data type",e);
         }
     }
 

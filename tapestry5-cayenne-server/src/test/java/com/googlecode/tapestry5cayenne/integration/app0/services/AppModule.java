@@ -7,7 +7,6 @@ package com.googlecode.tapestry5cayenne.integration.app0.services;
 
 import java.util.List;
 
-import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.BaseContext;
 import org.apache.cayenne.ObjectContext;
 import org.apache.tapestry5.SymbolConstants;

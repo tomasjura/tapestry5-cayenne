@@ -87,7 +87,7 @@ public class TestBlockContributions extends Assert {
         Document doc = _tester.renderPage("TestToOneControl");
         List<Element> els = TestUtils.DOMFindAll(doc.getRootElement(),"body/form/div/div/input");
         assertFalse(els.isEmpty());
-        Element submit = els.get(2);
+        Element submit = els.get(1);
         
         Map<String,String> params = new HashMap<String, String>();
         params.put("price", "100.0");
@@ -136,12 +136,11 @@ public class TestBlockContributions extends Assert {
         //one for the paintingList property, and one for the paintings as a map property.
         assertEquals(els.size(),2);
         assertEquals(els.get(0).getChildren().size(),_data.get(0).getPaintingList().size());
-        Iterator it = _data.get(0).getPaintingList().iterator();
+        Iterator<Painting> it = _data.get(0).getPaintingList().iterator();
         for(Node n : els.get(0).getChildren()) {
             //should be a li...
             Element el = (Element) n;
             assertEquals(el.getName(),"li");
-            StringBuilder blder = new StringBuilder();
             assertEquals(el.getChildMarkup().trim(),doc.getMarkupModel().encode(it.next().toString()));
         }
         //now test the map...
@@ -149,7 +148,6 @@ public class TestBlockContributions extends Assert {
         for(Node n : els.get(1).getChildren()) {
             Element el = (Element) n;
             assertEquals(el.getName(),"li");
-            StringBuilder blder = new StringBuilder();
             assertEquals(el.getChildMarkup().trim(),doc.getMarkupModel().encode(it.next().toString()));
         }
     }

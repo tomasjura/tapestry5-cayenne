@@ -117,6 +117,7 @@ public class TapestryCayenneCoreModule {
         configuration.add(new LibraryMapping("cay", "com.googlecode.tapestry5cayenne"));
     }
     
+    @SuppressWarnings("unchecked")
     public static void contributeValueEncoderSource(MappedConfiguration<Class, ValueEncoderFactory> configuration,
                                                     @Cayenne final ObjectContextProvider provider,
                                                     final TypeCoercer coercer,
@@ -133,11 +134,13 @@ public class TapestryCayenneCoreModule {
         });
     }
     
+    @SuppressWarnings("unchecked")
     public static void contributeAliasOverrides(Configuration<AliasContribution> conf,
             @Cayenne BeanModelSource source) {
         conf.add(AliasContribution.create(BeanModelSource.class, source));
     }
     
+    @SuppressWarnings("unchecked")
     public static void contributeAlias(Configuration<AliasContribution> conf, 
             @InjectService("PlainTextEncrypter") EncodedValueEncrypter enc) {
         conf.add(AliasContribution.create(EncodedValueEncrypter.class, enc));

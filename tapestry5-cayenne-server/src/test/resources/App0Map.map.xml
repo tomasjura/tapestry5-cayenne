@@ -13,6 +13,7 @@
 		<db-attribute name="id" type="VARCHAR" isPrimaryKey="true" isMandatory="true" length="64"/>
 		<db-attribute name="intProp1" type="INTEGER"/>
 		<db-attribute name="stringProp1" type="LONGVARCHAR"/>
+		<db-attribute name="stringProp2" type="VARCHAR" length="64"/>
 	</db-entity>
 	<db-entity name="TinyIntPKEntity">
 		<db-attribute name="id" type="TINYINT" isPrimaryKey="true" isMandatory="true"/>
@@ -54,6 +55,7 @@
 		<obj-attribute name="id" type="java.lang.String" db-attribute-path="id"/>
 		<obj-attribute name="intProp1" type="java.lang.Integer" db-attribute-path="intProp1"/>
 		<obj-attribute name="stringProp1" type="java.lang.String" db-attribute-path="stringProp1"/>
+		<obj-attribute name="stringProp2" type="java.lang.String" db-attribute-path="stringProp2"/>
 	</obj-entity>
 	<obj-entity name="TinyIntPKEntity" className="com.googlecode.tapestry5cayenne.model.TinyIntPKEntity" dbEntityName="TinyIntPKEntity">
 		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>

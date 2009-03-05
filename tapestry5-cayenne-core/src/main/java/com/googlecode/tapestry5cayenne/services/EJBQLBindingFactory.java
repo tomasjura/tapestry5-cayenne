@@ -16,12 +16,13 @@ public class EJBQLBindingFactory implements BindingFactory {
         String toString = String.format("EJBQLBinding[%s %s(%s)]",description,
                 container.getCompleteId(),
                 expression);
+        EJBQLQuery query;
         try {
-            EJBQLQuery query = new EJBQLQuery(expression);
+            query = new EJBQLQuery(expression);
         } catch (Exception e) {
             throw new TapestryException("Unable to convert " + expression + " into an EJBQLQuery",e);
         }
-        return new EJBQLBinding(location,new EJBQLQuery(expression),toString);
+        return new EJBQLBinding(location,query,toString);
     }
 
 }
