@@ -15,8 +15,9 @@ public class EJBQLBinding extends AbstractBinding {
         this.toString = toString;
     }
 
+    /* the query doesn't change, but... the query /results/ do. So we're not invariant */
     public boolean isInvariant() {
-        return true;
+        return false;
     }
 
     @SuppressWarnings("unchecked")
