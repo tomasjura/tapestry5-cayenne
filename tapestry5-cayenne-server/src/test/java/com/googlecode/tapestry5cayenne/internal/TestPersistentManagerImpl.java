@@ -212,9 +212,6 @@ public class TestPersistentManagerImpl {
     
     @Test(dataProvider="list_matching")
     public void testListMatching(Class<?> type, Expression qualifier, List<?> expected, Ordering... orderings) {
-        for(Ordering o : orderings) {
-            System.out.println("with ordering: "+ o);
-        }
         List<?> ret = _manager.listMatching(type, qualifier, orderings);
         assertEquals(ret,expected);
     }
@@ -300,7 +297,6 @@ public class TestPersistentManagerImpl {
             assertEquals(t.getClass(),expectedException.getClass());
             assertEquals(t.getMessage(),expectedException.getMessage());
         } else {
-            System.out.println(t);
             if (t != null) {
                 t.printStackTrace();
             }

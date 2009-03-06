@@ -6,7 +6,7 @@ import org.apache.cayenne.BaseContext;
 import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.Persistent;
 import org.apache.cayenne.exp.Expression;
-import org.apache.cayenne.query.EJBQLQuery;
+import org.apache.cayenne.query.Query;
 import org.apache.tapestry5.PrimaryKeyEncoder;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.VersionUtils;
@@ -108,10 +108,6 @@ public class TapestryCayenneCoreModule {
         binder.bind(BindingFactory.class,EJBQLBindingFactory.class)
             .withId("EJBQLBindingFactory")
             .withMarker(Cayenne.class);
-        
-        binder.bind(ValidationConstraintGenerator.class,CayenneConstraintGenerator.class)
-            .withId("CayenneConstraintGenerator")
-            .withMarker(Cayenne.class);
     }
     
     public static void contributeMasterObjectProvider(OrderedConfiguration<ObjectProvider> conf,
@@ -195,8 +191,8 @@ public class TapestryCayenneCoreModule {
         }));
         
         
-        conf.add(new CoercionTuple<EJBQLQuery,List>(EJBQLQuery.class,List.class,new Coercion<EJBQLQuery,List>() {
-            public List coerce(EJBQLQuery input) {
+        conf.add(new CoercionTuple<Query,List>(Query.class,List.class,new Coercion<Query,List>() {
+            public List coerce(Query input) {
                 /* as much as I would like to use ObjectContextProvider here,
                  * injecting it results in TypeCoercer not instantiable b/c it depends on itself
                  * although I have yet to figure out where the dependency issue comes into play, 
@@ -229,7 +225,7 @@ public class TapestryCayenneCoreModule {
     
     public static void contributeValidationConstraintGenerator(
             OrderedConfiguration<ValidationConstraintGenerator>conf, 
-            @Local ValidationConstraintGenerator cayConstraints) {
-        conf.add("Cayenne", cayConstraints, "after:ValidateAnnotation");
+            ObjectLocator locator) {
+        conf.add("Cayenne", locator.autobuild(CayenneConstraintGenerator.class), "after:ValidateAnnotation");
     }
 }
