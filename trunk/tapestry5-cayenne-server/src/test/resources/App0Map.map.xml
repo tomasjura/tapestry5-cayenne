@@ -33,7 +33,7 @@
 		<db-attribute name="artistid" type="INTEGER" isMandatory="true"/>
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
 		<db-attribute name="price" type="DECIMAL"/>
-		<db-attribute name="title" type="LONGVARCHAR" isMandatory="true"/>
+		<db-attribute name="title" type="LONGVARCHAR" isMandatory="true" length="1024"/>
 	</db-entity>
 	<obj-entity name="Artist" className="com.googlecode.tapestry5cayenne.model.Artist" dbEntityName="artists">
 		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
