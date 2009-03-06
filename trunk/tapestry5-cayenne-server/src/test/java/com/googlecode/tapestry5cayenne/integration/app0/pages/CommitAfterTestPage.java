@@ -41,7 +41,6 @@ public class CommitAfterTestPage {
     
     @CommitAfter
     void onActionFromCommitOk() {
-        System.out.println("What is artist? " + artist);
         artist.setName("commitokname");
     }
 

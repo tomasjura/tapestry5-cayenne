@@ -52,14 +52,17 @@ public class TestBlockContributions extends Assert {
      */
     public void testToOneEditor() {
         Document doc = _tester.renderPage("TestToOneControl");
-        
+        System.out.println("testing toone editor. What is doc?");
+        System.out.println(doc);
         //Verify the label
         Element el = doc.getElementById("toOneList:label");
         assertEquals(el.getChildMarkup(),"Artist");
         
         //Verify the select list.
+        //note that this is required, so the blank option isn't present, 
+        //so children size should be the same as data size.
         el = doc.getElementById("toOneList");
-        assertEquals(el.getChildren().size()-1,_data.size());
+        assertEquals(el.getChildren().size(),_data.size());
         
         //we expect the list of items to be sorted by the @Label.
         Collections.sort(_data,new Comparator<Artist>() {
@@ -68,8 +71,6 @@ public class TestBlockContributions extends Assert {
             }
         });
         Iterator<Node> children = el.getChildren().iterator();
-        //skip the first node: it's blank.
-        children.next();
         for(Artist a : _data) {
             Element option = (Element) children.next();
             String val = option.getAttribute("value");
@@ -99,11 +100,12 @@ public class TestBlockContributions extends Assert {
         els = TestUtils.DOMFindAll(doc.getRootElement(),"body/form/div/div/select/option");
         assertFalse(els.isEmpty());
         //find the option corresponding to _data.get(1).
-        assertTrue(els.get(2).getAttribute("selected").equals("selected"));
-        assertTrue(els.get(2).getChildMarkup().equals("Picasso"));
+        //remember, painting.artist is required, so no blank option, now that
+        //t5cayenne automagically picks up those validations.
+        assertTrue(els.get(1).getAttribute("selected").equals("selected"));
+        assertTrue(els.get(1).getChildMarkup().equals("Picasso"));
         
         //make sure the output is correct.
-        System.out.println(doc);
         String markup = TestUtils.DOMFindAll(doc.getRootElement(), "body/dl/dt").get(2).getChildMarkup();
         assertEquals(markup,"Artist");
         markup = TestUtils.DOMFindAll(doc.getRootElement(),"body/dl/dd").get(2).getChildMarkup();
@@ -176,7 +178,6 @@ public class TestBlockContributions extends Assert {
      */
     public void testCayenneSelect() {
         Document doc = _tester.renderPage("TestSelect");
-System.out.println(doc.toString());
         //Verify the label
         //Element el = doc.getElementById("toOneList:label");
         //assertEquals(el.getChildMarkup(),"Artist");

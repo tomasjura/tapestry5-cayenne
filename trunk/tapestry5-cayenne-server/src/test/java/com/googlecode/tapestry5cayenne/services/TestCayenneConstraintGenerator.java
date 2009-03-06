@@ -45,7 +45,7 @@ public class TestCayenneConstraintGenerator extends Assert {
         e.push(PropertyEditContext.class, propCtxt);
         e.push(BeanEditContext.class, bec);
         
-        gen = registry.getService("CayenneConstraintGenerator",ValidationConstraintGenerator.class);
+        gen = registry.autobuild(CayenneConstraintGenerator.class);
     }
     
     void replay() {

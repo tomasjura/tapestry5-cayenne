@@ -180,7 +180,6 @@ public class EntityField {
 
     @OnEvent(value="providecompletions")
     String[] suggestions(String input) {
-        System.out.println("calling suggestions...");
         ArrayList<String> tmp = new ArrayList<String>();
         Method m = AnnotationFinder.methodForAnnotation(Label.class, resources.getBoundType("value"));
         List<?> objs = objsForInput(input);
