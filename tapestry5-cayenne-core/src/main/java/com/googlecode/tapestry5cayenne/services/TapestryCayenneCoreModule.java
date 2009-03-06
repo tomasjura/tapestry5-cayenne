@@ -26,10 +26,12 @@ import org.apache.tapestry5.services.AliasContribution;
 import org.apache.tapestry5.services.BeanBlockContribution;
 import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.BindingFactory;
+import org.apache.tapestry5.services.ComponentClassTransformWorker;
 import org.apache.tapestry5.services.DataTypeAnalyzer;
 import org.apache.tapestry5.services.LibraryMapping;
 import org.apache.tapestry5.services.PersistentFieldStrategy;
 import org.apache.tapestry5.services.RequestFilter;
+import org.apache.tapestry5.services.ValidationConstraintGenerator;
 import org.apache.tapestry5.services.ValueEncoderFactory;
 
 import com.googlecode.tapestry5cayenne.annotations.Cayenne;
@@ -105,6 +107,10 @@ public class TapestryCayenneCoreModule {
         
         binder.bind(BindingFactory.class,EJBQLBindingFactory.class)
             .withId("EJBQLBindingFactory")
+            .withMarker(Cayenne.class);
+        
+        binder.bind(ValidationConstraintGenerator.class,CayenneConstraintGenerator.class)
+            .withId("CayenneConstraintGenerator")
             .withMarker(Cayenne.class);
     }
     
@@ -216,5 +222,14 @@ public class TapestryCayenneCoreModule {
         configuration.add(T5CAYENNE_EJBQ_BINDING, ejbqlBindingFactory);
     }
     
+    public static void contributeComponentClassTransformWorker(OrderedConfiguration<ComponentClassTransformWorker> configuration,ObjectLocator locator) {
+        //add as per the hibernate module: after logging.
+        configuration.add("CayenneCommitAfter", locator.autobuild(CayenneCommitAfterWorker.class), "after:Log");
+    }
     
+    public static void contributeValidationConstraintGenerator(
+            OrderedConfiguration<ValidationConstraintGenerator>conf, 
+            @Local ValidationConstraintGenerator cayConstraints) {
+        conf.add("Cayenne", cayConstraints, "after:ValidateAnnotation");
+    }
 }
