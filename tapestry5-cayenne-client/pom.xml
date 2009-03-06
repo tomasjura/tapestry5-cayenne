@@ -27,8 +27,8 @@
         </dependency>
         <dependency>
             <groupId>org.apache.cayenne</groupId>
-            <artifactId>cayenne-server</artifactId>
-      </dependency>
+            <artifactId>cayenne-client</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
