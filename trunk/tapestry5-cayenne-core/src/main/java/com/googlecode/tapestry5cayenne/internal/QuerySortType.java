@@ -9,6 +9,8 @@ import org.apache.cayenne.query.Ordering;
 
 /**
  * QuerySortType is used by the RelationshipSelectModel for sorting of relationship lists. 
+ * The type determines how those lists will be sorted, and determines whether the sort will occur 
+ * in memory or via the db.
  * @author robertz
  */
 public enum QuerySortType {
