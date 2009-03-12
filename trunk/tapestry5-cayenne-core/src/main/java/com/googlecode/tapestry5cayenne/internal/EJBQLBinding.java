@@ -4,6 +4,13 @@ import org.apache.cayenne.query.EJBQLQuery;
 import org.apache.tapestry5.internal.bindings.AbstractBinding;
 import org.apache.tapestry5.ioc.Location;
 
+/**
+ * Component binding that represents an EJBQLQuery.
+ * eg: 
+ * <t:grid source="ejbq:select a from Artist a"/>
+ * @author robertz
+ *
+ */
 public class EJBQLBinding extends AbstractBinding {
     
     private final EJBQLQuery query;

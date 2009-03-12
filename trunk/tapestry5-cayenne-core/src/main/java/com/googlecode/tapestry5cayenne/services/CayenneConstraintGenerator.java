@@ -15,6 +15,15 @@ import org.apache.tapestry5.services.Environment;
 import org.apache.tapestry5.services.PropertyEditContext;
 import org.apache.tapestry5.services.ValidationConstraintGenerator;
 
+/**
+ * ValidationConstraintGenerator that uses information available from the
+ * cayenne mapping file to determine the proper set of constraints to apply.
+ * Currently, "mandatory" (for both attributes and foreign keys) and
+ * maxlength (for string-based properties: things that wind up as a CharSequence in the ObjEntity)
+ * are supported.
+ * @author robertz
+ *
+ */
 public class CayenneConstraintGenerator implements
         ValidationConstraintGenerator {
     

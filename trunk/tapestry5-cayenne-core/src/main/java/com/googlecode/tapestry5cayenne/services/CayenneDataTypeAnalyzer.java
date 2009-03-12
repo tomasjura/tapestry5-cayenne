@@ -21,7 +21,7 @@ import com.googlecode.tapestry5cayenne.internal.BeanModelTypeHolder;
 
 /**
  * DataTypeAnalyzer to handle cayenne properties. In particular, 
- * the CayenneDataTypeAnalyzer handles Cayenne toOne and toMany relationships.
+ * recognizes and assigns a datatype to toOne and toMany relationships.
  * @author robertz
  *
  */
