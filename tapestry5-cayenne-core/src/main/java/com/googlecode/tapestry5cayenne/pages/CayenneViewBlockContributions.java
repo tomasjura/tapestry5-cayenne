@@ -11,6 +11,12 @@ import org.apache.tapestry5.services.PropertyOutputContext;
 
 import com.googlecode.tapestry5cayenne.internal.Labeler;
 
+/**
+ * 
+ * Contains all of the custom "bean display" blocks used for displaying cayenne objects.
+ * @author robertz
+ *
+ */
 public class CayenneViewBlockContributions {
     
     @Environmental

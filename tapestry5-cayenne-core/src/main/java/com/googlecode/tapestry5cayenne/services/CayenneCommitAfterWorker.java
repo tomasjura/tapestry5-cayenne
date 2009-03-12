@@ -11,7 +11,9 @@ import com.googlecode.tapestry5cayenne.annotations.CommitAfter;
 
 /**
  * Exactly analogous to the tapestry-hibernate CommitAfterWorker.
- *
+ * That is: any method annotated with @CommitAfer in a tapestry-controlled class
+ * (component, page, mixin) will automatically call context.commitChanges() on completion of
+ * the method; should commit fail, rollback is performed automatically.
  */
 public class CayenneCommitAfterWorker implements ComponentClassTransformWorker {
     

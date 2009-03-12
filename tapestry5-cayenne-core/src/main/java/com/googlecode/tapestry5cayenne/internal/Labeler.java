@@ -4,6 +4,11 @@ import java.lang.reflect.Method;
 
 import com.googlecode.tapestry5cayenne.annotations.Label;
 
+/**
+ * Utility class that determines the appropriate "label" (user-presentable string representation) for an entity.
+ * @author robertz
+ *
+ */
 public class Labeler {
     
     /**

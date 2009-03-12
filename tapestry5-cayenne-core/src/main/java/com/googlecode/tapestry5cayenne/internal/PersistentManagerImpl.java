@@ -20,6 +20,11 @@ import com.googlecode.tapestry5cayenne.annotations.Label;
 import com.googlecode.tapestry5cayenne.services.ObjectContextProvider;
 import com.googlecode.tapestry5cayenne.services.PersistentManager;
 
+/**
+ * Implementation of the PersistentManager interface. See the interface for more details.
+ * @author robertz
+ *
+ */
 public class PersistentManagerImpl implements PersistentManager {
     
     private final ObjectContextProvider _provider;
@@ -42,7 +47,7 @@ public class PersistentManagerImpl implements PersistentManager {
         Method label = AnnotationFinder.methodForAnnotation(Label.class, type);
         QuerySortResult rslt = querySort(sq,label,context,type,orderings);
         if (limit > 0) {
-            sq.setFetchLimit(0);
+            sq.setFetchLimit(limit);
         }
         List<T> values = context.performQuery(sq);
         rslt.type.sort(values,rslt.ordering,label);
@@ -80,7 +85,7 @@ public class PersistentManagerImpl implements PersistentManager {
      * @param orderings
      * @return
      */
-    static QuerySortResult querySort(SelectQuery sq,Method label, ObjectContext context, Class<?> type,Ordering[] orderings) {
+    static QuerySortResult querySort(SelectQuery sq,Method label, ObjectContext context, Class<?> type,Ordering... orderings) {
         QuerySortResult res = new QuerySortResult();
         //first check to see if there's anything in orderings...
         if (orderings.length>0) {

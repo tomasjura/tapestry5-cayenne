@@ -1,7 +1,7 @@
 package com.googlecode.tapestry5cayenne.internal;
 
 /**
- * Bean for use with teh environmental service.
+ * Bean for use with the environmental service.
  * Used to allow communication between the CayenneBeanModelSource, and 
  * DataTypeAnalyzers, particularly the CayenneDataTypeAnalyzer.
  * @author robertz
