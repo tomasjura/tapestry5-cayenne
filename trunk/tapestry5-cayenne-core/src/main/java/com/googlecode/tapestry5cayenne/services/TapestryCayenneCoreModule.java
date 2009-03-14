@@ -79,9 +79,9 @@ public class TapestryCayenneCoreModule {
     public static final String T5CAYENNE_EJBQ_BINDING="ejbq";
     
     /**
-     * Constant for the binding prefix for obj entity binding (value: cay).
+     * Constant for the binding prefix for obj entity binding (value: ent).
      */
-    public static final String T5CAYENNE_OBJENT_BINDING="cay";
+    public static final String T5CAYENNE_OBJENT_BINDING="ent";
     
     public static void contributeFactoryDefaults(MappedConfiguration<String,String> conf) {
         conf.add(FILTER_LOCATION,"after:*");
