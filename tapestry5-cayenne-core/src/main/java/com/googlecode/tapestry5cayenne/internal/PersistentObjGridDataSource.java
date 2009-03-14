@@ -16,6 +16,10 @@ import org.apache.tapestry5.grid.SortConstraint;
 
 import com.googlecode.tapestry5cayenne.annotations.Label;
 
+/**
+ * Provides a memory-efficient implementation of GridDataSource based on fetching object entities.
+ * The coercion from ObjEntity => GridDataSource makes use of this class.
+ */
 public class PersistentObjGridDataSource implements GridDataSource {
     
     private final ObjEntity type;

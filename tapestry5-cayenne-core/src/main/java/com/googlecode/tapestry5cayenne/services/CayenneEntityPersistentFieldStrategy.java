@@ -16,7 +16,7 @@ import com.googlecode.tapestry5cayenne.annotations.Cayenne;
 /**
  * Provides a strategy for use with {@link Persist} for Persistent entities.
  * Stores only an object identifier in the HttpSession, rather than serializing the 
- * entire object tree into the sesssion.
+ * entire object tree into the session.
  * @author robertz
  *
  */
