@@ -25,6 +25,10 @@
 
     <body>
 
+        <head>
+            <link rel="stylesheet" type="text/css" media="screen" href="css/custom.css"></link>
+        </head>
+
         <links>
             <item name="Tapestry" href="http://tapestry.apache.org/"/>
 			<item name="Cayenne" href="http://cayenne.apache.org/"/>
