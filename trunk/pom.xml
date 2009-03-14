@@ -42,6 +42,7 @@
             <roles>
                 <role>Developer</role>
             </roles>
+            <timezone>-6</timezone>
         </developer>
     </developers>
 
@@ -140,8 +141,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-site-plugin</artifactId>
-                    <!-- according to t5 master pom, snapshots after this are broken -->
-                    <version>2.0-beta-5</version>
+                    <version>2.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
@@ -239,7 +239,7 @@
         <site>
             <id>saiwai-solutions-site</id>
             <name>T5Cayenne Website</name>
-            <url>scp://t5cayenne.saiwai-solutions.com/var/www/vhosts/saiwai-solutions.com/t5cayenne</url>
+            <url>scp://t5cayenne.saiwai-solutions.com:10022/var/www/vhosts/saiwai-solutions.com/t5cayenne</url>
         </site>
     </distributionManagement>
 </project>

@@ -19,17 +19,41 @@ Features
 	
 	* ObjectContext creation and binding to Application State Object for easy context retrieval
 
-	* Injectable ObjectContext (with on-demand creation) for sessionless applications
-	
+        * ObjectContext may be obtained in one of several ways:
+
+            * Inject ObjectContextProvider service
+
+            * Pages and components may directly @Inject ObjectContext, optional using the OCType annotation to influence the creation of the context
+
+            * Can also use the @ApplicationState annotation to obtain a reference to the thread-bound context.
+
 	* {{{/tapestry5-cayenne-core/value-encoder.html}ValueEncoder}} for all Persistent objects
+
+        * This should "just work": put a persistent entity into a page, action, or event link "context" and get it back in onActivate or event handlers.
 	
 	* {{{/tapestry5-cayenne-core/bean-model-source.html}BeanModelSource}} implementation to hide Cayenne's "non-editable" fields
+
+        * This should also "just work": The t5cayenne BeanModelSource is aliased to BeanModelSource, so all of tapestry's built-in components will use it.
 
 	* Pluggable ID encoding strategies for URL generation in order to prevent data tampering
 	
 	* {{{/tapestry5-cayenne-core/ref/index.html}Editors and viewers}} for Persistent objects, allowing Persistent objects to be used in BeanEditor and BeanDisplay with no effort
+
+        * toOne relationships can be both viewed and edited
+
+        * toMany relationships can be viewed
 	
 	* {{{/tapestry5-cayenne-core/ref/index.html}Rich components}} and supporting services for making working with Persistent objects as simple as possible
+
+    * ValidationConstraint generator for auto-generating field constraints based on mapping data 
+
+        * Required fields
+
+        * Max-length of text-based fields
+
+    * Auto-detection of "long" text-based fields so BeanEditor will use a textarea instead of a textfield component
+
+    * Bindings and coercions for using queries or even just object entity names as a GridDataSource
 
 
 Additional Information
