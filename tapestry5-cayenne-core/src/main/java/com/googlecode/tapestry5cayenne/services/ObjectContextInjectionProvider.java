@@ -41,33 +41,6 @@ public class ObjectContextInjectionProvider implements InjectionProvider {
         this.shadowBuilder = shadowBuilder;
     }
     
-    /*
-    @SuppressWarnings("unchecked")
-    public <T> T provide(Class<T> type, AnnotationProvider ap, ObjectLocator locator) {
-        if (!(ObjectContext.class.isAssignableFrom(type))) {
-            return null;
-        }
-        OCType t = ap.getAnnotation(OCType.class);
-        ContextType ctype = t==null?ContextType.CURRENT:t.value();
-        switch(ctype) {
-            case NEW:
-                return (T) shadowBuilder.build(
-                        new ObjectContextWrapper(threadManager,provider),
-                        "newContext",
-                        ObjectContext.class);
-            case CHILD:
-                return (T) shadowBuilder.build(
-                        new ObjectContextWrapper(threadManager,provider),
-                        "childContext",
-                        ObjectContext.class);
-            default:
-                return (T) shadowBuilder.build(
-                        new ObjectContextWrapper(threadManager,provider),
-                        "currentContext",
-                        ObjectContext.class);
-        }
-    }*/
-
     public boolean provideInjection(String fieldName, Class fieldType,
             ObjectLocator locator, ClassTransformation transformation,
             MutableComponentModel componentModel) {
