@@ -1,6 +1,7 @@
 package com.googlecode.tapestry5cayenne.internal;
 
 import org.apache.cayenne.ObjectContext;
+import org.apache.cayenne.access.DataContext;
 import org.apache.tapestry5.ioc.services.PerthreadManager;
 
 import com.googlecode.tapestry5cayenne.services.ObjectContextProvider;
@@ -77,9 +78,13 @@ public class ObjectContextWrapper {
      */
     public ObjectContext getChildContext() {
         ObjectContext context = (ObjectContext) threadManager.get(threadContextKey);
-        if (context == null) {
-            context = provider.currentContext().createChildContext();
-            threadManager.put(threadContextKey,context);
+        if (context == null ) {
+            if (context instanceof DataContext) {
+                context = ((DataContext)context).createChildDataContext();
+                threadManager.put(threadContextKey,context);
+            } else {
+                throw new UnsupportedOperationException("Cannot create a child context from ObjectContext other than DataContext! (Base support not added until after cayenne 3.0M5)");
+            }
         }
         return context;
     }
