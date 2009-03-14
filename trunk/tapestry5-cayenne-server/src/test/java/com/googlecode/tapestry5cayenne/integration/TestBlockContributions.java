@@ -52,8 +52,6 @@ public class TestBlockContributions extends Assert {
      */
     public void testToOneEditor() {
         Document doc = _tester.renderPage("TestToOneControl");
-        System.out.println("testing toone editor. What is doc?");
-        System.out.println(doc);
         //Verify the label
         Element el = doc.getElementById("toOneList:label");
         assertEquals(el.getChildMarkup(),"Artist");

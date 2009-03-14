@@ -1,13 +1,19 @@
 package com.googlecode.tapestry5cayenne.services;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.cayenne.ObjectContext;
+import org.apache.cayenne.map.ObjEntity;
 import org.apache.cayenne.query.EJBQLQuery;
 import org.apache.cayenne.query.Ordering;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Transformer;
 import org.apache.tapestry5.Binding;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.grid.GridDataSource;
+import org.apache.tapestry5.grid.SortConstraint;
 import org.apache.tapestry5.ioc.Registry;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.services.BindingFactory;
@@ -18,9 +24,10 @@ import org.testng.annotations.Test;
 
 import com.googlecode.tapestry5cayenne.TestUtils;
 import com.googlecode.tapestry5cayenne.model.Artist;
+import com.googlecode.tapestry5cayenne.model.Painting;
 
 @Test
-public class TestEJBQLBindingAndCoercion extends Assert {
+public class TestBindingAndGridDataSourceCoercion extends Assert {
     
     private Registry registry;
     private List<Artist> data;
@@ -67,6 +74,39 @@ public class TestEJBQLBindingAndCoercion extends Assert {
             assertEquals(((Artist)ds.getRowValue(i)).getObjectId(),data.get(i).getObjectId());
         }
         
+    }
+    
+    public void testObjEntityBinding() {
+        BindingFactory bf = registry.autobuild(ObjEntityBindingFactory.class);
+        Binding b = bf.newBinding("test", mockResources(), null, "Artist", null);
+        
+        ObjEntity ent = (ObjEntity) b.get();
+        
+        assertEquals(ent.getName(),"Artist");
+        
+    }
+    
+    public void testPersistentClassToGridDataSourceCoercion() {
+        TypeCoercer coercer = registry.getService(TypeCoercer.class);
+        
+        GridDataSource ds = coercer.coerce(Painting.class,GridDataSource.class);
+        List<SortConstraint> constraints = Collections.emptyList();
+        
+        ds.prepare(0, ds.getAvailableRows()-1, constraints);
+        final List<Painting> paints = new ArrayList<Painting>();
+        CollectionUtils.collect(data, new Transformer() {
+
+            public Object transform(Object input) {
+                paints.addAll(((Artist)input).getPaintingList());
+                return null;
+            }
+            
+        });
+        new Ordering(Painting.TITLE_PROPERTY,true).orderList(paints);
+        assertEquals(ds.getAvailableRows(),paints.size());
+        for(int i=0;i<paints.size();i++) {
+            assertEquals(((Painting)ds.getRowValue(i)).getObjectId(),paints.get(i).getObjectId());
+        }
     }
     
     private ComponentResources mockResources() {
