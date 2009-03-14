@@ -1,5 +1,6 @@
 package com.googlecode.tapestry5cayenne.integration.app0.pages;
 
+import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.ObjectContext;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
@@ -29,13 +30,13 @@ public class InjectObjectContextTestPage {
   private ObjectContext childContext;
   
   public boolean isCurrentReallyCurrent() {
-      provider.currentContext().setUserProperty("testprop", new Object());
-      return currentNoOCType.getUserProperty("testprop") != null;
+      ((DataContext)provider.currentContext()).setUserProperty("testprop", new Object());
+      return ((DataContext)currentNoOCType).getUserProperty("testprop") != null;
       
   }
   
   public boolean isNoAnnotationSameAsOCTypeCurrent() {
-      return currentWithOCType.getUserProperty("testprop") != null;
+      return ((DataContext)currentWithOCType).getUserProperty("testprop") != null;
   }
   
   public boolean isChildAnnotationChildOfCurrent() {
@@ -43,17 +44,17 @@ public class InjectObjectContextTestPage {
   }
   
   public boolean isNewContextReallyNew() {
-      if (newContext.getUserProperty("newcontextprop") == null) {
-	      newContext.setUserProperty("newcontextprop", "new" + System.currentTimeMillis());
+      if (((DataContext)newContext).getUserProperty("newcontextprop") == null) {
+	      ((DataContext)newContext).setUserProperty("newcontextprop", "new" + System.currentTimeMillis());
       }
       return !newContext.equals(provider.currentContext())
           && !newContext.equals(childContext)
           && !newContext.getChannel().equals(provider.currentContext())
-          && newContext.getUserProperty("testprop") == null;
+          && ((DataContext)newContext).getUserProperty("testprop") == null;
   }
   
   public String getNewContextProp() {
-       return (String) newContext.getUserProperty("newcontextprop");
+       return (String) ((DataContext)newContext).getUserProperty("newcontextprop");
   }
   
   @Inject
