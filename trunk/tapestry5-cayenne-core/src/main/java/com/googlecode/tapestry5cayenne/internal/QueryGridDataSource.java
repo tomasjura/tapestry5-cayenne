@@ -8,6 +8,13 @@ import org.apache.cayenne.query.Query;
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.grid.SortConstraint;
 
+/**
+ * Implements a GridDataSource for queries.
+ * Note that the current coercion from query to grid data source does NOT make use
+ * of this class (yet); this class should be considered "experimental" for the time being.
+ * @author robertz
+ *
+ */
 public class QueryGridDataSource implements GridDataSource {
     
     private final Query query;

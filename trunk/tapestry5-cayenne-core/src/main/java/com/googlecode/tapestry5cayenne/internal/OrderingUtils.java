@@ -5,7 +5,7 @@ import org.apache.cayenne.query.Ordering;
 /**
  * Utility class for quick conversion from string to Ordering.
  * @author robertz
- *
+ * 
  */
 public class OrderingUtils {
     

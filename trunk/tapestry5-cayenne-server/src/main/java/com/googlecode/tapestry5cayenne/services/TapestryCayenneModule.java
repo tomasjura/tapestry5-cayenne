@@ -22,11 +22,16 @@ public class TapestryCayenneModule {
             .withMarker(Cayenne.class).withId("DataContext");
     }
     
+    /**
+     * Alias the DataContext-based object context provider to ObjectContextProvider.
+     * @param conf
+     * @param storer
+     * @param provider
+     */
     @SuppressWarnings("unchecked")
     public static void contributeAlias(Configuration<AliasContribution> conf,
             @Cayenne NonPersistedObjectStorer storer,
             @Cayenne ObjectContextProvider provider) {
-        conf.add(AliasContribution.create(NonPersistedObjectStorer.class, storer));
         conf.add(AliasContribution.create(ObjectContextProvider.class, provider));
     }
 }

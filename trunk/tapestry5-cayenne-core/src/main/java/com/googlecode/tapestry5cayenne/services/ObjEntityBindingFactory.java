@@ -8,6 +8,12 @@ import org.apache.tapestry5.services.BindingFactory;
 
 import com.googlecode.tapestry5cayenne.internal.ObjEntityBinding;
 
+/**
+ * BindingFactory for ObjEntity, so you can do things like:
+ * <t:grid source="ent:User"/>
+ * @author robertz
+ *
+ */
 public class ObjEntityBindingFactory implements BindingFactory {
     
     private final ObjectContextProvider provider;

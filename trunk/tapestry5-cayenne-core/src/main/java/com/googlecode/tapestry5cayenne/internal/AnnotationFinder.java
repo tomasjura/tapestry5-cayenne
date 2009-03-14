@@ -4,6 +4,11 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+/**
+ * Utility class for finding annotated field, methods, etc.
+ * @author robertz
+ *
+ */
 public class AnnotationFinder {
 
     /**

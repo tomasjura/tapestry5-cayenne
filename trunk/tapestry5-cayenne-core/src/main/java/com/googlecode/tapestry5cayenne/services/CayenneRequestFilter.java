@@ -18,7 +18,6 @@ import org.apache.tapestry5.services.Response;
 /**
  * Provides a RequestFilter which ensures that there is a DataContext associated with the current request.
  * Currently uses a session-based strategy.
- * 
  * @author robertz
  */
 public class CayenneRequestFilter implements RequestFilter {
