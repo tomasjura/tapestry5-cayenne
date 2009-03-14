@@ -10,7 +10,7 @@ public class TapestryCayenneIntegrationTests extends AbstractIntegrationTestSuit
         super("src/test/app0");
     }
     
-    public void test_commit_after() throws InterruptedException {
+    public void test_commit_after() {
         open("/commitaftertestpage");
         waitForPageToLoad();
         assertTextPresent("Dali");
@@ -20,5 +20,27 @@ public class TapestryCayenneIntegrationTests extends AbstractIntegrationTestSuit
         assertTextPresent("commitokname");
         clickAndWait("link=Checked Exception");
         assertTextPresent("savesokwithcheckedexceptionname");
+    }
+    
+    public void test_inject_objectcontext() {
+        open("/injectobjectcontexttestpage");
+        waitForPageToLoad();
+        assertTextPresent("Injecting the current context really /does/ give you the current context.");
+        assertTextPresent("Injecting with no annotation is the same as injecting with the octype current.");
+        assertTextPresent("Injecting with octype child yields child of current context.");
+        assertTextPresent("Injecting with octype new yields a new context, not child of current context.");
+        
+        String newContextHash = getText("id=newContextProp").trim();
+        
+        clickAndWait("link=Invalidate Session");
+        
+        assertTextPresent("Injecting the current context really /does/ give you the current context.");
+        assertTextPresent("Injecting with no annotation is the same as injecting with the octype current.");
+        assertTextPresent("Injecting with octype child yields child of current context.");
+        assertTextPresent("Injecting with octype new yields a new context, not child of current context.");
+        
+        String newContextHash2 = getText("id=newContextProp").trim();
+        assertFalse(newContextHash.equals(newContextHash2));
+        
     }
 }
