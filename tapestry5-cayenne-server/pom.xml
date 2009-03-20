@@ -9,7 +9,7 @@
     <parent>
         <groupId>com.googlecode.tapestry5-cayenne</groupId>
         <artifactId>tapestry5-cayenne-project</artifactId>
-        <version>0.2-SNAPSHOT</version>
+        <version>0.3-SNAPSHOT</version>
     </parent>
     <name>Tapestry5-Cayenne Server Library</name>
     <description>
