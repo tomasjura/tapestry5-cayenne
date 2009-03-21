@@ -41,7 +41,6 @@ public class CayenneConstraintGenerator implements
     public List<String> buildConstraints(Class propertyType, AnnotationProvider provider) {
         BeanEditContext bec = environment.peek(BeanEditContext.class);
         PropertyEditContext pec = environment.peek(PropertyEditContext.class);
-        
         if (bec == null || pec == null) {//not much we can do...
             return null;
         }
@@ -53,16 +52,18 @@ public class CayenneConstraintGenerator implements
             return null;
         }
         
-        DbAttribute dbatt = extractDbAttribute(pec.getPropertyId(), oent);
+        String propId = pec.getPropertyId();
+        ObjRelationship relationship = relationship(propId,oent);
+        DbAttribute dbatt = extractDbAttribute(propId, oent,relationship);
+        
         if (dbatt == null) {
             return null;
         }
         List<String> ret = new ArrayList<String>();
-        if (dbatt.isMandatory()) {
+        if (isPropRequired(dbatt, relationship)) {
             ret.add("required");
         }
         //little tricky here. If it's a string, we add a maxlength validator, otherwise, we ignore it, for now.
-        //a guess at a max bounds.
         if (dbatt.getMaxLength() > 0 && CharSequence.class.isAssignableFrom(propertyType)) {
             ret.add(String.format("maxlength=%d",dbatt.getMaxLength()));
         }
@@ -72,23 +73,45 @@ public class CayenneConstraintGenerator implements
         return ret;
     }
     
-    private DbAttribute extractDbAttribute(String propId, ObjEntity oent) {
-        ObjAttribute oatt = (ObjAttribute) oent.getAttribute(propId);
-        if (oatt == null) {
-            ObjRelationship rel = (ObjRelationship) oent.getRelationship(propId);
-            if (rel == null || rel.isToMany() || rel.getDbRelationships().isEmpty()) {
-		        return null;
-            }
-            
-            DbRelationship dbrel = rel.getDbRelationships().get(0);
-            //assume only one
-            if (dbrel.getSourceAttributes().isEmpty()) {
-                return null;
-            }
-            return dbrel.getSourceAttributes().iterator().next();
+    private boolean isPropRequired(DbAttribute dbatt, ObjRelationship rel) {
+        if (!dbatt.isMandatory()) {
+            return false;
         }
-        return oatt.getDbAttribute();
+        if (rel == null) {
+            return true;
+        }
+       
+        //ok, it's mandatory.
+        //if it's not a pk, then it's really mandatory.
+        if (!dbatt.isPrimaryKey()) {
+            return true;
+        }
+        //ok, it /is/ a pk... if source is indepenent of target, then 
+        //this is the "master" side of a to-dep-pk-type situation. 
+        //Otherwise, the child side of such a situation. Parent side: not mandatory.
+        //child side: mandatory.
+        return !rel.isSourceIndependentFromTargetChange();
+    }
+    
+    private ObjRelationship relationship(String propId, ObjEntity oent) {
+        return (ObjRelationship) oent.getRelationship(propId);
+    }
+    
+    private DbAttribute extractDbAttribute(String propId, ObjEntity oent,ObjRelationship rel) {
+        if (rel == null) {
+            return ((ObjAttribute) oent.getAttribute(propId)).getDbAttribute();
+        }
         
+        if (rel.isToMany() || rel.getDbRelationships().isEmpty()) {
+	        return null;
+        }
+            
+        DbRelationship dbrel = rel.getDbRelationships().get(0);
+        //assume only one... for now.
+        if (dbrel.getSourceAttributes().isEmpty()) {
+            return null;
+        }
+        return dbrel.getSourceAttributes().iterator().next();
     }
 
 }

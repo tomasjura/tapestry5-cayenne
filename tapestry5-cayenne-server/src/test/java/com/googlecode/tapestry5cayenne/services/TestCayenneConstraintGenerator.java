@@ -19,6 +19,7 @@ import org.testng.annotations.Test;
 
 import com.googlecode.tapestry5cayenne.TestUtils;
 import com.googlecode.tapestry5cayenne.model.Artist;
+import com.googlecode.tapestry5cayenne.model.ArtistDetails;
 import com.googlecode.tapestry5cayenne.model.Bid;
 import com.googlecode.tapestry5cayenne.model.Painting;
 import com.googlecode.tapestry5cayenne.model.StringPKEntity;
@@ -109,6 +110,25 @@ public class TestCayenneConstraintGenerator extends Assert {
         
         assertEquals(gen.buildConstraints(String.class, new NullAnnotationProvider()),
                 Arrays.asList("required","maxlength=1024"));
+    }
+    
+    public void test_toonerelationship_usingpkside_notrequired() {
+        EasyMock.expect(bec.getBeanClass()).andStubReturn(Artist.class);
+        EasyMock.expect(propCtxt.getPropertyId()).andReturn(Artist.CURRENT_BID_PROPERTY);
+        replay();
+        
+        assertNull(gen.buildConstraints(List.class, new NullAnnotationProvider()));
+    }
+    
+    public void test_toonerelationship_pkisfk_isrequired() {
+        //in the case of todeppk, one object is a 'child' of the other object: it's pk is a fk, as well.
+        //which makes the property absolutely mandatory, or the obj won't have a pk! Test to make sure this is correctly handled.
+        EasyMock.expect(bec.getBeanClass()).andStubReturn(ArtistDetails.class);
+        EasyMock.expect(propCtxt.getPropertyId()).andReturn(ArtistDetails.ARTIST_PROPERTY);
+        replay();
+        
+        assertEquals(gen.buildConstraints(Artist.class, new NullAnnotationProvider()),
+                Arrays.asList("required"));
     }
 }
 

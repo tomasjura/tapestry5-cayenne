@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import org.apache.cayenne.CayenneDataObject;
 
+import com.googlecode.tapestry5cayenne.model.Artist;
 import com.googlecode.tapestry5cayenne.model.Painting;
 
 /**
@@ -15,6 +16,7 @@ import com.googlecode.tapestry5cayenne.model.Painting;
 public abstract class _Bid extends CayenneDataObject {
 
     public static final String AMOUNT_PROPERTY = "amount";
+    public static final String BIDDER_PROPERTY = "bidder";
     public static final String PAINTING_PROPERTY = "painting";
 
     public static final String BIDID_PK_COLUMN = "bidid";
@@ -25,6 +27,15 @@ public abstract class _Bid extends CayenneDataObject {
     public BigDecimal getAmount() {
         return (BigDecimal)readProperty("amount");
     }
+
+    public void setBidder(Artist bidder) {
+        setToOneTarget("bidder", bidder, true);
+    }
+
+    public Artist getBidder() {
+        return (Artist)readProperty("bidder");
+    }
+
 
     public void setPainting(Painting painting) {
         setToOneTarget("painting", painting, true);
