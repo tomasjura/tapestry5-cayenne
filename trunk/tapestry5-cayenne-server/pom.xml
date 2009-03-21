@@ -71,6 +71,13 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.cayenne.plugins</groupId>
+                <artifactId>maven-cayenne-modeler-plugin</artifactId>
+                <configuration>
+                    <modelFile>src/test/resources/cayenne.xml</modelFile>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
