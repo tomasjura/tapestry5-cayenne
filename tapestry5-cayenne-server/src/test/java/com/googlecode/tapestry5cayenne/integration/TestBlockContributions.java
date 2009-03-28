@@ -166,7 +166,9 @@ public class TestBlockContributions extends Assert {
             _data.get(0).addToPaintingList(p);
         }
         Document doc = assertToManyHead();
+        System.out.println(doc);
         List<Element> els = TestUtils.DOMFindAll(doc.getRootElement(), "body/dl/dd");
+        System.out.println(els.size());
         assertEquals(els.get(0).getChildMarkup().trim(),"20 associated items");
         assertEquals(els.get(1).getChildMarkup().trim(),"20 associated items");
     }

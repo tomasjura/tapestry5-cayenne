@@ -55,10 +55,13 @@ public class TestCayenneBeanModelSource extends Assert {
         Map<String,String> artistProps = new HashMap<String, String>();
         //name is a longvarchar, so, longtext.
         artistProps.put(Artist.NAME_PROPERTY, "longtext");
+        artistProps.put(Artist.CURRENT_BID_PROPERTY,"to_one");
+        artistProps.put(Artist.DETAILS_PROPERTY,"to_one");
         Map<String,String> artistPropsWithRelationship = new HashMap<String,String>(artistProps);
         artistPropsWithRelationship.put("paintingList", "to_many_collection");
         artistPropsWithRelationship.put("paintingsByTitle","to_many_map");
         artistPropsWithRelationship.put("numPaintings","number");
+        artistPropsWithRelationship.put("currentBid","to_one");
         Map<String,String> paintingProps = new HashMap<String,String>();
         paintingProps.put(Painting.ARTIST_PROPERTY,"to_one");
         paintingProps.put(Painting.PRICE_PROPERTY,"number");
@@ -66,6 +69,7 @@ public class TestCayenneBeanModelSource extends Assert {
         Map<String,String> bidProps = new HashMap<String,String>();
         bidProps.put(Bid.AMOUNT_PROPERTY, "number");
         bidProps.put(Bid.PAINTING_PROPERTY, "painting");
+        bidProps.put(Bid.BIDDER_PROPERTY,"to_one");
         return new Object[][] {
                 {
                     StringPKEntity.class,
