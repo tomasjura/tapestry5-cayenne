@@ -38,7 +38,7 @@ public class CayenneRequestFilter implements RequestFilter {
         if (_asm.exists(ObjectContext.class)) {
             oc = _asm.get(ObjectContext.class);
         } else {
-            oc = _provider.newContext();
+            oc = _provider.currentContext() != null ? _provider.currentContext() : _provider.newContext();
             _asm.set(ObjectContext.class, oc);
         }
 
@@ -47,7 +47,7 @@ public class CayenneRequestFilter implements RequestFilter {
         try {
             return handler.service(request, response);
         } finally {
-            BaseContext.bindThreadObjectContext(null);
+//            BaseContext.bindThreadObjectContext(null);
         }
     }
 }
