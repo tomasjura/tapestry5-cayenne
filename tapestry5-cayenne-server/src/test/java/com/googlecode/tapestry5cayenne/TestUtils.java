@@ -26,9 +26,12 @@ import org.apache.tapestry5.ioc.services.SymbolProvider;
 
 import com.googlecode.tapestry5cayenne.model.Artist;
 import com.googlecode.tapestry5cayenne.model.Painting;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TestUtils {
-    
+
+    private static final Logger logger = LoggerFactory.getLogger(TestUtils.class);
     
     /**
      * Initializes an hsql database for tests.
@@ -106,13 +109,14 @@ public class TestUtils {
      */
     public static Registry setupRegistry(String appName, Class<?>...modules) {
         SymbolProvider provider = new SingleKeySymbolProvider(InternalConstants.TAPESTRY_APP_PACKAGE_PARAM, "com.googlecode.tapestry5cayenne.integration");
-        TapestryAppInitializer initializer = new TapestryAppInitializer(provider, appName, PageTesterModule.TEST_MODE);
+        TapestryAppInitializer initializer = new TapestryAppInitializer(logger, provider, appName, PageTesterModule.TEST_MODE);
+
         if (modules.length > 0) {
             initializer.addModules(modules);
         }
-        Registry ret = initializer.getRegistry();
-        return ret;
 
+        Registry ret = initializer.createRegistry();
+        return ret;
     }
 
     /**

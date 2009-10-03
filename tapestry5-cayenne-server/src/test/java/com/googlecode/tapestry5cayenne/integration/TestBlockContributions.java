@@ -53,7 +53,7 @@ public class TestBlockContributions extends Assert {
     public void testToOneEditor() {
         Document doc = _tester.renderPage("TestToOneControl");
         //Verify the label
-        Element el = doc.getElementById("toOneList:label");
+        Element el = doc.getElementById("toOneList-label");
         assertEquals(el.getChildMarkup(),"Artist");
         
         //Verify the select list.
@@ -84,16 +84,16 @@ public class TestBlockContributions extends Assert {
         //render the document, select the artist, 
         //submit, then check the view.
         Document doc = _tester.renderPage("TestToOneControl");
-        List<Element> els = TestUtils.DOMFindAll(doc.getRootElement(),"body/form/div/div/input");
+        List<Element> els = TestUtils.DOMFindAll(doc.getRootElement(),"body/form");
         assertFalse(els.isEmpty());
-        Element submit = els.get(1);
+        Element form = els.get(0);
         
         Map<String,String> params = new HashMap<String, String>();
         params.put("price", "100.0");
         params.put("title","dud");
         params.put("toOneList",_encoder.toClient(_data.get(1)));
-        doc = _tester.clickSubmit(submit, params);
-        
+        doc = _tester.submitForm(form, params);
+
         //make sure that the select is correctly selected.
         els = TestUtils.DOMFindAll(doc.getRootElement(),"body/form/div/div/select/option");
         assertFalse(els.isEmpty());
@@ -118,8 +118,8 @@ public class TestBlockContributions extends Assert {
         //make sure the stylesheet shows up.
         List<Element> els = TestUtils.DOMFindAll(doc.getRootElement(), "head/link");
         //should be 2: one for tapestry, one for t5cayenne
-        assertEquals(els.size(),2);
-        assertTrue(els.get(1).getAttribute("href").contains("ToManyViewer.css"));
+        assertEquals(els.size(), 3);
+        assertTrue(els.get(2).getAttribute("href").contains("ToManyViewer.css"));
         //ok... make sure we have the right thing on the bean display...
         return doc;
     }

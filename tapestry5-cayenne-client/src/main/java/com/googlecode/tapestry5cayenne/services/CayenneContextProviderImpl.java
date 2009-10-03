@@ -55,7 +55,14 @@ public class CayenneContextProviderImpl implements ObjectContextProvider
 
     public ObjectContext currentContext()
     {
-        return BaseContext.getThreadObjectContext();
+        try
+        {
+            return BaseContext.getThreadObjectContext();
+        }
+        catch (final IllegalStateException exception)
+        {
+            return null;
+        }
     }
 
     public ObjectContext newContext()
