@@ -61,6 +61,10 @@ public class CayenneContextProviderImpl implements ObjectContextProvider
         }
         catch (final IllegalStateException exception)
         {
+            //make our behavior consistent with DataContextProviderImpl in the server package.
+            if (asm.exists(ObjectContext.class)) {
+                return asm.get(ObjectContext.class);
+            }
             return null;
         }
     }

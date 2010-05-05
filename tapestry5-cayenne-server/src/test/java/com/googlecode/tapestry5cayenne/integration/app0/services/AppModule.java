@@ -38,11 +38,11 @@ public class AppModule {
                 try {
                     TestUtils.setupdb();
                     ObjectContext oc = BaseContext.getThreadObjectContext();
+                    //put in some artists and paintings...
                     List<Artist> artists = TestUtils.basicData(oc);
                     TestUtils.addPaintings(artists.get(0),15,oc);
                     TestUtils.addPaintings(artists.get(1),18,oc);
                 } catch (Exception e) { throw new RuntimeException(e); }
-                //put in some artists and paintings...
                 handler.initializeApplication(context);
             }
         });
