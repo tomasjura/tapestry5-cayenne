@@ -213,18 +213,6 @@ public class TapestryCayenneCoreModule {
     }
     
     /**
-     * Make it simple to ref. cayenne artifacts by contributing to ClasspahAssetaliasManager.
-     * @param configuration
-     * @param version
-     */
-    public static void contributeClasspathAssetAliasManager(MappedConfiguration<String,String> configuration,
-                                                            @Symbol(T5CAYENNE_VERSION)
-                                                            String version)
-    {
-        configuration.add("cay/" + version,"com/googlecode/tapestry5cayenne");
-    }
-    
-    /**
      * Contributes the following: <dl> <dt>cayenneentity</dt> <dd>Stores the id of the entity and reloads from the {@link
      * ObjectContext}</dd> </dl>
      */

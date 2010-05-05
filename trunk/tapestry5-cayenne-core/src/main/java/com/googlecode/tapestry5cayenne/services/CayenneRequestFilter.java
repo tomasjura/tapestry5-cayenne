@@ -22,32 +22,31 @@ import org.apache.tapestry5.services.Response;
  */
 public class CayenneRequestFilter implements RequestFilter {
     
-    private final ApplicationStateManager _asm;
-    private final ObjectContextProvider _provider;
+    private final ApplicationStateManager asm;
+    private final ObjectContextProvider provider;
     
     public CayenneRequestFilter(
             final ApplicationStateManager asm,
             final ObjectContextProvider provider) {
-        _asm = asm;
-        _provider = provider;
+        this.asm = asm;
+        this.provider = provider;
     }
 
     public boolean service(Request request, Response response, RequestHandler handler)
             throws IOException {
         ObjectContext oc;
-        if (_asm.exists(ObjectContext.class)) {
-            oc = _asm.get(ObjectContext.class);
+        if (asm.exists(ObjectContext.class)) {
+            oc = asm.get(ObjectContext.class);
         } else {
-            oc = _provider.currentContext() != null ? _provider.currentContext() : _provider.newContext();
-            _asm.set(ObjectContext.class, oc);
+            oc = provider.currentContext() != null ? provider.currentContext() : provider.newContext();
+            asm.set(ObjectContext.class, oc);
         }
 
         BaseContext.bindThreadObjectContext(oc);
-
         try {
             return handler.service(request, response);
         } finally {
-//            BaseContext.bindThreadObjectContext(null);
+            BaseContext.bindThreadObjectContext(null);
         }
     }
 }
