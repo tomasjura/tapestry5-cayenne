@@ -10,6 +10,7 @@ import org.apache.cayenne.map.ObjEntity;
 import org.apache.cayenne.query.EJBQLQuery;
 import org.apache.cayenne.query.Ordering;
 import org.apache.cayenne.query.Query;
+import org.apache.cayenne.query.SortOrder;
 import org.apache.cayenne.query.SelectQuery;
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.grid.SortConstraint;
@@ -74,10 +75,10 @@ public class PersistentObjGridDataSource implements GridDataSource {
             for(SortConstraint c : sortConstraints) {
                 switch(c.getColumnSort()) {
                     case ASCENDING:
-                        orderings.add(new Ordering(c.getPropertyModel().getPropertyName(),true));
+                        orderings.add(new Ordering(c.getPropertyModel().getPropertyName(),SortOrder.ASCENDING));
                         break;
                     case DESCENDING:
-                        orderings.add(new Ordering(c.getPropertyModel().getPropertyName(),false));
+                        orderings.add(new Ordering(c.getPropertyModel().getPropertyName(),SortOrder.DESCENDING));
                         break;
                     default:
                        break;       

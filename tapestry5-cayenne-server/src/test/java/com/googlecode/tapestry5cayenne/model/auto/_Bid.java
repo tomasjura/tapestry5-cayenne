@@ -1,9 +1,11 @@
 package com.googlecode.tapestry5cayenne.model.auto;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.apache.cayenne.CayenneDataObject;
 
+import com.googlecode.tapestry5cayenne.model.AcceptedBid;
 import com.googlecode.tapestry5cayenne.model.Artist;
 import com.googlecode.tapestry5cayenne.model.Painting;
 
@@ -16,6 +18,7 @@ import com.googlecode.tapestry5cayenne.model.Painting;
 public abstract class _Bid extends CayenneDataObject {
 
     public static final String AMOUNT_PROPERTY = "amount";
+    public static final String ACCEPTING_ARTISTS_PROPERTY = "acceptingArtists";
     public static final String BIDDER_PROPERTY = "bidder";
     public static final String PAINTING_PROPERTY = "painting";
 
@@ -27,6 +30,18 @@ public abstract class _Bid extends CayenneDataObject {
     public BigDecimal getAmount() {
         return (BigDecimal)readProperty("amount");
     }
+
+    public void addToAcceptingArtists(AcceptedBid obj) {
+        addToManyTarget("acceptingArtists", obj, true);
+    }
+    public void removeFromAcceptingArtists(AcceptedBid obj) {
+        removeToManyTarget("acceptingArtists", obj, true);
+    }
+    @SuppressWarnings("unchecked")
+    public List<AcceptedBid> getAcceptingArtists() {
+        return (List<AcceptedBid>)readProperty("acceptingArtists");
+    }
+
 
     public void setBidder(Artist bidder) {
         setToOneTarget("bidder", bidder, true);

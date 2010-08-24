@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.cayenne.CayenneDataObject;
 
+import com.googlecode.tapestry5cayenne.model.AcceptedBid;
 import com.googlecode.tapestry5cayenne.model.ArtistDetails;
 import com.googlecode.tapestry5cayenne.model.Bid;
 import com.googlecode.tapestry5cayenne.model.Painting;
@@ -18,6 +19,7 @@ import com.googlecode.tapestry5cayenne.model.Painting;
 public abstract class _Artist extends CayenneDataObject {
 
     public static final String NAME_PROPERTY = "name";
+    public static final String ACCEPTED_BIDS_PROPERTY = "acceptedBids";
     public static final String CURRENT_BID_PROPERTY = "currentBid";
     public static final String DETAILS_PROPERTY = "details";
     public static final String PAINTING_LIST_PROPERTY = "paintingList";
@@ -31,6 +33,18 @@ public abstract class _Artist extends CayenneDataObject {
     public String getName() {
         return (String)readProperty("name");
     }
+
+    public void addToAcceptedBids(AcceptedBid obj) {
+        addToManyTarget("acceptedBids", obj, true);
+    }
+    public void removeFromAcceptedBids(AcceptedBid obj) {
+        removeToManyTarget("acceptedBids", obj, true);
+    }
+    @SuppressWarnings("unchecked")
+    public List<AcceptedBid> getAcceptedBids() {
+        return (List<AcceptedBid>)readProperty("acceptedBids");
+    }
+
 
     public void setCurrentBid(Bid currentBid) {
         setToOneTarget("currentBid", currentBid, true);

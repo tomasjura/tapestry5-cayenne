@@ -156,7 +156,7 @@ class MockDataContext extends DataContext {
     MockDataContext() {}
     
     @Override
-    public DataContext createChildDataContext() {
+    public ObjectContext createChildContext() {
         createChildCalled=true;
         return this;
     }

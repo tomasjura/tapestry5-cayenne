@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.cayenne.query.Ordering;
+import org.apache.cayenne.query.SortOrder;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -44,7 +45,7 @@ public class TestQuerySortType {
     }
     
     public void testOrdering() {
-        Ordering o = new Ordering("theInt",true);
+        Ordering o = new Ordering("theInt",SortOrder.ASCENDING);
         QuerySortType.ORDERING.sort(_values, o, null);
         assertValues();
     }

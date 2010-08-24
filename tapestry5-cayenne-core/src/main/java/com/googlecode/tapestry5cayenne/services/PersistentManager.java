@@ -1,6 +1,7 @@
 package com.googlecode.tapestry5cayenne.services;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.cayenne.exp.Expression;
 import org.apache.cayenne.query.Ordering;
@@ -89,9 +90,44 @@ public interface PersistentManager {
      * @param entity The Object Entity name of the obj to find, as mapped in Cayenne.
      * @param id The id of the object to find.
      * @return The matching object, if any, or null.
-     * @throws ClassCastException if the java class for entity does not match <T>.
+     * @throws ClassCastException if the java class for entity cannot be cast to <T>.
      */
     <T> T find(String entity, Object id);
+    
+    /**
+     * Finds the object of type <T>, with the (possibly multi-column id) given by idMap.
+     * This method will attempt to coerce the pk values in idMap to the expected java class for the
+     * id attribute (eg: String -> int conversion). ONLY works for objects which have already been committed to the database.
+     * @param <T>
+     * @param type The type of object to find.
+     * @param idMap The (possibly multi-valued) mapping of pkname -> pkvalue. 
+     * @return The matching object, if any, or null.
+     */
+    <T> T find(Class<T> type, Map<String, Object> idMap);
+    
+    /**
+     * Finds the object of type <T>, with the (possibly multi-column id) given by idMap.
+     * This method will attempt to coerce the pk values in idMap to the expected java class for the
+     * id attribute (eg: String -> int conversion). ONLY works for objects which have already been committed to the database.
+     * @param <T> The type to find
+     * @param entity The Object Entity name of the obj to find, as mapped in Cayenne.
+     * @param idMap The (possibly multi-valued) mapping of pkname -> pkvalue. 
+     * @return The matching object, if any, or null.
+     * @throws ClassCastException if the java class for the entity cannot be cast to <T>.
+     */
+    <T> T find(String entity, Map<String, Object> idMap);
+    
+    /**
+     * Finds the object of type <T>, with the (possibly multi-column id) given by pkVals.
+     * The values in pkVals MUST be listed in the order returned by sorting the key names.
+     * Otherwise, identical to {@link #find(String, Map)}.
+     * @param <T>
+     * @param entity The object entity name of the obj to find, as mapped in Cayenne.
+     * @param pkVals The array of pk vals. Coercion will occur to convert them to the appropriate type (eg: String -> int).
+     * @return The matching object, if any, or null.
+     * @throws ClassCastException if the java class for the entity cannot be cast to <T>.
+     */
+    <T> T find(String entity, Object[] pkVals);
 
     /**
      * Finds all objects of the provided type, matching the entire set of properties provided.

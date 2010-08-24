@@ -1,6 +1,7 @@
 package com.googlecode.tapestry5cayenne.internal;
 
 import org.apache.cayenne.query.Ordering;
+import org.apache.cayenne.query.SortOrder;
 
 /**
  * Utility class for quick conversion from string to Ordering.
@@ -30,7 +31,7 @@ public class OrderingUtils {
     public static Ordering[] stringToOrdering(boolean ascending,String...vals) {
         Ordering[] o = new Ordering[vals.length];
         for(int i=0;i<o.length;i++) {
-            o[i]=new Ordering(vals[i],ascending);
+            o[i]=new Ordering(vals[i],ascending?SortOrder.ASCENDING:SortOrder.DESCENDING);
         }
         return o;
     }
