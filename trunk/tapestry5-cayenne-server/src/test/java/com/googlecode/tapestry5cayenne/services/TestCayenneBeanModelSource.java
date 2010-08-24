@@ -62,6 +62,7 @@ public class TestCayenneBeanModelSource extends Assert {
         artistPropsWithRelationship.put("paintingsByTitle","to_many_map");
         artistPropsWithRelationship.put("numPaintings","number");
         artistPropsWithRelationship.put("currentBid","to_one");
+        artistPropsWithRelationship.put("acceptedBids", "to_many_collection");
         Map<String,String> paintingProps = new HashMap<String,String>();
         paintingProps.put(Painting.ARTIST_PROPERTY,"to_one");
         paintingProps.put(Painting.PRICE_PROPERTY,"number");
@@ -70,6 +71,9 @@ public class TestCayenneBeanModelSource extends Assert {
         bidProps.put(Bid.AMOUNT_PROPERTY, "number");
         bidProps.put(Bid.PAINTING_PROPERTY, "painting");
         bidProps.put(Bid.BIDDER_PROPERTY,"to_one");
+        
+        Map<String,String> bidPropsWithRelationship = new HashMap<String, String>(bidProps);
+        bidPropsWithRelationship.put(Bid.ACCEPTING_ARTISTS_PROPERTY, "to_many_collection");
         return new Object[][] {
                 {
                     StringPKEntity.class,
@@ -111,19 +115,19 @@ public class TestCayenneBeanModelSource extends Assert {
                 {
                     Bid.class,
                     false,
-                    bidProps,
+                    bidPropsWithRelationship,
                 }
         };
     }
     
     @Test(dataProvider="property_tests")
-    public void test_properties(Class<?> type,boolean filterReadable,Map<String,String> props) {
+    public void test_properties(Class<?> type,boolean filterReadonly,Map<String,String> props) {
         //ensure all properties specified are included.
         Messages msgs = createMock(Messages.class);
         expect(msgs.contains((String)anyObject())).andReturn(false).anyTimes();
         replay(msgs);
         
-        BeanModel<?> model = filterReadable?_source.createEditModel(type, msgs):_source.createDisplayModel(type, msgs);
+        BeanModel<?> model = filterReadonly?_source.createEditModel(type, msgs):_source.createDisplayModel(type, msgs);
         List<String> names = model.getPropertyNames();
         for(String key : props.keySet()) {
             assertTrue(names.contains(key),"Model missing property " + key);

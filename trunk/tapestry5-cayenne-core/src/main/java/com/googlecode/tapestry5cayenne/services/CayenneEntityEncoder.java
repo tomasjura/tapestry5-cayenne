@@ -5,10 +5,17 @@
  */
 package com.googlecode.tapestry5cayenne.services;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.cayenne.DataObjectUtils;
-import org.apache.cayenne.PersistenceState;
+import org.apache.cayenne.ObjectId;
 import org.apache.cayenne.Persistent;
 import org.apache.cayenne.map.ObjEntity;
 import org.apache.tapestry5.ValueEncoder;
@@ -21,10 +28,7 @@ import com.googlecode.tapestry5cayenne.annotations.Cayenne;
  * Basic Persistent ValueEncoder.
  * This works for objects which implements Persistent. If you're using the POJO
  * facilities of cayenne, you will need to contribute your own value encoders.
- * This ValueEncoder assumes a single-column primary key. If your entity uses a
- * multi-column key, you will need to contribute a custom ValueEncoder for that
- * entity.  If the pk type is something other than "INTEGER", you must have
- * an object attribute corresponding to the primary key's db attribute.
+ * This ValueEncoder can handle single or multi-column primary keys.
  * @author Robert Zeigler
  */
 @Marker(Cayenne.class)
@@ -50,24 +54,39 @@ public class CayenneEntityEncoder implements ValueEncoder<Persistent> {
         _encrypter = encrypter;
     }
 
-    public String toClient(final Persistent dao)
+    public String toClient(final Persistent obj)
     {
-        if (dao == null) {
+        if (obj == null) {
             return _encrypter.encrypt("nil");
         }
 
-        if (dao.getPersistenceState() == PersistenceState.NEW
-                || dao.getPersistenceState() == PersistenceState.TRANSIENT) {
+        if (obj.getObjectId() == null || obj.getObjectId().isTemporary()) {
             
-            final String key = _storer.store(dao);
+            final String key = _storer.store(obj);
 
             //TODO smells of tight coupling here, having to dig through so many layers of objects.
-            ObjEntity ent = _provider.currentContext().getEntityResolver().lookupObjEntity(dao.getClass());
+            ObjEntity ent = _provider.currentContext().getEntityResolver().lookupObjEntity(obj.getClass());
             return _encrypter.encrypt(ent.getName() + "::t::" + key);
         }
-
-        final String pk = _coercer.coerce(DataObjectUtils.pkForObject(dao),String.class);
-        return _encrypter.encrypt(dao.getObjectId().getEntityName() + "::" + pk);
+        
+        ObjectId id = obj.getObjectId();
+        Map<String, Object> idSnap = id.getIdSnapshot();
+        if (idSnap.size() == 1) {
+	        final String pk = _coercer.coerce(DataObjectUtils.pkForObject(obj),String.class);
+	        return _encrypter.encrypt(id.getEntityName() + "::" + pk);
+        }
+        StringBuilder b = new StringBuilder(id.getEntityName());
+        for(String key : sortedKeys(idSnap)) {
+        	String val = _coercer.coerce(idSnap.get(key), String.class);
+        	b.append("::").append(val);
+        }
+        return _encrypter.encrypt(b.toString());
+    }
+    
+    private List<String> sortedKeys(Map<String, Object> map) {
+        List<String> keys = new ArrayList<String>(map.keySet());
+        Collections.sort(keys);
+        return keys;
     }
 
     public Persistent toValue(String val) {
@@ -86,7 +105,7 @@ public class CayenneEntityEncoder implements ValueEncoder<Persistent> {
             throw new RuntimeException("Unable to convert " + val + " into a Cayenne Persistent object");
         }
 
-        if (vals.length == 3) {
+        if (vals.length == 3 && vals[1].equals("t")) {
             //check to see if it's in storage...
             Persistent obj = _storer.retrieve(vals[2],vals[0]);
             if (obj == null) { 
@@ -95,7 +114,12 @@ public class CayenneEntityEncoder implements ValueEncoder<Persistent> {
 
             return obj; 
         }
-        
-        return _manager.find(vals[0], vals[1]);
+        if (vals.length == 2) {
+	        return _manager.find(vals[0], vals[1]);
+        }
+        //1.6 introduces Arrays.copyOfRange, but that would require us to require java 1.6...
+        String[] pks = new String[vals.length-1];
+    	System.arraycopy(vals, 1, pks, 0, pks.length);
+    	return _manager.find(vals[0], pks);
     }
 }

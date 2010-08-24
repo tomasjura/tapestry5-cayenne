@@ -5,6 +5,9 @@
  */
 package com.googlecode.tapestry5cayenne.services;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import org.apache.cayenne.DataObjectUtils;
 import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.ObjectId;
@@ -19,8 +22,11 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.googlecode.tapestry5cayenne.TestUtils;
+import com.googlecode.tapestry5cayenne.model.AcceptedBid;
 import com.googlecode.tapestry5cayenne.model.Artist;
+import com.googlecode.tapestry5cayenne.model.Bid;
 import com.googlecode.tapestry5cayenne.model.BigIntPKEntity;
+import com.googlecode.tapestry5cayenne.model.Painting;
 import com.googlecode.tapestry5cayenne.model.SmallIntPKEntity;
 import com.googlecode.tapestry5cayenne.model.StringPKEntity;
 import com.googlecode.tapestry5cayenne.model.TinyIntPKEntity;
@@ -67,9 +73,24 @@ public class TestCayenneEntityEncoder extends Assert {
         //(unsigned) int is just over 4 billion, so, 5 billion.
         bigPk.setObjectId(new ObjectId("BigIntPKEntity","id",5000000000L));
         stringPk.setId("testingstrings");
+        
+        
+        Painting p = _provider.currentContext().newObject(Painting.class);
+        p.setArtist(a);
+        p.setPrice(25.0);
+        p.setTitle("A work in progress");
+        Bid b = _provider.currentContext().newObject(Bid.class);
+        b.setAmount(new BigDecimal(25.00));
+        b.setBidder(a);
+        b.setPainting(p);
+        AcceptedBid ab = _provider.currentContext().newObject(AcceptedBid.class);
+        ab.setAcceptor(a);
+        ab.setBid(b);
+        ab.setAcceptedDate(new Date());
         _provider.currentContext().commitChanges();
         Artist a2 = new Artist();
         Artist a3 = _provider.currentContext().newObject(Artist.class);
+        
         
         return new Object[][] {
                 //Null object handling.
@@ -86,6 +107,10 @@ public class TestCayenneEntityEncoder extends Assert {
                 {tinyPk,"TinyIntPKEntity::" + DataObjectUtils.intPKForObject(tinyPk)},
                 {smallPk,"SmallIntPKEntity::" + DataObjectUtils.intPKForObject(smallPk)},
                 {bigPk,"BigIntPKEntity::" + DataObjectUtils.longPKForObject(bigPk)},
+                {ab, "AcceptedBid::" + 
+                	DataObjectUtils.intPKForObject(a) + "::" + 
+                	DataObjectUtils.intPKForObject(b)
+                }
                 //TODO might be nice to have a way to store objs in the url in a "tamper-proof" fashion.
                 //at least as an option.
         };

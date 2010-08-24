@@ -33,7 +33,7 @@ import com.googlecode.tapestry5cayenne.services.PersistentManager;
  * @author robertz
  * @see Label
  */
-public class PersistentEntitySelectModel extends AbstractSelectModel {
+public class PersistentEntitySelectModel<T> extends AbstractSelectModel {
     
     private final List<OptionModel> _options;
     
@@ -41,15 +41,18 @@ public class PersistentEntitySelectModel extends AbstractSelectModel {
      * Constructs the model by looking up the entities corresponding to type, using the provided ObjectContext.
      * All provided orderings will be honored.  
      */
-    public PersistentEntitySelectModel(Class<?> type, PersistentManager manager, Ordering...orderings) {
+    public PersistentEntitySelectModel(Class<T> type, PersistentManager manager, Ordering...orderings) {
+        this(type, manager.listAll(type, orderings));
+    }
+
+    public PersistentEntitySelectModel(Class<T> type, List<T> options) {
         Method label = AnnotationFinder.methodForAnnotation(Label.class, type);
-        List<?> options = manager.listAll(type, orderings);
         _options = new ArrayList<OptionModel>();
         for(Object obj : options) {
             _options.add(new MethodLabelOptionModel(obj,label));
         }
     }
-    
+
     public List<OptionGroupModel> getOptionGroups() {
         return null;
     }

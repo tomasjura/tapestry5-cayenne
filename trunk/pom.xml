@@ -203,7 +203,7 @@
     </reporting>
 
     <properties>
-        <cayenne-release-version>3.0M6</cayenne-release-version>
+        <cayenne-release-version>3.0</cayenne-release-version>
         <tapestry-release-version>5.1.0.5</tapestry-release-version>
     </properties>
 

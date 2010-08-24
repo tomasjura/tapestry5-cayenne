@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.cayenne.BaseContext;
 import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.query.Ordering;
+import org.apache.cayenne.query.SortOrder;
 import org.apache.tapestry5.OptionModel;
 import org.easymock.EasyMock;
 import org.testng.Assert;
@@ -33,7 +34,7 @@ public class TestPersistentEntitySelectModel extends Assert {
         _data = TestUtils.basicData(_context);
         _manager = EasyMock.createMock(PersistentManager.class);
         List<Artist> copy = new ArrayList<Artist>(_data);
-        new Ordering("name",true).orderList(copy);
+        new Ordering("name",SortOrder.ASCENDING).orderList(copy);
         EasyMock.expect(_manager.listAll(Artist.class)).andReturn(copy);
         EasyMock.replay(_manager);
     }
@@ -47,7 +48,7 @@ public class TestPersistentEntitySelectModel extends Assert {
         PersistentEntitySelectModel model = new PersistentEntitySelectModel(Artist.class,_manager);
         assertNull(model.getOptionGroups());
         assertEquals(model.getOptions().size(),_data.size());
-        Ordering o = new Ordering("name",true);
+        Ordering o = new Ordering("name",SortOrder.ASCENDING);
         o.orderList(_data);
         Iterator<OptionModel> it = model.getOptions().iterator();
         for(Artist a : _data) {

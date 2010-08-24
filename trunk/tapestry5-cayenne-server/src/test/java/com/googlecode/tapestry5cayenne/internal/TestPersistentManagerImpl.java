@@ -18,6 +18,7 @@ import org.apache.cayenne.exp.Expression;
 import org.apache.cayenne.exp.ExpressionFactory;
 import org.apache.cayenne.query.Ordering;
 import org.apache.cayenne.query.SelectQuery;
+import org.apache.cayenne.query.SortOrder;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -46,7 +47,7 @@ public class TestPersistentManagerImpl {
         TestUtils.setupdb();
         _context = BaseContext.getThreadObjectContext();
         List<Artist> data = TestUtils.basicData(_context);
-        new Ordering(Artist.NAME_PROPERTY,true).orderList(data);
+        new Ordering(Artist.NAME_PROPERTY,SortOrder.ASCENDING).orderList(data);
         dali = data.get(0);
         picasso=data.get(1);
         assertEquals(dali.getName(),"Dali");
@@ -79,14 +80,14 @@ public class TestPersistentManagerImpl {
                     new SelectQuery(Artist.class),
                     Artist.class.getMethod("getName"),
                     Artist.class,
-                    new QuerySortResult(QuerySortType.QUERY,new Ordering("name",true))
+                    new QuerySortResult(QuerySortType.QUERY,new Ordering("name",SortOrder.ASCENDING))
                 },
                 //label is a javabeans prop, but not in model
                 {
                     new SelectQuery(Artist.class),
                     Artist.class.getMethod("getNumPaintings"),
                     Artist.class,
-                    new QuerySortResult(QuerySortType.ORDERING,new Ordering("numPaintings",true))
+                    new QuerySortResult(QuerySortType.ORDERING,new Ordering("numPaintings",SortOrder.ASCENDING))
                 },
                 {
                     new SelectQuery(Artist.class),
@@ -204,7 +205,7 @@ public class TestPersistentManagerImpl {
                             picasso.getPaintingsByTitle().get("Portrait of Igor Stravinsky")
                             ),
                     new Ordering[]{
-                       new Ordering("title",false)
+                       new Ordering("title",SortOrder.DESCENDING)
                     }
                 },
         };

@@ -6,6 +6,7 @@ import com.googlecode.tapestry5cayenne.model.Painting;
 import com.googlecode.tapestry5cayenne.services.ObjectContextProvider;
 import org.apache.cayenne.Persistent;
 import org.apache.cayenne.query.Ordering;
+import org.apache.cayenne.query.SortOrder;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.dom.Document;
 import org.apache.tapestry5.dom.Element;
@@ -36,7 +37,7 @@ public class TestBlockContributions extends Assert {
         _registry = _tester.getRegistry();
         _provider = _registry.getService(ObjectContextProvider.class);
         _data = TestUtils.basicData(_provider.currentContext());
-        new Ordering(Artist.NAME_PROPERTY,true).orderList(_data);
+        new Ordering(Artist.NAME_PROPERTY,SortOrder.ASCENDING).orderList(_data);
         _encoder = _registry.getService("CayenneEntityEncoder", ValueEncoder.class);
     }
     

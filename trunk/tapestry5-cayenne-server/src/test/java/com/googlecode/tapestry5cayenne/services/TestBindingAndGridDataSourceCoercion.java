@@ -8,6 +8,7 @@ import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.map.ObjEntity;
 import org.apache.cayenne.query.EJBQLQuery;
 import org.apache.cayenne.query.Ordering;
+import org.apache.cayenne.query.SortOrder;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
 import org.apache.tapestry5.Binding;
@@ -39,7 +40,7 @@ public class TestBindingAndGridDataSourceCoercion extends Assert {
         registry = TestUtils.setupRegistry("App0", TapestryCayenneModule.class);
         context = registry.getService(ObjectContextProvider.class).newContext();
         data = TestUtils.basicData(context);
-        new Ordering(Artist.NAME_PROPERTY,true).orderList(data);
+        new Ordering(Artist.NAME_PROPERTY,SortOrder.ASCENDING).orderList(data);
     }
     
     @SuppressWarnings("unchecked")
@@ -102,7 +103,7 @@ public class TestBindingAndGridDataSourceCoercion extends Assert {
             }
             
         });
-        new Ordering(Painting.TITLE_PROPERTY,true).orderList(paints);
+        new Ordering(Painting.TITLE_PROPERTY,SortOrder.ASCENDING).orderList(paints);
         assertEquals(ds.getAvailableRows(),paints.size());
         for(int i=0;i<paints.size();i++) {
             assertEquals(((Painting)ds.getRowValue(i)).getObjectId(),paints.get(i).getObjectId());

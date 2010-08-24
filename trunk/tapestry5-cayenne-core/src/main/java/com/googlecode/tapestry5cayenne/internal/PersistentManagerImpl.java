@@ -1,9 +1,14 @@
 package com.googlecode.tapestry5cayenne.internal;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.cayenne.DataObjectUtils;
 import org.apache.cayenne.ObjectContext;
@@ -13,6 +18,7 @@ import org.apache.cayenne.map.ObjAttribute;
 import org.apache.cayenne.map.ObjEntity;
 import org.apache.cayenne.query.Ordering;
 import org.apache.cayenne.query.SelectQuery;
+import org.apache.cayenne.query.SortOrder;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 
 import com.googlecode.tapestry5cayenne.annotations.DefaultOrder;
@@ -100,7 +106,7 @@ public class PersistentManagerImpl implements PersistentManager {
               sq.addOrderings(Arrays.asList(OrderingUtils.stringToOrdering(order.ascending()[0],order.value())));
             } else if (order.ascending().length==order.value().length) {
                 for(int i=0;i<order.value().length;i++) {
-                    sq.addOrdering(new Ordering(order.value()[i],order.ascending()[i]));
+                    sq.addOrdering(new Ordering(order.value()[i],order.ascending()[i]?SortOrder.ASCENDING:SortOrder.DESCENDING));
                 }
             } else {
                 throw new RuntimeException("DefaultOrdering.ascending.length != 1 and DefaultOrdering.ascending.length != DefaultOrdering.orderings.length for type: " + type.getName());
@@ -130,7 +136,7 @@ public class PersistentManagerImpl implements PersistentManager {
         } else {
             name = name.substring(3);
         }
-        Ordering o = new Ordering(name,true);
+        Ordering o = new Ordering(name,SortOrder.ASCENDING);
         res.ordering=o;
         
         ObjEntity ent = context.getEntityResolver().lookupObjEntity(type);
@@ -149,6 +155,52 @@ public class PersistentManagerImpl implements PersistentManager {
         return DataObjectUtils.objectForPK(_provider.currentContext(),type,pk);
     }
     
+    public <T> T find(Class<T> type, Map<String, Object> idMap) {
+    	return DataObjectUtils.objectForPK(_provider.currentContext(), type, mapIds(null, type, idMap));
+    }
+    
+    public <T> T find(String entity, Map<String, Object> idMap) {
+    	return (T) DataObjectUtils.objectForPK(_provider.currentContext(), entity, mapIds(entity, null, idMap));
+    }
+    
+	public <T> T find(String entity, Object[] pkVals) {
+		ObjEntity ent = _provider.currentContext().getEntityResolver().getObjEntity(entity);
+		ArrayList<ObjAttribute> pks = new ArrayList<ObjAttribute>(ent.getPrimaryKeys());
+		
+		Collections.sort(pks, new Comparator<ObjAttribute>() {
+			public int compare(ObjAttribute o1, ObjAttribute o2) {
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
+		
+		Map<String, Object> pkMap = new HashMap<String, Object>();
+		
+		if (pkVals.length != pks.size()) {
+			throw new RuntimeException("Wrong number of keys for entity '" + entity + "'. Expected " + pks.size() + " but got " + pkVals.length);
+		}
+		for(int i=0; i<pkVals.length; i++) {
+			ObjAttribute pk = pks.get(i);
+			Object value = _coercer.coerce(pkVals[i], pk.getJavaClass());
+			pkMap.put(pks.get(i).getName(), value);
+		}
+		return (T) DataObjectUtils.objectForPK(_provider.currentContext(), entity, pkMap);
+	}
+
+    private Map<String, Object> mapIds(String entityName, Class<?> entityClass, Map<String,Object> idMap) {
+    	Map<String,Object> ids = new HashMap<String, Object>();
+    	ObjEntity entity;
+    	if (entityName == null) {
+    		entity = _provider.currentContext().getEntityResolver().lookupObjEntity(entityClass);
+    	} else {
+    		entity = _provider.currentContext().getEntityResolver().getObjEntity(entityName);
+    	}
+    	for(Map.Entry<String, Object> id : idMap.entrySet()) {
+    		Object val = _coercer.coerce(id.getValue(), pkTypeForEntity(entity, id.getKey()));
+    		ids.put(id.getKey(), val);
+    	}
+    	return ids;
+    }
+    
     private Class<?> pkTypeForEntity(String name) {
         return pkTypeForEntity(_provider.currentContext().getEntityResolver().getObjEntity(name));
     }
@@ -164,6 +216,23 @@ public class PersistentManagerImpl implements PersistentManager {
         }
         ObjAttribute attribute = atts.iterator().next(); 
         return attribute.getJavaClass();
+    }
+    
+    private Class<?> pkTypeForEntity(String entName, String name) {
+    	return pkTypeForEntity(_provider.currentContext().getEntityResolver().lookupObjEntity(entName), name);
+    }
+    
+    private Class<?> pkTypeForEntity(Class<?> type, String name) {
+    	return pkTypeForEntity(_provider.currentContext().getEntityResolver().lookupObjEntity(type), name);
+    }
+    
+    private Class<?> pkTypeForEntity(ObjEntity entity, String name) {
+    	for(ObjAttribute attr : entity.getPrimaryKeys()) {
+    		if (attr.getName().equals(name)) {
+    			return attr.getJavaClass();
+    		}
+    	}
+    	throw new RuntimeException("Entity '" + entity.getName() + "' does not have a key named " + name);
     }
     
     @SuppressWarnings("unchecked")
@@ -238,7 +307,6 @@ public class PersistentManagerImpl implements PersistentManager {
     public <T> List<T> findLikeAnyProperty(Class<T> type, int limit, Object... properties) {
         return findByProperties(type, limit,false, false, properties);
     }
-
 
 }
 
