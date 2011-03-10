@@ -1,9 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.googlecode.tapestry5-cayenne</groupId>
     <artifactId>tapestry5-cayenne-project</artifactId>
     <packaging>pom</packaging>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.3-SNAPSHOT</version>
     <name>Tapestry5-Cayenne Integration</name>
     <description>Makes integration of Cayenne within Tapestry 5 as easy as possible.</description>
     <inceptionYear>2008</inceptionYear>
@@ -209,7 +210,7 @@
     <repositories>
         <!-- Cayenne repositories. -->
         <repository>
-            <snapshots />
+            <snapshots/>
             <id>apache.snapshots</id>
             <url>http://people.apache.org/repo/m2-snapshot-repository</url>
         </repository>
@@ -231,9 +232,9 @@
 
     <distributionManagement>
         <repository>
-            <id>objectstyle-repository</id>
-            <name>ObjectStyle Maven Repository</name>
-            <url>dav:https://objectstyle.org/maven2</url>
+            <id>saiwai-repository</id>
+            <name>Saiwai Maven Repository</name>
+            <url>scp://t5cayenne.saiwai-solutions.com:10022/var/www/vhosts/saiwai-solutions.com/maven</url>
         </repository>
         <site>
             <id>saiwai-solutions-site</id>
