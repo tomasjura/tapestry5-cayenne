@@ -217,6 +217,11 @@
             <id>cayenne.deps</id>
             <url>http://objectstyle.org/maven2</url>
         </repository>
+        <!-- saiwai repo -->
+        <repository>
+            <id>saiwai-repository</id>
+        	<url>http://maven.saiwai-solutions.com/</url>
+        </repository>
         <!-- tapestry snapshot repository -->
         <repository>
           <id>tapestry-snapshots</id>
