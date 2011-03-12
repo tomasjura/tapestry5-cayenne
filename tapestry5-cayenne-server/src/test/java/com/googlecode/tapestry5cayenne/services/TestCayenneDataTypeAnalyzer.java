@@ -56,7 +56,7 @@ public class TestCayenneDataTypeAnalyzer extends Assert {
             assertEquals(type,"longtext");
             EasyMock.verify(adaptor);
         } catch (Exception e) {
-            fail("Should not have been an exception identifying the data type",e);
+            failOnException(e);
         }
     }
     
@@ -79,14 +79,43 @@ public class TestCayenneDataTypeAnalyzer extends Assert {
             assertEquals(type,"text");
             EasyMock.verify(adaptor);
         } catch(Exception e) {
-            fail("Should not have been an exception identifying the data type",e);
+            failOnException(e);
         }
+    }
+
+    /* google code ticket #39: basically, when you have a POJO with a String property + t5cayenne, you get NPE.*/
+    public void test_text_datatype_on_pojo() {
+        _reg.getService(Environment.class).push(BeanModelTypeHolder.class, new BeanModelTypeHolder(SomePOJO.class));
+        try {
+            PropertyAdapter adaptor = EasyMock.createMock(PropertyAdapter.class);
+            EasyMock.expect(adaptor.getType()).andReturn(String.class);
+            EasyMock.replay(adaptor);
+            assertEquals("text", _analyzer.identifyDataType(adaptor));
+            EasyMock.verify(adaptor);
+        } catch(Exception e) {
+            failOnException(e);
+        }
+    }
+
+    private void failOnException(Exception e) {
+        fail("Should not have been an exception identifying the data type", e);
     }
 
 }
 
 class SomePOJO {
+    private String name;
+
     public Artist getArtist() {
         return new Artist();
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }

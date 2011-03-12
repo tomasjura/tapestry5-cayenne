@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.googlecode.tapestry5cayenne.internal.util.MethodWrapper;
 import org.apache.cayenne.BaseContext;
 import org.apache.cayenne.DataObjectUtils;
 import org.apache.cayenne.ObjectContext;
@@ -20,6 +21,7 @@ import org.apache.cayenne.query.Ordering;
 import org.apache.cayenne.query.SelectQuery;
 import org.apache.cayenne.query.SortOrder;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
+import org.apache.tapestry5.ioc.services.Coercion;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -59,6 +61,9 @@ public class TestPersistentManagerImpl {
                 return (T) arg0;
             }
             public <S, T> String explain(Class<S> arg0, Class<T> arg1) { return null; }
+            public <S, T> Coercion<S, T> getCoercion(Class<S> sourceType, Class<T> targetType) {
+                return null;
+            }
         };
         
         _manager = new PersistentManagerImpl(new ObjectContextProvider() {
@@ -78,32 +83,32 @@ public class TestPersistentManagerImpl {
                 //prop is in model
                 {
                     new SelectQuery(Artist.class),
-                    Artist.class.getMethod("getName"),
+                    new MethodWrapper(Artist.class.getMethod("getName")),
                     Artist.class,
                     new QuerySortResult(QuerySortType.QUERY,new Ordering("name",SortOrder.ASCENDING))
                 },
                 //label is a javabeans prop, but not in model
                 {
                     new SelectQuery(Artist.class),
-                    Artist.class.getMethod("getNumPaintings"),
+                    new MethodWrapper(Artist.class.getMethod("getNumPaintings")),
                     Artist.class,
                     new QuerySortResult(QuerySortType.ORDERING,new Ordering("numPaintings",SortOrder.ASCENDING))
                 },
                 {
                     new SelectQuery(Artist.class),
-                    Artist.class.getMethod("numPaintings"),
+                    new MethodWrapper(Artist.class.getMethod("numPaintings")),
                     Artist.class,
                     new QuerySortResult(QuerySortType.METHOD,null)
                 },
                 {
                     new SelectQuery(BigIntPKEntity.class),
-                    null,
+                    new MethodWrapper(null),
                     BigIntPKEntity.class,
                     new QuerySortResult(QuerySortType.NOSORT,null)
                 },
                 {
                     new SelectQuery(Artist.class),
-                    null,
+                    new MethodWrapper(null),
                     Artist.class,
                     new QuerySortResult(QuerySortType.COMPARABLE,null)
                 }
@@ -111,8 +116,8 @@ public class TestPersistentManagerImpl {
     }
     
     @Test(dataProvider="sorts")
-    public void query_sort(SelectQuery sq, Method label, Class<?> type, QuerySortResult expected) {
-        QuerySortResult result = PersistentManagerImpl.querySort(sq, label, BaseContext.getThreadObjectContext(), type,new Ordering[]{});
+    public void query_sort(SelectQuery sq, MethodWrapper label, Class<?> type, QuerySortResult expected) {
+        QuerySortResult result = PersistentManagerImpl.querySort(sq, label.getMethod(), BaseContext.getThreadObjectContext(), type,new Ordering[]{});
         assertEquals(result.type,expected.type);
         if (expected.ordering == null) {
             assertNull(result.ordering);

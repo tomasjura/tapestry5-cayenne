@@ -88,8 +88,7 @@
             <dependency>
                 <groupId>org.testng</groupId>
                 <artifactId>testng</artifactId>
-                <version>5.8</version>
-                <classifier>jdk15</classifier>
+                <version>5.12.1</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -203,7 +202,7 @@
 
     <properties>
         <cayenne-release-version>3.0.1</cayenne-release-version>
-        <tapestry-release-version>5.1.0.5</tapestry-release-version>
+        <tapestry-release-version>5.2.4</tapestry-release-version>
     </properties>
 
     <repositories>

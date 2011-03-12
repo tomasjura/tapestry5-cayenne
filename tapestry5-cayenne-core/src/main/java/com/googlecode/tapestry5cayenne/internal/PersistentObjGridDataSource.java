@@ -67,7 +67,6 @@ public class PersistentObjGridDataSource implements GridDataSource {
 
     public void prepare(int startIndex, int endIndex,
             List<SortConstraint> sortConstraints) {
-        // TODO Auto-generated method stub
         query = new SelectQuery(type);
         this.startIndex = startIndex;
         List<Ordering> orderings = new ArrayList<Ordering>();
