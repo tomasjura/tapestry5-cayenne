@@ -109,7 +109,7 @@ public class TestUtils {
      */
     public static Registry setupRegistry(String appName, Class<?>...modules) {
         SymbolProvider provider = new SingleKeySymbolProvider(InternalConstants.TAPESTRY_APP_PACKAGE_PARAM, "com.googlecode.tapestry5cayenne.integration");
-        TapestryAppInitializer initializer = new TapestryAppInitializer(logger, provider, appName, PageTesterModule.TEST_MODE);
+        TapestryAppInitializer initializer = new TapestryAppInitializer(logger, provider, appName, PageTesterModule.TEST_MODE, null);
 
         if (modules.length > 0) {
             initializer.addModules(modules);

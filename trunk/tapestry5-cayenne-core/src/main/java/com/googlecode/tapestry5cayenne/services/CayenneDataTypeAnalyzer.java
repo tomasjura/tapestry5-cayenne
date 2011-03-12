@@ -47,14 +47,15 @@ public class CayenneDataTypeAnalyzer implements DataTypeAnalyzer {
         EntityResolver er = _provider.currentContext().getEntityResolver();
         Class<?> type = _environment.peek(BeanModelTypeHolder.class).getType();
         ObjEntity ent = er.lookupObjEntity(type);
-        
+
         String dt = _defaultAnalyzer.identifyDataType(adapter);
+
+        //fixes googlecode issue #39: unable to use POJO w/ String properties w/ t5cayenne.
+        if (ent == null)
+            return dt;
+
         if (dt != null && !dt.equals("")) {
             return checkLongText(ent,adapter,dt);
-        }
-        
-        if (ent == null) {
-            return null;
         }
         
         //if we add any more "special cases" for datatypes, we should refactor this into a chain of command

@@ -310,21 +310,3 @@ public class PersistentManagerImpl implements PersistentManager {
 
 }
 
-/**
- * Data Storage class for holding information about how the query sort should take place.
- * @author robertz
- *
- */
-class QuerySortResult {
-  
-    QuerySortResult() {
-        
-    }
-    
-    QuerySortResult(QuerySortType type, Ordering ordering) {
-        this.type=type;
-        this.ordering = ordering;
-    }
-    QuerySortType type;
-    Ordering ordering;
-}

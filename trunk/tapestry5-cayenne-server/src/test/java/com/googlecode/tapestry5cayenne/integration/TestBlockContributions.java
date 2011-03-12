@@ -54,7 +54,7 @@ public class TestBlockContributions extends Assert {
     public void testToOneEditor() {
         Document doc = _tester.renderPage("TestToOneControl");
         //Verify the label
-        Element el = doc.getElementById("toOneList-label");
+        Element el = doc.getRootElement().getElementByAttributeValue("for","toOneList");
         assertEquals(el.getChildMarkup(),"Artist");
         
         //Verify the select list.
@@ -119,8 +119,8 @@ public class TestBlockContributions extends Assert {
         //make sure the stylesheet shows up.
         List<Element> els = TestUtils.DOMFindAll(doc.getRootElement(), "head/link");
         //should be 2: one for tapestry, one for t5cayenne
-        assertEquals(els.size(), 3);
-        assertTrue(els.get(2).getAttribute("href").contains("ToManyViewer.css"));
+        assertEquals(els.size(), 2);
+        assertTrue(els.get(1).getAttribute("href").contains("ToManyViewer.css"));
         //ok... make sure we have the right thing on the bean display...
         return doc;
     }

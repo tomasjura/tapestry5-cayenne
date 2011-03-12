@@ -8,7 +8,7 @@ import org.apache.cayenne.query.SelectQuery;
 /**
  * Enum representing the major (select) query types in cayenne.
  * Allows us to utilize query-specific properties in a query-type-independent manner.
- * @author robertz-
+ * @author robertz
  *
  */
 public enum QueryType {
@@ -16,7 +16,11 @@ public enum QueryType {
     /**
      * Constant for EJBQLQueries.
      */
-    EJBQL(EJBQLQuery.class),//TODO implement setPageSize for EJBQLQuery when 3.0M6 is released
+    EJBQL(EJBQLQuery.class) {
+        public void setPageSize(Query q, int size) {
+            ((EJBQLQuery)q).setPageSize(size);
+        }
+    },
     /**
      * Constant for SQLTemplate queries.
      */
