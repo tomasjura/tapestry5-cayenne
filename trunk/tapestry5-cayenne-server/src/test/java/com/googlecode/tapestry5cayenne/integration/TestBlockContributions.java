@@ -177,6 +177,7 @@ public class TestBlockContributions extends Assert {
      */
     public void testCayenneSelect() {
         Document doc = _tester.renderPage("TestSelect");
+        System.out.println(doc);
         //Verify the label
         //Element el = doc.getElementById("toOneList:label");
         //assertEquals(el.getChildMarkup(),"Artist");

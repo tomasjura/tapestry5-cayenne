@@ -46,7 +46,8 @@ public class ToOneEditor implements Field {
     public void setValue(Persistent value) {
         _context.setPropertyValue(value);
     }
-    
+
+    @SuppressWarnings("unchecked")
     public SelectModel getModel() {
         Class<?> type = _context.getPropertyType();
         return new PersistentEntitySelectModel(type,_manager);

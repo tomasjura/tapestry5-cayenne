@@ -2,7 +2,7 @@ package com.googlecode.tapestry5cayenne.components;
 
 import java.util.Collection;
 
-import org.apache.tapestry5.annotations.IncludeStylesheet;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.Messages;
@@ -23,7 +23,7 @@ import com.googlecode.tapestry5cayenne.internal.Labeler;
  * annotation. If no method is annotated, the text displayed will be the result of invoking "toString" on the object.
  * @author robertz
  */
-@IncludeStylesheet("ToManyViewer.css")
+@Import(stylesheet="ToManyViewer.css")
 public class ToManyViewer {
     
     /**

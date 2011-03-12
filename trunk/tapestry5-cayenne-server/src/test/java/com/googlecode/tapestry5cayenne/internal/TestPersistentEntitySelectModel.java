@@ -44,6 +44,7 @@ public class TestPersistentEntitySelectModel extends Assert {
         EasyMock.verify(_manager);
     }
 
+    @SuppressWarnings("unchecked")
     public void construction() {
         PersistentEntitySelectModel model = new PersistentEntitySelectModel(Artist.class,_manager);
         assertNull(model.getOptionGroups());

@@ -7,7 +7,7 @@ package com.googlecode.tapestry5cayenne.integration.app0.pages;
 
 import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.map.ObjEntity;
-import org.apache.tapestry5.annotations.ApplicationState;
+import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.googlecode.tapestry5cayenne.annotations.Cayenne;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class Index {
 
-    @ApplicationState
+    @SessionState
     private DataContext _context;
     
     @Inject
