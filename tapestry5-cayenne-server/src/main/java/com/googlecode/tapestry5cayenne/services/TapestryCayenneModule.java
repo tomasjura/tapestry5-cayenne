@@ -6,11 +6,13 @@
 package com.googlecode.tapestry5cayenne.services;
 
 import org.apache.tapestry5.ioc.Configuration;
+import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.SubModule;
-import org.apache.tapestry5.services.AliasContribution;
 
 import com.googlecode.tapestry5cayenne.annotations.Cayenne;
+import org.apache.tapestry5.ioc.services.ServiceOverride;
 
 @SubModule(TapestryCayenneCoreModule.class)
 public class TapestryCayenneModule {
@@ -25,13 +27,12 @@ public class TapestryCayenneModule {
     /**
      * Alias the DataContext-based object context provider to ObjectContextProvider.
      * @param conf
-     * @param storer
      * @param provider
      */
     @SuppressWarnings("unchecked")
-    public static void contributeAlias(Configuration<AliasContribution> conf,
-            @Cayenne NonPersistedObjectStorer storer,
+    @Contribute(ServiceOverride.class)
+    public static void contributeServiceOverride(MappedConfiguration<Class, Object> conf,
             @Cayenne ObjectContextProvider provider) {
-        conf.add(AliasContribution.create(ObjectContextProvider.class, provider));
+        conf.add(ObjectContextProvider.class, provider);
     }
 }

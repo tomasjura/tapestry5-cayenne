@@ -158,11 +158,13 @@ public class PersistentManagerImpl implements PersistentManager {
     public <T> T find(Class<T> type, Map<String, Object> idMap) {
     	return DataObjectUtils.objectForPK(_provider.currentContext(), type, mapIds(null, type, idMap));
     }
-    
+
+    @SuppressWarnings("unchecked")
     public <T> T find(String entity, Map<String, Object> idMap) {
     	return (T) DataObjectUtils.objectForPK(_provider.currentContext(), entity, mapIds(entity, null, idMap));
     }
-    
+
+    @SuppressWarnings("unchecked")
 	public <T> T find(String entity, Object[] pkVals) {
 		ObjEntity ent = _provider.currentContext().getEntityResolver().getObjEntity(entity);
 		ArrayList<ObjAttribute> pks = new ArrayList<ObjAttribute>(ent.getPrimaryKeys());
@@ -219,7 +221,7 @@ public class PersistentManagerImpl implements PersistentManager {
     }
     
     private Class<?> pkTypeForEntity(String entName, String name) {
-    	return pkTypeForEntity(_provider.currentContext().getEntityResolver().lookupObjEntity(entName), name);
+    	return pkTypeForEntity(_provider.currentContext().getEntityResolver().getObjEntity(entName), name);
     }
     
     private Class<?> pkTypeForEntity(Class<?> type, String name) {

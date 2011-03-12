@@ -12,6 +12,7 @@ import com.googlecode.tapestry5cayenne.ContextType;
 import com.googlecode.tapestry5cayenne.annotations.Cayenne;
 import com.googlecode.tapestry5cayenne.annotations.OCType;
 import com.googlecode.tapestry5cayenne.internal.ObjectContextWrapper;
+import org.apache.tapestry5.services.TransformField;
 
 /**
  * Provides an InjectionProvider so pages and components can @Inject an ObjectContext directly.
@@ -47,7 +48,8 @@ public class ObjectContextInjectionProvider implements InjectionProvider {
         if (!(ObjectContext.class.isAssignableFrom(fieldType))) {
             return false;
         }
-        OCType t = transformation.getFieldAnnotation(fieldName, OCType.class);
+        TransformField field = transformation.getField(fieldName);
+        OCType t = field.getAnnotation(OCType.class);
         ContextType ctype = t==null?ContextType.CURRENT:t.value();
         ObjectContext toInject;
         switch(ctype) {
@@ -69,7 +71,7 @@ public class ObjectContextInjectionProvider implements InjectionProvider {
                         "currentContext",
                         ObjectContext.class);
         }
-        transformation.injectField(fieldName, toInject);
+        field.inject(toInject);
         return true;
     }
 

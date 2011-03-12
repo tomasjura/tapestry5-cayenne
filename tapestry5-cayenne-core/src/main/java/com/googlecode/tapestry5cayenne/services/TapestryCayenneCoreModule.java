@@ -17,24 +17,15 @@ import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.ObjectLocator;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.Local;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.services.Coercion;
 import org.apache.tapestry5.ioc.services.CoercionTuple;
+import org.apache.tapestry5.ioc.services.ServiceOverride;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
-import org.apache.tapestry5.services.AliasContribution;
-import org.apache.tapestry5.services.BeanBlockContribution;
-import org.apache.tapestry5.services.BeanModelSource;
-import org.apache.tapestry5.services.BindingFactory;
-import org.apache.tapestry5.services.ComponentClassTransformWorker;
-import org.apache.tapestry5.services.DataTypeAnalyzer;
-import org.apache.tapestry5.services.InjectionProvider;
-import org.apache.tapestry5.services.LibraryMapping;
-import org.apache.tapestry5.services.PersistentFieldStrategy;
-import org.apache.tapestry5.services.RequestFilter;
-import org.apache.tapestry5.services.ValidationConstraintGenerator;
-import org.apache.tapestry5.services.ValueEncoderFactory;
+import org.apache.tapestry5.services.*;
 
 import com.googlecode.tapestry5cayenne.annotations.Cayenne;
 import com.googlecode.tapestry5cayenne.internal.PersistentManagerImpl;
@@ -111,6 +102,7 @@ public class TapestryCayenneCoreModule {
         binder.bind(NonPersistedObjectStorer.class,DefaultNonPersistedObjectStorer.class)
             .withId("DefaultNonPersistedObjectStorer").withMarker(Cayenne.class);
         binder.bind(PersistentManager.class,PersistentManagerImpl.class);
+        //remove when PrimaryKeyEncoder is gone.
         binder.bind(PrimaryKeyEncoder.class,CayennePrimaryKeyEncoder.class).withId("CayennePrimaryKeyEncoder");
         binder.bind(EncodedValueEncrypter.class,PlainTextEncodedValueEncrypter.class)
               .withId("PlainTextEncrypter");
@@ -163,28 +155,16 @@ public class TapestryCayenneCoreModule {
         });
     }
     
-    /**
-     * Override tapestry's default BeanModelSource with the cayenne-specific version.
-     * @param conf
-     * @param source
-     */
-    @SuppressWarnings("unchecked")
-    public static void contributeAliasOverrides(Configuration<AliasContribution> conf,
-            @Cayenne BeanModelSource source) {
-        conf.add(AliasContribution.create(BeanModelSource.class, source));
-    }
-    
-    /**
-     * Create the requisite alias for EncodedValueEncrypter.
-     * @param conf
-     * @param enc
-     */
-    @SuppressWarnings("unchecked")
-    public static void contributeAlias(Configuration<AliasContribution> conf, 
+    @Contribute(ServiceOverride.class)
+    public static void contributeServiceOverride(
+            MappedConfiguration<Class, Object> conf,
+            @Cayenne BeanModelSource source,
             @InjectService("PlainTextEncrypter") EncodedValueEncrypter enc,
             @Local NonPersistedObjectStorer storer) {
-        conf.add(AliasContribution.create(EncodedValueEncrypter.class, enc));
-        conf.add(AliasContribution.create(NonPersistedObjectStorer.class,storer));
+        conf.add(BeanModelSource.class, source);
+        conf.add(EncodedValueEncrypter.class, enc);
+        conf.add(NonPersistedObjectStorer.class, storer);
+
     }
     
     /**
@@ -206,10 +186,10 @@ public class TapestryCayenneCoreModule {
      * @param conf
      */
     public static void contributeBeanBlockSource(Configuration<BeanBlockContribution> conf) {
-        conf.add(new BeanBlockContribution("to_one", "cay/CayenneEditBlockContributions", "to_one_editor", true));
-        conf.add(new BeanBlockContribution("to_one","cay/CayenneViewBlockContributions","to_one_viewer",false));
-        conf.add(new BeanBlockContribution("to_many_map","cay/CayenneViewBlockContributions","to_many_map_viewer",false));
-        conf.add(new BeanBlockContribution("to_many_collection","cay/CayenneViewBlockContributions","to_many_collection_viewer",false));
+        conf.add(new EditBlockContribution("to_one", "cay/CayenneEditBlockContributions", "to_one_editor"));
+        conf.add(new DisplayBlockContribution("to_one","cay/CayenneViewBlockContributions","to_one_viewer"));
+        conf.add(new DisplayBlockContribution("to_many_map","cay/CayenneViewBlockContributions","to_many_map_viewer"));
+        conf.add(new DisplayBlockContribution("to_many_collection","cay/CayenneViewBlockContributions","to_many_collection_viewer"));
     }
     
     /**

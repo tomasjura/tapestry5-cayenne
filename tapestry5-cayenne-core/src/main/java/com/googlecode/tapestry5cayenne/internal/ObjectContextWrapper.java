@@ -1,6 +1,7 @@
 package com.googlecode.tapestry5cayenne.internal;
 
 import org.apache.cayenne.ObjectContext;
+import org.apache.tapestry5.ioc.services.PerThreadValue;
 import org.apache.tapestry5.ioc.services.PerthreadManager;
 
 import com.googlecode.tapestry5cayenne.services.ObjectContextProvider;
@@ -32,19 +33,13 @@ public class ObjectContextWrapper {
      */
     private static final String REQUEST_BOUND_CONTEXT="tapestry5cayenne.thread.context";
     
-    /**
-     * Use the request to store the new or child context for the duration of the request.
-     */
-    private final PerthreadManager threadManager;
-    
     private final ObjectContextProvider provider;
     
-    private final String threadContextKey;
+    private final PerThreadValue<ObjectContext> threadContext;
     
     public ObjectContextWrapper(PerthreadManager threadManager,ObjectContextProvider provider) {
-        this.threadManager = threadManager;
         this.provider = provider;
-        threadContextKey = REQUEST_BOUND_CONTEXT + this.hashCode();
+        threadContext = threadManager.createValue();
     }
     
     /**
@@ -55,10 +50,10 @@ public class ObjectContextWrapper {
      *  3) The context will only live for the duration of the thread.
      */
     public ObjectContext getNewContext() {
-        ObjectContext context = (ObjectContext) threadManager.get(threadContextKey);
+        ObjectContext context = (ObjectContext) threadContext.get();
         if (context == null) {
             context = provider.newContext();
-            threadManager.put(threadContextKey,context);
+            threadContext.set(context);
         }
         return context;
     }
@@ -76,10 +71,10 @@ public class ObjectContextWrapper {
      * As for getNewContext, only one child context is created per thread, and it only lasts the duration of the thread.
      */
     public ObjectContext getChildContext() {
-        ObjectContext context = (ObjectContext) threadManager.get(threadContextKey);
+        ObjectContext context = (ObjectContext) threadContext.get();
         if (context == null) {
             context = provider.currentContext().createChildContext();
-            threadManager.put(threadContextKey,context);
+            threadContext.set(context);
         }
         return context;
     }

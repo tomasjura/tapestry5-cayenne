@@ -1,11 +1,7 @@
 package com.googlecode.tapestry5cayenne.services;
 
 import org.apache.tapestry5.model.MutableComponentModel;
-import org.apache.tapestry5.services.ClassTransformation;
-import org.apache.tapestry5.services.ComponentClassTransformWorker;
-import org.apache.tapestry5.services.ComponentMethodAdvice;
-import org.apache.tapestry5.services.ComponentMethodInvocation;
-import org.apache.tapestry5.services.TransformMethodSignature;
+import org.apache.tapestry5.services.*;
 
 import com.googlecode.tapestry5cayenne.annotations.CommitAfter;
 
@@ -41,8 +37,8 @@ public class CayenneCommitAfterWorker implements ComponentClassTransformWorker {
 
     public void transform(ClassTransformation transformation,
             MutableComponentModel model) {
-        for(TransformMethodSignature sig: transformation.findMethodsWithAnnotation(CommitAfter.class)) {
-            transformation.advise(sig, advice);
+        for(TransformMethod method: transformation.matchMethodsWithAnnotation(CommitAfter.class)) {
+            method.addAdvice(advice);
         }
     }
     
