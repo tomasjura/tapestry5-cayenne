@@ -201,8 +201,8 @@
     </reporting>
 
     <properties>
-        <cayenne-release-version>3.0.1</cayenne-release-version>
-        <tapestry-release-version>5.2.4</tapestry-release-version>
+        <cayenne-release-version>3.0.2</cayenne-release-version>
+        <tapestry-release-version>5.2.6</tapestry-release-version>
     </properties>
 
     <repositories>
