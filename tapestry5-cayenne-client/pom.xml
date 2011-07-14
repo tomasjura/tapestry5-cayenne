@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.googlecode.tapestry5-cayenne</groupId>
     <artifactId>tapestry5-cayenne-client</artifactId>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.4</version>
     <packaging>jar</packaging>
     <parent>
         <groupId>com.googlecode.tapestry5-cayenne</groupId>
         <artifactId>tapestry5-cayenne-project</artifactId>
-        <version>0.4-SNAPSHOT</version>
+        <version>0.4</version>
     </parent>
     <name>Tapestry5-Cayenne Client Library</name>
     <description>
