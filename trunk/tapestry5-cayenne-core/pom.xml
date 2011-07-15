@@ -38,7 +38,7 @@
   	  </dependency>
     </dependencies>
     <inceptionYear>2008</inceptionYear>
-
+<!--
 	<reporting>
 		<plugins>
 		<plugin>
@@ -51,5 +51,6 @@
 		</plugin>
 		</plugins>
 	</reporting>
+-->
 </project>
 
