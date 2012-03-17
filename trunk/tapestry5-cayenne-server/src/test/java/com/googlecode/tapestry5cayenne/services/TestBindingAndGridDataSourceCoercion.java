@@ -37,7 +37,7 @@ public class TestBindingAndGridDataSourceCoercion extends Assert {
     @BeforeClass
     void setupDB() throws Exception {
         TestUtils.setupdb();
-        registry = TestUtils.setupRegistry("App0", TapestryCayenneModule.class);
+        registry = TestUtils.setupRegistry("App0", TapestryCayenneModule.class, TestModule.class);//need TestModule to contribute the correct PROJECT_FILE.
         context = registry.getService(ObjectContextProvider.class).newContext();
         data = TestUtils.basicData(context);
         new Ordering(Artist.NAME_PROPERTY,SortOrder.ASCENDING).orderList(data);

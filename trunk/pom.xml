@@ -201,8 +201,8 @@
     </reporting>
 
     <properties>
-        <cayenne-release-version>3.0.2</cayenne-release-version>
-        <tapestry-release-version>5.2.6</tapestry-release-version>
+        <cayenne-release-version>3.1M3</cayenne-release-version>
+        <tapestry-release-version>5.3.2</tapestry-release-version>
     </properties>
 
     <repositories>
@@ -222,27 +222,31 @@
         	<url>http://maven.saiwai-solutions.com/</url>
         </repository>
         <!-- tapestry snapshot repository -->
+<!--
         <repository>
           <id>tapestry-snapshots</id>
           <url>http://tapestry.formos.com/maven-snapshot-repository/</url>
         </repository>
+-->
         <!-- tapestry (pre) release repository -->
+<!--
         <repository>
           <id>tapestry-pending-releases</id>
           <url>http://people.apache.org/~hlship/tapestry-ibiblio-rsynch-repository/</url>
         </repository>
+-->
     </repositories>
 
     <distributionManagement>
         <repository>
             <id>saiwai-repository</id>
             <name>Saiwai Maven Repository</name>
-            <url>scp://t5cayenne.saiwai-solutions.com:10022/var/www/vhosts/saiwai-solutions.com/maven</url>
+            <url>scp://t5cayenne.saiwai-solutions.com/var/www/vhosts/saiwai-solutions.com/maven</url>
         </repository>
         <site>
             <id>saiwai-solutions-site</id>
             <name>T5Cayenne Website</name>
-            <url>scp://t5cayenne.saiwai-solutions.com:10022/var/www/vhosts/saiwai-solutions.com/t5cayenne</url>
+            <url>scp://t5cayenne.saiwai-solutions.com/var/www/vhosts/saiwai-solutions.com/t5cayenne</url>
         </site>
     </distributionManagement>
 </project>

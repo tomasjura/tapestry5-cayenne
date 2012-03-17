@@ -10,8 +10,7 @@ import org.apache.cayenne.BaseContext;
 import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.access.DataNode;
 import org.apache.cayenne.access.DbGenerator;
-import org.apache.cayenne.conf.Configuration;
-import org.apache.cayenne.conf.DefaultConfiguration;
+import org.apache.cayenne.configuration.server.ServerRuntime;
 import org.apache.cayenne.dba.DbAdapter;
 import org.apache.cayenne.dba.hsqldb.HSQLDBAdapter;
 import org.apache.cayenne.map.DataMap;
@@ -39,10 +38,9 @@ public class TestUtils {
      * @throws Exception
      */
     public static void setupdb() throws Exception {
-        DefaultConfiguration c = new DefaultConfiguration("cayenne.xml");
-        Configuration.initializeSharedConfiguration(c);
+        ServerRuntime runtime = new ServerRuntime("cayenne-App0.xml");
         DbAdapter adapt = HSQLDBAdapter.class.newInstance();
-        DataContext dc = DataContext.createDataContext();
+        DataContext dc = (DataContext) runtime.getContext();
         for(Object obj : dc.getEntityResolver().getDataMaps()) {
             DataMap map = (DataMap) obj;
             DataNode node = dc.getParentDataDomain().lookupDataNode(map);

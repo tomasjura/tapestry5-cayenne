@@ -177,13 +177,12 @@ public class TestBlockContributions extends Assert {
      */
     public void testCayenneSelect() {
         Document doc = _tester.renderPage("TestSelect");
-        System.out.println(doc);
         //Verify the label
         //Element el = doc.getElementById("toOneList:label");
         //assertEquals(el.getChildMarkup(),"Artist");
 
         //Verify the select list.
-        Element el = doc.getElementById("select");
+        Element el = doc.getElementById("select_0");
         assertEquals(el.getChildren().size()-1,_data.size());
 
         //we expect the list of items to be sorted by the @Label.
