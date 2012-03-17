@@ -8,7 +8,6 @@ import org.apache.cayenne.Persistent;
 import org.apache.cayenne.exp.Expression;
 import org.apache.cayenne.map.ObjEntity;
 import org.apache.cayenne.query.Query;
-import org.apache.tapestry5.PrimaryKeyEncoder;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.VersionUtils;
 import org.apache.tapestry5.grid.GridDataSource;
@@ -27,6 +26,7 @@ import org.apache.tapestry5.ioc.services.ServiceOverride;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.services.*;
 
+import com.googlecode.tapestry5cayenne.T5CayenneConstants;
 import com.googlecode.tapestry5cayenne.annotations.Cayenne;
 import com.googlecode.tapestry5cayenne.internal.PersistentManagerImpl;
 import com.googlecode.tapestry5cayenne.internal.PersistentObjGridDataSource;
@@ -86,6 +86,7 @@ public class TapestryCayenneCoreModule {
         conf.add(T5CAYENNE_VERSION,
                  VersionUtils.readVersionNumber(
                          "META-INF/maven/com.googlecode.tapestry5-cayenne/tapestry5-cayenne-core/pom.properties"));
+        conf.add(T5CayenneConstants.PROJECT_FILE, "cayenne.xml");
     }
 
     @SuppressWarnings("unchecked")
@@ -102,8 +103,7 @@ public class TapestryCayenneCoreModule {
         binder.bind(NonPersistedObjectStorer.class,DefaultNonPersistedObjectStorer.class)
             .withId("DefaultNonPersistedObjectStorer").withMarker(Cayenne.class);
         binder.bind(PersistentManager.class,PersistentManagerImpl.class);
-        //remove when PrimaryKeyEncoder is gone.
-        binder.bind(PrimaryKeyEncoder.class,CayennePrimaryKeyEncoder.class).withId("CayennePrimaryKeyEncoder");
+
         binder.bind(EncodedValueEncrypter.class,PlainTextEncodedValueEncrypter.class)
               .withId("PlainTextEncrypter");
 
