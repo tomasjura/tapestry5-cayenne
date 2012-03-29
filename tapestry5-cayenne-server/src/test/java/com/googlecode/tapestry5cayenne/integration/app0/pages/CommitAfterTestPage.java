@@ -3,7 +3,10 @@ package com.googlecode.tapestry5cayenne.integration.app0.pages;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.cayenne.DataObjectUtils;
 import org.apache.cayenne.ObjectContext;
+import org.apache.cayenne.query.Ordering;
+import org.apache.cayenne.query.SortOrder;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
@@ -21,6 +24,9 @@ public class CommitAfterTestPage {
     @Inject
     private PersistentManager manager;
     
+//note that you have to @Persist the artist through requests to ensure that you are using the correct artist each time.
+//Otherwise, having multiple artists can throw things off. But, to fully test CommitAfter, you also have to refresh
+//the artist from the DB each time.
     @Property
     @Persist
     private Artist artist;
@@ -28,45 +34,48 @@ public class CommitAfterTestPage {
     @SetupRender
     public void setupRender() {
         if (artist == null) {
-	        List<Artist> artists = manager.listAll(Artist.class);
-	        if (artists.isEmpty()) {
-	            artist = context.newObject(Artist.class);
-	            artist.setName("Dali");
-	            context.commitChanges();
-	        } else {
-	            artist = artists.get(0);
-	        }
+            List<Artist> artists = manager.listAll(Artist.class, new Ordering("name", SortOrder.ASCENDING));
+            if (artists.isEmpty()) {
+                artist = context.newObject(Artist.class);
+                artist.setName("Dali");
+                context.commitChanges();
+            } else {
+                artist = artists.get(0);
+            }
+        } else {
+            //force a DB refresh...
+            artist = (Artist) DataObjectUtils.objectForPK(context, artist.getObjectId());
         }
     }
     
     @CommitAfter
-    void onActionFromCommitOk() {
-        artist.setName("commitokname");
+    void onActionFromCommitOk(Artist artist) {
+        artist.setName("Commitokname");
     }
 
     @CommitAfter
-    void doActionFromRuntimeException() {
-        artist.setName("savefailsname");
+    void doActionFromRuntimeException(Artist artist) {
+        artist.setName("Failedsavename");
         throw new RuntimeException("ignore");
     }
     
-    void onActionFromRuntimeException() {
+    void onActionFromRuntimeException(Artist artist) {
         try {
-            doActionFromRuntimeException();
+            doActionFromRuntimeException(artist);
         } catch (RuntimeException e) {
             //Ignore
         }
     }
     
     @CommitAfter
-    void doActionFromCheckedException() throws SQLException {
+    void doActionFromCheckedException(Artist artist) throws SQLException {
         artist.setName("savesokwithcheckedexceptionname");
         throw new SQLException("blah");
     }
     
-    void onActionFromCheckedException() {
+    void onActionFromCheckedException(Artist artist) {
         try {
-            doActionFromCheckedException();
+            doActionFromCheckedException(artist);
         } catch (SQLException e) {
             //Ignore
         }

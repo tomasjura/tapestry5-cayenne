@@ -5,9 +5,9 @@ import org.apache.tapestry5.test.SeleniumTestCase;
 import org.testng.annotations.Test;
 
 @Test(sequential=true,groups="integration")
-public class TapestryCayenneIntegrationTests extends AbstractIntegrationTestSuite {
+public class TapestryCayenneIntegrationTest extends AbstractIntegrationTestSuite {
     
-    public TapestryCayenneIntegrationTests() {
+    public TapestryCayenneIntegrationTest() {
         super("src/test/app0");
     }
     
@@ -16,9 +16,9 @@ public class TapestryCayenneIntegrationTests extends AbstractIntegrationTestSuit
         waitForPageToLoad();
         assertTextPresent("Dali");
         clickAndWait("link=Commit Ok");
-        assertTextPresent("commitokname");
+        assertTextPresent("Commitokname");
         clickAndWait("link=Runtime Exception");
-        assertTextPresent("commitokname");
+        assertTextPresent("Commitokname");
         clickAndWait("link=Checked Exception");
         assertTextPresent("savesokwithcheckedexceptionname");
     }

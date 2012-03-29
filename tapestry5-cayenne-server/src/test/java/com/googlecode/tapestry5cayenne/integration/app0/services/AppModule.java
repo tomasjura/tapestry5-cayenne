@@ -5,6 +5,8 @@
  */
 package com.googlecode.tapestry5cayenne.integration.app0.services;
 
+import static com.googlecode.tapestry5cayenne.T5CayenneConstants.PROJECT_FILE;
+
 import java.util.List;
 
 import org.apache.cayenne.BaseContext;
@@ -30,6 +32,7 @@ public class AppModule {
     {
         configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en");
         configuration.add(SymbolConstants.PRODUCTION_MODE,"false");
+        configuration.add(PROJECT_FILE, "cayenne-App0.xml");
     }
     
     public static void contributeApplicationInitializer(OrderedConfiguration<ApplicationInitializerFilter> conf) {
