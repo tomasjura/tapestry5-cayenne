@@ -3,7 +3,7 @@
     <groupId>com.googlecode.tapestry5-cayenne</groupId>
     <artifactId>tapestry5-cayenne-project</artifactId>
     <packaging>pom</packaging>
-    <version>0.5-SNAPSHOT</version>
+    <version>0.5</version>
     <name>Tapestry5-Cayenne Integration</name>
     <description>Makes integration of Cayenne within Tapestry 5 as easy as possible.</description>
     <inceptionYear>2008</inceptionYear>
@@ -20,8 +20,8 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:svn:https://tapestry5-cayenne.googlecode.com/svn/trunk</connection>
-        <url>http://tapestry5-cayenne.googlecode.com/svn/trunk</url>
+        <connection>scm:svn:https://tapestry5-cayenne.googlecode.com/svn/tags/0.5</connection>
+        <url>http://tapestry5-cayenne.googlecode.com/svn/tags/0.5</url>
     </scm>
     <developers>
         <developer>
