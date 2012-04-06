@@ -35,9 +35,7 @@ public class CayenneCommitAfterWorker implements ComponentClassTransformWorker {
 
     public void transform(ClassTransformation transformation,
             MutableComponentModel model) {
-        System.out.println("Attempting to add advice for CommitAfter-annotated methods for model " + model + "; transformation: " + transformation);
         for(TransformMethod method: transformation.matchMethodsWithAnnotation(CommitAfter.class)) {
-            System.out.println("Adding commit after advice to method: " + method);
             method.addAdvice(advice);
         }
     }
