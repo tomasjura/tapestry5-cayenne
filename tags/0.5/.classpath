@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="tapestry5-cayenne-core/src/main/java"/>
+	<classpathentry kind="src" path="tapestry5-cayenne-core/src/test/java"/>
+	<classpathentry excluding="**" kind="src" output="tapestry5-cayenne-core/src/main/resources" path="tapestry5-cayenne-core/src/main/resources"/>
+	<classpathentry excluding="**" kind="src" output="tapestry5-cayenne-core/src/test/resources" path="tapestry5-cayenne-core/src/test/resources"/>
+	<classpathentry kind="src" path="tapestry5-cayenne-server/src/main/java"/>
+	<classpathentry kind="src" path="tapestry5-cayenne-server/src/test/java"/>
+	<classpathentry excluding="**" kind="src" output="tapestry5-cayenne-server/src/main/resources" path="tapestry5-cayenne-server/src/main/resources"/>
+	<classpathentry excluding="**" kind="src" output="tapestry5-cayenne-server/src/test/resources" path="tapestry5-cayenne-server/src/test/resources"/>
+	<classpathentry kind="src" path="tapestry5-cayenne-client/src/main/java"/>
+	<classpathentry kind="src" path="tapestry5-cayenne-client/src/test/java"/>
+	<classpathentry excluding="**" kind="src" output="tapestry5-cayenne-client/src/main/resources" path="tapestry5-cayenne-client/src/main/resources"/>
+	<classpathentry excluding="**" kind="src" output="tapestry5-cayenne-client/src/test/resources" path="tapestry5-cayenne-client/src/test/resources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>
