@@ -1,0 +1,24 @@
+# Overview #
+
+The Tapestry5-Cayenne module should be able to handle both Cayenne server (classic) mode and Cayenne ROP client.  The two are actually fairly similar, but do have some divergent behavior that must be addressed by this module.
+
+# ObjectContext #
+
+## DataContext - Server ##
+
+Traditionally, a DataContext is used as the implementation of ObjectContext.  The creation of a DataContext is rather straightforward and the class has static accessors for binding and retrieving the context to and from ThreadLocal.  The context is also good for as long as it's needed.
+
+## CayenneContext - Client ##
+
+Creating a context for the client is a little trickier.  There is some application specific configuration that is required in order to establish a connection to the Web service being hosted by the server.  At the absolute minimum, a connection URL must be specified.  Optionally, authentication credentials may be supplied as well.
+
+Currently (as of 4/2/08), CayenneContext does not have any utility methods for interacting with ThreadLocal.  Thus, if we want this support we must handle it ourselves in the module.
+
+What's even trickier is the lifecycle of the context.  While technically it is valid for the entire time a reference is held onto it, the server connected to will in all likelihood have a session timeout.  Thus, if the context is not used for some time, it may cease to be usable any longer because the session to the server may expire.  Dealing with this exception is a hassle and it would be great if this module could provide a nice way of dealing with this.
+
+
+# Data Object Access #
+
+The class hierarchy for Cayenne client classes is different from that of server classes.  The client classes do not extend CayenneDataObject, but rather PersistentObject.  The common interface for these two class hierarchies is org.apache.cayenne.Persistent.  Most of the general API in Cayenne 3.0 has been updated to work with Persistent rather than DataObject.  Any cases that it isn't are likely bugs and should be addressed in Cayenne.
+
+So, in order to share as much code between the server and client classes, we should use Persistent wherever possible.  If there is divergent behavior, we will need to supply client and/or server specific classes.

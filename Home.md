@@ -1,0 +1,22 @@
+# Introduction #
+
+The purpose of this project is to make integrating Apache Cayenne 3 and Apache Tapestry 5 as seemless as possible.  Most Web apps using these two frameworks are going to require some form of common functionality.  By centralizing it into an easy to add module, we hope to streamline the process of getting going, while cutting down on the amount of boilerplate code that needs to be maintained.
+
+
+# Details #
+
+Supports both Cayenne server and client classes.  Core features are:
+
+  * Request filter for binding ObjectContext to session and ThreadLocal.
+  * Automatic ValueEncoder for use in page activation and passivation.
+  * Simple ObjectContext creation for ad hoc contexts.
+  * Custom BeanModelSource implementation
+  * Support for relationship editing and viewing via the CayenneDataTypeAnalyzer and supporting components.
+
+# Design Notes #
+
+  * ServerVersusClient
+
+# Decisions #
+
+  * SecuringValueEncoders

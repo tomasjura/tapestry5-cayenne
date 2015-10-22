@@ -1,0 +1,13 @@
+# Motivation #
+
+Some members of the Cayenne community have expressed security concerns over storing primary keys directly in client-accessible (and modifiable) portions of web applications, such as urls and forms.  The concern is that a user can modify the primary key and potentially gain read or write access to restricted information.  The first point of defense against such issues is to always verify that a user has access to domain objects.  Indeed, there is a school of thought that encourages simple, user-modifiable urls in web apps.  That said, it would be nice if there was an option to have "pretty" urls which are also secure to tampering.
+
+# Possible Remedies #
+
+  * Keep primary keys in URLs, but add an (optional) "security manager" that checks to make sure a user is authorized to access a particular object
+    * This is an interesting idea, but is difficult in practice due to context concerns. For example, a user might be authorized to view, but not edit, an object, and the value encoder has no way of distinguishing those two contexts, although an application-specific security manager might be able to, based on request information.
+    * This also suffers from the "then what" problem: A user is unathorized to access an object; now what?
+  * The other possibility is to obfuscate URLs, at least optionally. For instance, by encrypting the primary key in some form.
+    * This seems to defeat the purpose of short, pretty urls with primary keys.
+    * Encryption/decryption of many objects for high-traffic websites could be a performance bottleneck.
+  * Other ways?
