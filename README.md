@@ -1,4 +1,4 @@
-Module for cooperatio between the Apache Tapestry (https://tapestry.apache.org/) and Apache Cayenne 
+Module for cooperation between the Apache Tapestry (https://tapestry.apache.org/) and Apache Cayenne 
 (http://cayenne.apache.org/)
 
 Long time ago - in 1995 - the Web Objects framework (https://en.wikipedia.org/wiki/WebObjects) was founded by Next company led by Steve Jobs. The essential part of the Web Objects is the Enterprise Objects framework (EOF)
